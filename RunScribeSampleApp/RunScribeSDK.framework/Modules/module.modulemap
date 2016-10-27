@@ -1,0 +1,6 @@
+framework module RunScribeSDK {
+  umbrella header "RunScribeSDK-umbrella.h"
+
+  export *
+  module * { export * }
+}
