@@ -1,25 +1,447 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11134" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11106"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Main View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="" sceneMemberID="viewController">
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <viewController id="BYZ-38-t0r" customClass="MainViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="320"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="coU-vz-Jqb">
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <state key="normal" title="Display LED"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="displayLEDButtonClicked:" destination="BYZ-38-t0r" eventType="touchDown" id="FXN-IT-X7d"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="20y-4h-Sqo">
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <state key="normal" title="Start Rec"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xci-2W-j15">
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <state key="normal" title="Erase"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="eraseButtonClicked:" destination="BYZ-38-t0r" eventType="touchDown" id="e04-o9-GsC"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Cy-Vv-Bcg">
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <state key="normal" title="Files"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Eyj-VP-8Py">
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <state key="normal" title="Config"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YHF-gy-2Py">
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <state key="normal" title="Status"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3en-mW-UYC">
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <state key="normal" title="Diagnostic"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5eC-o0-bBG">
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <state key="normal" title="Motion"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n5x-QZ-IJh">
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <state key="normal" title="Scan"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AAH-aE-5HU">
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="85" id="aEf-J6-uhu"/>
+                                </constraints>
+                                <state key="normal" title="DFU"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xjB-jE-7OW">
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="L0R-ZH-0cV">
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="runscribeTableCell" id="HGM-yx-aNh">
+                                        <rect key="frame" x="0.0" y="28" width="374" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="HGM-yx-aNh" id="WK8-Vt-kKf">
+                                            <frame key="frameInset" width="374" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="RunScribe-4a56" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JfT-up-UOM">
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C3A-rE-Tsf">
+                                                    <state key="normal" title="Connect"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                            <integer key="value" value="10"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="C3A-rE-Tsf" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="JfT-up-UOM" secondAttribute="trailing" constant="20" id="3ox-1r-qfA"/>
+                                                <constraint firstItem="C3A-rE-Tsf" firstAttribute="centerY" secondItem="WK8-Vt-kKf" secondAttribute="centerY" id="RuG-Az-Z72"/>
+                                                <constraint firstAttribute="trailing" secondItem="C3A-rE-Tsf" secondAttribute="trailing" constant="8" id="dIl-QK-1Mi"/>
+                                                <constraint firstItem="JfT-up-UOM" firstAttribute="leading" secondItem="WK8-Vt-kKf" secondAttribute="leadingMargin" id="iN0-bd-TG4"/>
+                                                <constraint firstItem="JfT-up-UOM" firstAttribute="centerY" secondItem="WK8-Vt-kKf" secondAttribute="centerY" id="phC-gh-5Uu"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wdw-hf-7z4">
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="5eC-o0-bBG" firstAttribute="top" secondItem="20y-4h-Sqo" secondAttribute="top" id="0qL-so-JTg"/>
+                            <constraint firstItem="20y-4h-Sqo" firstAttribute="trailing" secondItem="YHF-gy-2Py" secondAttribute="trailing" id="1Ud-rt-gKg"/>
+                            <constraint firstItem="AAH-aE-5HU" firstAttribute="leading" secondItem="3en-mW-UYC" secondAttribute="leading" id="6U2-9M-bSa"/>
+                            <constraint firstItem="3en-mW-UYC" firstAttribute="bottom" secondItem="Eyj-VP-8Py" secondAttribute="bottom" id="7Bc-oR-Z9R"/>
+                            <constraint firstItem="AAH-aE-5HU" firstAttribute="top" secondItem="3en-mW-UYC" secondAttribute="bottom" constant="8" id="7MK-BA-2m0"/>
+                            <constraint firstItem="xci-2W-j15" firstAttribute="leading" secondItem="5eC-o0-bBG" secondAttribute="leading" id="902-rE-bzw"/>
+                            <constraint firstItem="3en-mW-UYC" firstAttribute="top" secondItem="xci-2W-j15" secondAttribute="bottom" constant="8" id="9xI-eL-pjt"/>
+                            <constraint firstItem="5eC-o0-bBG" firstAttribute="bottom" secondItem="20y-4h-Sqo" secondAttribute="bottom" id="Ckp-ar-3Ds"/>
+                            <constraint firstItem="coU-vz-Jqb" firstAttribute="bottom" secondItem="YHF-gy-2Py" secondAttribute="bottom" id="Dxe-eM-2eh"/>
+                            <constraint firstItem="AAH-aE-5HU" firstAttribute="leading" secondItem="n5x-QZ-IJh" secondAttribute="trailing" constant="8" id="Ggb-2k-JPy"/>
+                            <constraint firstItem="5eC-o0-bBG" firstAttribute="leading" secondItem="coU-vz-Jqb" secondAttribute="leading" id="Hug-ui-A6f"/>
+                            <constraint firstItem="L0R-ZH-0cV" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="3:8" constant="1" id="Ikw-nd-02P"/>
+                            <constraint firstItem="3en-mW-UYC" firstAttribute="trailing" secondItem="xci-2W-j15" secondAttribute="trailing" id="KFg-yT-o7C"/>
+                            <constraint firstItem="YHF-gy-2Py" firstAttribute="leading" secondItem="wdw-hf-7z4" secondAttribute="leading" id="LjD-P3-f92"/>
+                            <constraint firstItem="L0R-ZH-0cV" firstAttribute="top" secondItem="xjB-jE-7OW" secondAttribute="bottom" constant="8" id="Lll-JS-63T"/>
+                            <constraint firstItem="xci-2W-j15" firstAttribute="trailing" secondItem="5eC-o0-bBG" secondAttribute="trailing" id="Lqm-XU-01h"/>
+                            <constraint firstItem="L0R-ZH-0cV" firstAttribute="trailing" secondItem="xjB-jE-7OW" secondAttribute="trailing" id="MLp-yA-gxT"/>
+                            <constraint firstItem="YHF-gy-2Py" firstAttribute="top" secondItem="wdw-hf-7z4" secondAttribute="bottom" constant="8" id="NpP-Md-Gi8"/>
+                            <constraint firstItem="xci-2W-j15" firstAttribute="top" secondItem="5eC-o0-bBG" secondAttribute="bottom" constant="8" id="OhK-Xr-Tg3"/>
+                            <constraint firstItem="n5x-QZ-IJh" firstAttribute="trailing" secondItem="Eyj-VP-8Py" secondAttribute="trailing" id="Q6y-a0-fvR"/>
+                            <constraint firstItem="AAH-aE-5HU" firstAttribute="width" secondItem="n5x-QZ-IJh" secondAttribute="width" id="QUR-oH-To7"/>
+                            <constraint firstItem="Eyj-VP-8Py" firstAttribute="trailing" secondItem="7Cy-Vv-Bcg" secondAttribute="trailing" id="VlO-he-obt"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="L0R-ZH-0cV" secondAttribute="bottom" constant="8" id="Vz8-yO-yyY"/>
+                            <constraint firstItem="L0R-ZH-0cV" firstAttribute="leading" secondItem="xjB-jE-7OW" secondAttribute="leading" id="ZUp-sw-7Nr"/>
+                            <constraint firstItem="coU-vz-Jqb" firstAttribute="top" secondItem="YHF-gy-2Py" secondAttribute="top" id="aHd-82-mHN"/>
+                            <constraint firstItem="20y-4h-Sqo" firstAttribute="leading" secondItem="YHF-gy-2Py" secondAttribute="leading" id="baQ-MC-Fmw"/>
+                            <constraint firstItem="3en-mW-UYC" firstAttribute="top" secondItem="Eyj-VP-8Py" secondAttribute="top" id="cdc-6S-Sk9"/>
+                            <constraint firstItem="7Cy-Vv-Bcg" firstAttribute="trailing" secondItem="20y-4h-Sqo" secondAttribute="trailing" id="czO-bd-xiA"/>
+                            <constraint firstItem="n5x-QZ-IJh" firstAttribute="leading" secondItem="Eyj-VP-8Py" secondAttribute="leading" id="dwu-zH-Sxx"/>
+                            <constraint firstItem="xci-2W-j15" firstAttribute="bottom" secondItem="7Cy-Vv-Bcg" secondAttribute="bottom" id="f0h-wc-tk3"/>
+                            <constraint firstItem="wdw-hf-7z4" firstAttribute="top" secondItem="xjB-jE-7OW" secondAttribute="top" id="fbZ-PO-IKk"/>
+                            <constraint firstItem="AAH-aE-5HU" firstAttribute="trailing" secondItem="3en-mW-UYC" secondAttribute="trailing" id="h6Z-Ix-PCt"/>
+                            <constraint firstItem="AAH-aE-5HU" firstAttribute="top" secondItem="n5x-QZ-IJh" secondAttribute="top" id="hA2-pn-TSe"/>
+                            <constraint firstItem="coU-vz-Jqb" firstAttribute="trailing" secondItem="wdw-hf-7z4" secondAttribute="trailing" id="hhV-Y8-IoR"/>
+                            <constraint firstItem="xjB-jE-7OW" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="16" id="id2-TD-GbW"/>
+                            <constraint firstItem="n5x-QZ-IJh" firstAttribute="leading" secondItem="L0R-ZH-0cV" secondAttribute="trailing" constant="16" id="isd-dK-Ph2"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="AAH-aE-5HU" secondAttribute="bottom" constant="8" id="llR-rg-Qac"/>
+                            <constraint firstItem="5eC-o0-bBG" firstAttribute="trailing" secondItem="coU-vz-Jqb" secondAttribute="trailing" id="nA4-YI-gH6"/>
+                            <constraint firstItem="7Cy-Vv-Bcg" firstAttribute="leading" secondItem="20y-4h-Sqo" secondAttribute="leading" id="o2T-N3-Kqi"/>
+                            <constraint firstAttribute="trailing" secondItem="AAH-aE-5HU" secondAttribute="trailing" constant="16" id="pyt-2i-u4W"/>
+                            <constraint firstItem="5eC-o0-bBG" firstAttribute="top" secondItem="coU-vz-Jqb" secondAttribute="bottom" constant="8" id="tKM-RR-WeO"/>
+                            <constraint firstItem="xci-2W-j15" firstAttribute="top" secondItem="7Cy-Vv-Bcg" secondAttribute="top" id="uZM-fk-YYs"/>
+                            <constraint firstItem="Eyj-VP-8Py" firstAttribute="leading" secondItem="7Cy-Vv-Bcg" secondAttribute="leading" id="wHP-R9-alB"/>
+                            <constraint firstItem="3en-mW-UYC" firstAttribute="leading" secondItem="xci-2W-j15" secondAttribute="leading" id="xvm-DW-vYQ"/>
+                            <constraint firstItem="AAH-aE-5HU" firstAttribute="bottom" secondItem="n5x-QZ-IJh" secondAttribute="bottom" id="y4p-zW-3XZ"/>
+                            <constraint firstItem="L0R-ZH-0cV" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="16" id="z1Y-5P-TeE"/>
+                        </constraints>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="600" height="320"/>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="33.600000000000001" y="84.557721139430285"/>
+        </scene>
+        <!--Main View Controller-->
+        <scene sceneID="bVt-VM-R8p">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="x6B-5n-bjf" sceneMemberID="firstResponder"/>
+                <viewController id="oso-Pp-Dmf" customClass="MainViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="lXa-6G-6HI"/>
+                        <viewControllerLayoutGuide type="bottom" id="RK9-Ov-24D"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="4Ch-km-slJ">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="320"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sfw-rP-Ld1">
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="85" id="xaI-7t-PTm"/>
+                                </constraints>
+                                <state key="normal" title="Red"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="displayLEDButtonClicked:" destination="oso-Pp-Dmf" eventType="touchDown" id="ga0-DR-rQk"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g3Y-iC-fgT">
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="85" id="VEk-7r-LfY"/>
+                                </constraints>
+                                <state key="normal" title="Start Rec"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SDT-q9-faH">
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <state key="normal" title="EraseFlash"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jFx-NI-1j1">
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <state key="normal" title="EraseEE"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WS7-vX-xuK">
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <state key="normal" title="Files"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DzZ-hw-JO6">
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <state key="normal" title="Config"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qzq-Cs-vyg">
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <state key="normal" title="Status"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dJY-eA-MEi">
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <state key="normal" title="DFU"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Cl-dI-ERW">
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <state key="normal" title="Green"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Ta-Ye-yl4">
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <state key="normal" title="Blue"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Yj-1W-134">
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <state key="normal" title="On/Off"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mfG-Fj-U0w">
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <state key="normal" title="Diagnostic"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="96t-ek-XHY">
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <state key="normal" title="Motion"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wbw-TZ-fPE">
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="56" id="acs-CU-zyb"/>
+                                </constraints>
+                                <state key="normal" title="Scan"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Na2-qQ-HGJ">
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <state key="normal" title="Disconnect"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="Sfw-rP-Ld1" firstAttribute="leading" secondItem="g3Y-iC-fgT" secondAttribute="trailing" constant="4" id="0A7-db-Z3o"/>
+                            <constraint firstItem="mfG-Fj-U0w" firstAttribute="top" secondItem="3Yj-1W-134" secondAttribute="bottom" constant="4" id="A9l-bU-7X4"/>
+                            <constraint firstItem="SDT-q9-faH" firstAttribute="trailing" secondItem="g3Y-iC-fgT" secondAttribute="trailing" id="B00-gW-SBJ"/>
+                            <constraint firstItem="dJY-eA-MEi" firstAttribute="trailing" secondItem="g3Y-iC-fgT" secondAttribute="trailing" id="DLv-6f-Kxi"/>
+                            <constraint firstItem="RK9-Ov-24D" firstAttribute="top" secondItem="Wbw-TZ-fPE" secondAttribute="bottom" constant="8" id="Dx1-Ud-BNJ"/>
+                            <constraint firstItem="Sfw-rP-Ld1" firstAttribute="top" secondItem="lXa-6G-6HI" secondAttribute="bottom" constant="8" id="E7c-9E-LC4"/>
+                            <constraint firstItem="Na2-qQ-HGJ" firstAttribute="top" secondItem="dJY-eA-MEi" secondAttribute="bottom" constant="4" id="Ewb-2l-LQ2"/>
+                            <constraint firstItem="4Cl-dI-ERW" firstAttribute="top" secondItem="Sfw-rP-Ld1" secondAttribute="bottom" constant="4" id="F4y-HI-sZl"/>
+                            <constraint firstItem="Na2-qQ-HGJ" firstAttribute="trailing" secondItem="g3Y-iC-fgT" secondAttribute="trailing" id="FJK-I9-L0b"/>
+                            <constraint firstItem="Wbw-TZ-fPE" firstAttribute="top" secondItem="dJY-eA-MEi" secondAttribute="top" id="FSL-fY-ejD"/>
+                            <constraint firstItem="DzZ-hw-JO6" firstAttribute="trailing" secondItem="g3Y-iC-fgT" secondAttribute="trailing" id="HyL-ph-1st"/>
+                            <constraint firstItem="4Cl-dI-ERW" firstAttribute="bottom" secondItem="SDT-q9-faH" secondAttribute="bottom" id="J2b-8R-iBR"/>
+                            <constraint firstItem="3Yj-1W-134" firstAttribute="bottom" secondItem="WS7-vX-xuK" secondAttribute="bottom" id="JP3-0p-pJO"/>
+                            <constraint firstAttribute="trailing" secondItem="Sfw-rP-Ld1" secondAttribute="trailing" constant="8" id="JdG-tC-f2b"/>
+                            <constraint firstItem="Wbw-TZ-fPE" firstAttribute="top" secondItem="96t-ek-XHY" secondAttribute="bottom" constant="4" id="L6K-IV-6Jf"/>
+                            <constraint firstItem="3Yj-1W-134" firstAttribute="top" secondItem="3Ta-Ye-yl4" secondAttribute="bottom" constant="4" id="LRW-Ty-Kox"/>
+                            <constraint firstItem="mfG-Fj-U0w" firstAttribute="width" secondItem="Sfw-rP-Ld1" secondAttribute="width" id="Lmz-08-k0x"/>
+                            <constraint firstItem="96t-ek-XHY" firstAttribute="bottom" secondItem="Qzq-Cs-vyg" secondAttribute="bottom" id="McF-uH-qIl"/>
+                            <constraint firstItem="WS7-vX-xuK" firstAttribute="trailing" secondItem="g3Y-iC-fgT" secondAttribute="trailing" id="Oia-2m-ci4"/>
+                            <constraint firstItem="mfG-Fj-U0w" firstAttribute="bottom" secondItem="DzZ-hw-JO6" secondAttribute="bottom" id="RAi-Dj-9xK"/>
+                            <constraint firstItem="3Ta-Ye-yl4" firstAttribute="top" secondItem="jFx-NI-1j1" secondAttribute="top" id="Rky-6c-zfc"/>
+                            <constraint firstItem="jFx-NI-1j1" firstAttribute="width" secondItem="g3Y-iC-fgT" secondAttribute="width" id="RtC-BB-BuH"/>
+                            <constraint firstItem="3Ta-Ye-yl4" firstAttribute="width" secondItem="Sfw-rP-Ld1" secondAttribute="width" id="SIb-9T-qui"/>
+                            <constraint firstItem="3Yj-1W-134" firstAttribute="trailing" secondItem="Sfw-rP-Ld1" secondAttribute="trailing" id="Sbq-yt-85c"/>
+                            <constraint firstItem="mfG-Fj-U0w" firstAttribute="top" secondItem="DzZ-hw-JO6" secondAttribute="top" id="TaF-Mh-PBv"/>
+                            <constraint firstItem="Qzq-Cs-vyg" firstAttribute="width" secondItem="g3Y-iC-fgT" secondAttribute="width" id="Tuc-jQ-2ys"/>
+                            <constraint firstItem="4Cl-dI-ERW" firstAttribute="width" secondItem="Sfw-rP-Ld1" secondAttribute="width" id="UPV-Nt-l1i"/>
+                            <constraint firstItem="DzZ-hw-JO6" firstAttribute="width" secondItem="g3Y-iC-fgT" secondAttribute="width" id="X98-AY-B7d"/>
+                            <constraint firstItem="96t-ek-XHY" firstAttribute="top" secondItem="Qzq-Cs-vyg" secondAttribute="top" id="YIk-YE-bKz"/>
+                            <constraint firstItem="3Ta-Ye-yl4" firstAttribute="bottom" secondItem="jFx-NI-1j1" secondAttribute="bottom" id="ZK4-E5-aBL"/>
+                            <constraint firstItem="Sfw-rP-Ld1" firstAttribute="trailing" secondItem="4Cl-dI-ERW" secondAttribute="trailing" id="a2O-Jv-8d5"/>
+                            <constraint firstItem="96t-ek-XHY" firstAttribute="width" secondItem="Sfw-rP-Ld1" secondAttribute="width" id="hHK-xR-oOR"/>
+                            <constraint firstItem="jFx-NI-1j1" firstAttribute="trailing" secondItem="g3Y-iC-fgT" secondAttribute="trailing" id="hsh-lP-2cy"/>
+                            <constraint firstItem="Qzq-Cs-vyg" firstAttribute="trailing" secondItem="g3Y-iC-fgT" secondAttribute="trailing" id="jvz-gd-Waf"/>
+                            <constraint firstItem="Sfw-rP-Ld1" firstAttribute="top" secondItem="lXa-6G-6HI" secondAttribute="bottom" constant="8" id="kJF-Mi-Na4"/>
+                            <constraint firstItem="Wbw-TZ-fPE" firstAttribute="width" secondItem="Sfw-rP-Ld1" secondAttribute="width" id="l3t-PI-rdn"/>
+                            <constraint firstItem="mfG-Fj-U0w" firstAttribute="trailing" secondItem="Sfw-rP-Ld1" secondAttribute="trailing" id="mIC-B4-uoa"/>
+                            <constraint firstItem="4Cl-dI-ERW" firstAttribute="top" secondItem="SDT-q9-faH" secondAttribute="top" id="mOe-ad-8a8"/>
+                            <constraint firstItem="3Yj-1W-134" firstAttribute="top" secondItem="WS7-vX-xuK" secondAttribute="top" id="nOL-ER-PSL"/>
+                            <constraint firstItem="dJY-eA-MEi" firstAttribute="width" secondItem="g3Y-iC-fgT" secondAttribute="width" id="nr2-C0-t1d"/>
+                            <constraint firstItem="Sfw-rP-Ld1" firstAttribute="top" secondItem="g3Y-iC-fgT" secondAttribute="top" id="oQd-mQ-tdr"/>
+                            <constraint firstItem="Sfw-rP-Ld1" firstAttribute="bottom" secondItem="g3Y-iC-fgT" secondAttribute="bottom" id="oVy-87-tfg"/>
+                            <constraint firstItem="96t-ek-XHY" firstAttribute="trailing" secondItem="Sfw-rP-Ld1" secondAttribute="trailing" id="oiQ-vN-bN7"/>
+                            <constraint firstItem="3Ta-Ye-yl4" firstAttribute="trailing" secondItem="Sfw-rP-Ld1" secondAttribute="trailing" id="owC-ml-WTK"/>
+                            <constraint firstItem="3Ta-Ye-yl4" firstAttribute="top" secondItem="4Cl-dI-ERW" secondAttribute="bottom" constant="4" id="qOW-v0-Hpa"/>
+                            <constraint firstItem="WS7-vX-xuK" firstAttribute="width" secondItem="g3Y-iC-fgT" secondAttribute="width" id="utb-9E-mmn"/>
+                            <constraint firstItem="Na2-qQ-HGJ" firstAttribute="width" secondItem="g3Y-iC-fgT" secondAttribute="width" id="uzs-9G-fde"/>
+                            <constraint firstItem="SDT-q9-faH" firstAttribute="width" secondItem="g3Y-iC-fgT" secondAttribute="width" id="vZG-G1-b2G"/>
+                            <constraint firstItem="96t-ek-XHY" firstAttribute="top" secondItem="mfG-Fj-U0w" secondAttribute="bottom" constant="4" id="xQV-zY-Cou"/>
+                            <constraint firstItem="3Yj-1W-134" firstAttribute="width" secondItem="Sfw-rP-Ld1" secondAttribute="width" id="xRk-hG-1Qu"/>
+                            <constraint firstItem="Wbw-TZ-fPE" firstAttribute="trailing" secondItem="Sfw-rP-Ld1" secondAttribute="trailing" id="ztv-dj-18e"/>
+                        </constraints>
+                    </view>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="600" height="320"/>
+                </viewController>
             </objects>
         </scene>
     </scenes>
