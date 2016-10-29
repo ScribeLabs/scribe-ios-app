@@ -12,7 +12,7 @@
 @property (nonatomic, weak) IBOutlet UITableView *devicesTableView;
 
 @property (nonatomic, strong) RSDeviceMgr *deviceMgr;
-@property (nonatomic, strong) NSMutableDictionary *devicesMap; // includes connected and discovered devices
+@property (nonatomic, strong) NSMutableArray *devices; // includes connected and discovered devices
 
 @end
 
@@ -22,13 +22,17 @@
 {
     [super viewDidLoad];
     self.deviceMgr = [RSDeviceMgr sharedInstance];
-    self.devicesMap = [NSMutableDictionary dictionary];
+    self.devices = [NSMutableArray array];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scanTimedOut:) name:RSDeviceScanTimedOutNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceDiscovered:) name:RSDeviceDiscoveredNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceConnected:) name:RSDeviceConnectedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceDisconnected:) name:RSDeviceDisconnectedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(connectionFailed:) name:RSDeviceConnectTimeoutNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(connectionFailed:) name:RSDeviceConnectFailedNotification object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -47,11 +51,11 @@
 - (IBAction)scanButtonClicked:(id)sender
 {
     // Removing all devices except connected
-    [self.devicesMap removeAllObjects];
+    [self.devices removeAllObjects];
     NSArray *connectedDevices = self.deviceMgr.connectedDevices;
     for (RSDevice *device in connectedDevices)
     {
-        [self.devicesMap setObject:device forKey:device.uuidString];
+        [self.devices addObject:device];
     }
     [self.devicesTableView reloadData];
     
@@ -113,13 +117,25 @@
 {
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sender.tag inSection: 0];
     [self.devicesTableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+    RSDevice *device = self.devices[indexPath.row];
+    
+    if ([device isPeripheralConnected])
+    {
+        [self writeMessage:[NSString stringWithFormat:@"Disconnecting the %@", device.name]];
+        [self.deviceMgr disconnectDevice:device];
+    }
+    else
+    {
+        [self writeMessage:[NSString stringWithFormat:@"Connecting to %@", device.name]];
+        [self.deviceMgr connectToDevice:device];
+    }
 }
 
 # pragma mark - UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.devicesMap.count;
+    return self.devices.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -132,13 +148,27 @@
         cell = [[DeviceTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
     
-    RSDevice *device = (RSDevice *) self.devicesMap.allValues[indexPath.row];
-    cell.deviceNameLabel.text = device.name;
+    RSDevice *device = (RSDevice *)self.devices[indexPath.row];
+    [cell.deviceNameLabel setText:device.name];
     cell.connectButton.tag = indexPath.row;
     [cell.connectButton addTarget:self action:@selector(connectButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-    cell.connectButton.titleLabel.text = [device isDeviceReady] ? @"Disconnect" : @"Connect";
+    NSString *buttonTitle = [device isDeviceReady] ? @"Disconnect" : @"Connect";
+    [cell.connectButton setTitle:buttonTitle forState:UIControlStateNormal];
     
     return cell;
+}
+
+# pragma mark - UITableViewDelegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    RSDevice *device = (RSDevice *)self.devices[indexPath.row];
+    if (![device isPeripheralConnected])
+    {
+        [self writeMessage:[NSString stringWithFormat:@"Connecting to %@", device.name]];
+        [self writeMessage:@"Scan automatically stopped"];
+        [self.deviceMgr connectToDevice:device];
+    }
 }
 
 # pragma mark - Notifications
@@ -150,8 +180,8 @@
         RSDevice *device = (RSDevice *)obj;
         [self writeMessage:[NSString stringWithFormat:@"Found %@ with serial number %@. RSSI %d", device.name, device.serialNumber, device.rssi]];
         
-        if (![self.devicesMap.allKeys containsObject:device.uuidString]) {
-            [self.devicesMap setObject:device forKey:device.uuidString];
+        if ([self isDeviceNew:device]) {
+            [self.devices addObject:device];
             [self.devicesTableView reloadData];
         }
     }
@@ -160,6 +190,77 @@
 - (void)scanTimedOut:(NSNotification *)note
 {
     [self writeMessage:@"Scanning devices is completed"];
+}
+
+- (void)deviceConnected:(NSNotification *)note
+{
+    id obj = [note.userInfo valueForKey:kRSDevice];
+    if ([obj isKindOfClass:[RSDevice class]])
+    {
+        RSDevice *device = (RSDevice *)obj;
+        [self writeMessage:[NSString stringWithFormat:@"Connected %@ (v%@) with serial %@", device.name, device.hardwareVersion, device.serialNumber]];
+        
+        NSIndexPath *selectedRowIndexPath = [self.devicesTableView indexPathForSelectedRow];
+        [self.devicesTableView reloadData];
+        [self.devicesTableView selectRowAtIndexPath:selectedRowIndexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+    }
+}
+
+- (void)deviceDisconnected:(NSNotification *)note
+{
+    id obj = [note.userInfo valueForKey:kRSDevice];
+    if ([obj isKindOfClass:[RSDevice class]])
+    {
+        RSDevice *device = (RSDevice *)obj;
+        [self writeMessage:[NSString stringWithFormat:@"Device %@ has been disconnected", device.name]];
+        
+        NSInteger index = [self getDeviceIndex:device.uuidString];
+        if (index != -1)
+        {
+            [self.devices removeObjectAtIndex:index];
+        }
+        
+        [self.devicesTableView reloadData];
+    }
+}
+
+- (void)connectionFailed:(NSNotification *)note
+{
+    id obj = [note.userInfo valueForKey:kRSDevice];
+    if ([obj isKindOfClass:[RSDevice class]])
+    {
+        RSDevice *device = (RSDevice *)obj;
+        [self writeMessage:[NSString stringWithFormat:@"Failed connecting to %@", device.name]];
+    }
+}
+
+# pragma mark - Extra
+
+- (BOOL)isDeviceNew:(RSDevice *)discoveredDevice
+{
+    for (RSDevice *device in self.devices)
+    {
+        if ([device.uuidString isEqualToString:discoveredDevice.uuidString])
+        {
+            return NO;
+        }
+    }
+    
+    return YES;
+}
+
+- (NSInteger)getDeviceIndex:(NSString *)deviceUUID
+{
+    for (int i = 0; i < self.devices.count; i++)
+    {
+        RSDevice *device = self.devices[i];
+        if ([device.uuidString isEqualToString:deviceUUID])
+        {
+            return i;
+        }
+    }
+    
+    return -1;
 }
 
 # pragma mark - Logging
