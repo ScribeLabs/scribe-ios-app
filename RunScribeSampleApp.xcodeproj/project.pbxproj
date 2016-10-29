@@ -8,16 +8,16 @@
 
 /* Begin PBXBuildFile section */
 		07C7839E2D00B20A53E840D4 /* Pods_RunScribeSampleApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3049FCAFEF436BE5BCA1B61D /* Pods_RunScribeSampleApp.framework */; };
+		280D02B71DC4D06500AA8533 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 280D02B61DC4D06500AA8533 /* MainViewController.m */; };
+		280D02BA1DC4D0EA00AA8533 /* DeviceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 280D02B91DC4D0EA00AA8533 /* DeviceTableViewCell.m */; };
 		2883C5701DC287180065359D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2883C56F1DC287180065359D /* main.m */; };
 		2883C5731DC287180065359D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2883C5721DC287180065359D /* AppDelegate.m */; };
-		2883C5761DC287180065359D /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2883C5751DC287180065359D /* MainViewController.m */; };
 		2883C5791DC287180065359D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2883C5771DC287180065359D /* Main.storyboard */; };
 		2883C57C1DC287180065359D /* RunScribeSampleApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2883C57A1DC287180065359D /* RunScribeSampleApp.xcdatamodeld */; };
 		2883C57E1DC287180065359D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2883C57D1DC287180065359D /* Assets.xcassets */; };
 		2883C5811DC287180065359D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2883C57F1DC287180065359D /* LaunchScreen.storyboard */; };
 		2883C58B1DC2887A0065359D /* RunScribeSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2883C5881DC2884E0065359D /* RunScribeSDK.framework */; };
 		2883C58C1DC2887A0065359D /* RunScribeSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2883C5881DC2884E0065359D /* RunScribeSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		28C14C8D1DC3B29000DBB6B3 /* DeviceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C14C8C1DC3B29000DBB6B3 /* DeviceTableViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -35,20 +35,20 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		280D02B51DC4D06500AA8533 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MainViewController.h; path = UI/Main/MainViewController.h; sourceTree = "<group>"; };
+		280D02B61DC4D06500AA8533 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MainViewController.m; path = UI/Main/MainViewController.m; sourceTree = "<group>"; };
+		280D02B81DC4D0EA00AA8533 /* DeviceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DeviceTableViewCell.h; path = UI/Main/DeviceTableViewCell.h; sourceTree = "<group>"; };
+		280D02B91DC4D0EA00AA8533 /* DeviceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DeviceTableViewCell.m; path = UI/Main/DeviceTableViewCell.m; sourceTree = "<group>"; };
 		2883C56B1DC287180065359D /* RunScribeSampleApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RunScribeSampleApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2883C56F1DC287180065359D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		2883C5711DC287180065359D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		2883C5721DC287180065359D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		2883C5741DC287180065359D /* MainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
-		2883C5751DC287180065359D /* MainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		2883C5781DC287180065359D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		2883C57B1DC287180065359D /* RunScribeSampleApp.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = RunScribeSampleApp.xcdatamodel; sourceTree = "<group>"; };
 		2883C57D1DC287180065359D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2883C5801DC287180065359D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2883C5821DC287180065359D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2883C5881DC2884E0065359D /* RunScribeSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RunScribeSDK.framework; sourceTree = "<group>"; };
-		28C14C8B1DC3B29000DBB6B3 /* DeviceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceTableViewCell.h; sourceTree = "<group>"; };
-		28C14C8C1DC3B29000DBB6B3 /* DeviceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceTableViewCell.m; sourceTree = "<group>"; };
 		3049FCAFEF436BE5BCA1B61D /* Pods_RunScribeSampleApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RunScribeSampleApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		85038ECCBE491398BD0AC84A /* Pods-RunScribeSampleApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunScribeSampleApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-RunScribeSampleApp/Pods-RunScribeSampleApp.release.xcconfig"; sourceTree = "<group>"; };
 		B4DC3ED047CB44DE320B3B76 /* Pods-RunScribeSampleApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunScribeSampleApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RunScribeSampleApp/Pods-RunScribeSampleApp.debug.xcconfig"; sourceTree = "<group>"; };
@@ -67,6 +67,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		280D02B31DC4CB4500AA8533 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				2883C5771DC287180065359D /* Main.storyboard */,
+				2883C57F1DC287180065359D /* LaunchScreen.storyboard */,
+				280D02B41DC4CDF300AA8533 /* Main */,
+			);
+			name = UI;
+			sourceTree = "<group>";
+		};
+		280D02B41DC4CDF300AA8533 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				280D02B81DC4D0EA00AA8533 /* DeviceTableViewCell.h */,
+				280D02B91DC4D0EA00AA8533 /* DeviceTableViewCell.m */,
+				280D02B51DC4D06500AA8533 /* MainViewController.h */,
+				280D02B61DC4D06500AA8533 /* MainViewController.m */,
+			);
+			name = Main;
+			sourceTree = "<group>";
+		};
 		2883C5621DC287170065359D = {
 			isa = PBXGroup;
 			children = (
@@ -88,19 +109,14 @@
 		2883C56D1DC287180065359D /* RunScribeSampleApp */ = {
 			isa = PBXGroup;
 			children = (
+				280D02B31DC4CB4500AA8533 /* UI */,
 				2883C58A1DC288560065359D /* Frameworks */,
 				2883C5711DC287180065359D /* AppDelegate.h */,
 				2883C5721DC287180065359D /* AppDelegate.m */,
-				2883C5741DC287180065359D /* MainViewController.h */,
-				2883C5751DC287180065359D /* MainViewController.m */,
-				2883C5771DC287180065359D /* Main.storyboard */,
 				2883C57D1DC287180065359D /* Assets.xcassets */,
-				2883C57F1DC287180065359D /* LaunchScreen.storyboard */,
 				2883C5821DC287180065359D /* Info.plist */,
 				2883C57A1DC287180065359D /* RunScribeSampleApp.xcdatamodeld */,
 				2883C56E1DC287180065359D /* Supporting Files */,
-				28C14C8B1DC3B29000DBB6B3 /* DeviceTableViewCell.h */,
-				28C14C8C1DC3B29000DBB6B3 /* DeviceTableViewCell.m */,
 			);
 			path = RunScribeSampleApp;
 			sourceTree = "<group>";
@@ -262,10 +278,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2883C5761DC287180065359D /* MainViewController.m in Sources */,
-				28C14C8D1DC3B29000DBB6B3 /* DeviceTableViewCell.m in Sources */,
 				2883C5731DC287180065359D /* AppDelegate.m in Sources */,
+				280D02BA1DC4D0EA00AA8533 /* DeviceTableViewCell.m in Sources */,
 				2883C5701DC287180065359D /* main.m in Sources */,
+				280D02B71DC4D06500AA8533 /* MainViewController.m in Sources */,
 				2883C57C1DC287180065359D /* RunScribeSampleApp.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

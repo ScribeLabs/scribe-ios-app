@@ -4,7 +4,6 @@
 
 #import "MainViewController.h"
 #import "RSDeviceMgr.h"
-#import "DeviceUtils.h"
 #import "DeviceTableViewCell.h"
 
 @interface MainViewController () <UITableViewDataSource, UITableViewDelegate>
