@@ -18,6 +18,7 @@
 		2883C5811DC287180065359D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2883C57F1DC287180065359D /* LaunchScreen.storyboard */; };
 		2883C58B1DC2887A0065359D /* RunScribeSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2883C5881DC2884E0065359D /* RunScribeSDK.framework */; };
 		2883C58C1DC2887A0065359D /* RunScribeSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2883C5881DC2884E0065359D /* RunScribeSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		28F8A3BE1DC75B2000843D24 /* RSAppLogging.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F8A3BD1DC75B2000843D24 /* RSAppLogging.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -49,6 +50,8 @@
 		2883C5801DC287180065359D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2883C5821DC287180065359D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2883C5881DC2884E0065359D /* RunScribeSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RunScribeSDK.framework; sourceTree = "<group>"; };
+		28F8A3BC1DC75B2000843D24 /* RSAppLogging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSAppLogging.h; sourceTree = "<group>"; };
+		28F8A3BD1DC75B2000843D24 /* RSAppLogging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSAppLogging.m; sourceTree = "<group>"; };
 		3049FCAFEF436BE5BCA1B61D /* Pods_RunScribeSampleApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RunScribeSampleApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		85038ECCBE491398BD0AC84A /* Pods-RunScribeSampleApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunScribeSampleApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-RunScribeSampleApp/Pods-RunScribeSampleApp.release.xcconfig"; sourceTree = "<group>"; };
 		B4DC3ED047CB44DE320B3B76 /* Pods-RunScribeSampleApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunScribeSampleApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RunScribeSampleApp/Pods-RunScribeSampleApp.debug.xcconfig"; sourceTree = "<group>"; };
@@ -117,6 +120,8 @@
 				2883C5821DC287180065359D /* Info.plist */,
 				2883C57A1DC287180065359D /* RunScribeSampleApp.xcdatamodeld */,
 				2883C56E1DC287180065359D /* Supporting Files */,
+				28F8A3BC1DC75B2000843D24 /* RSAppLogging.h */,
+				28F8A3BD1DC75B2000843D24 /* RSAppLogging.m */,
 			);
 			path = RunScribeSampleApp;
 			sourceTree = "<group>";
@@ -278,6 +283,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				28F8A3BE1DC75B2000843D24 /* RSAppLogging.m in Sources */,
 				2883C5731DC287180065359D /* AppDelegate.m in Sources */,
 				280D02BA1DC4D0EA00AA8533 /* RSDeviceTableViewCell.m in Sources */,
 				2883C5701DC287180065359D /* main.m in Sources */,

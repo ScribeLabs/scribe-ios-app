@@ -5,6 +5,7 @@
 #import "RSMainViewController.h"
 #import "RSDeviceMgr.h"
 #import "RSDeviceTableViewCell.h"
+#import "RSAppLogging.h"
 
 @interface RSMainViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -267,7 +268,7 @@
 
 - (void)writeMessage:(NSString *)message
 {
-    NSLog(@"%@", message);
+    DDLogDebug(@"%@", message);
     dispatch_async(dispatch_get_main_queue(), ^{
         NSString* newLine = [message stringByAppendingString:@"\n"];
         NSAttributedString* name = [[NSAttributedString alloc] initWithString:newLine];
