@@ -8,6 +8,7 @@
 #import "RSAppLogging.h"
 #import "RSCommandFactory.h"
 #import "RSDisplayLEDCmd.h"
+#import "RSEraseDataCmd.h"
 
 @interface RSMainViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -96,14 +97,11 @@
     UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:@"Erase" message:nil preferredStyle:UIAlertControllerStyleAlert];
     
     [actionSheet addAction:[UIAlertAction actionWithTitle:@"Erase Flash" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [self dismissViewControllerAnimated:YES completion:^{
-            
-        }];
+        [self erase:kRSDeviceChipErase];
     }]];
     
     [actionSheet addAction:[UIAlertAction actionWithTitle:@"Erase EE" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [self dismissViewControllerAnimated:YES completion:^{
-        }];
+        [self erase:kRSDeviceEEpromErase];
     }]];
     
     [actionSheet addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
@@ -137,8 +135,7 @@
     if ([self isDeviceReady:device])
     {
         NSArray *colorRGB;
-        switch (ledColor)
-        {
+        switch (ledColor) {
             case kRSLEDColorRed:
                 colorRGB = @[@255, @0, @0];
                 [self writeMessage:[NSString stringWithFormat:@"Light up red LED on %@", device.name]];
@@ -188,6 +185,55 @@
             cmd.color = kRSLEDColorBlue;
         }
         [cmd setCompletedBlock:nil];
+        [device runCmd:cmd];
+        [self writeMessage:[NSString stringWithFormat:@"Dim the LED on %@", device.name]];
+    }
+}
+
+- (void)erase:(RSEraseTypes)eraseType
+{
+    RSDevice *device = [self getSelectedDevice];
+    if ([self isDeviceReady:device])
+    {
+        switch (eraseType) {
+            case kRSDeviceChipErase:
+                [self writeMessage:[NSString stringWithFormat:@"Performing chip erase on %@", device.name]];
+                break;
+                
+            case kRSDeviceEEpromErase:
+                [self writeMessage:[NSString stringWithFormat:@"Performing EEProm erase on %@", device.name]];
+                break;
+                
+            default:
+                break;
+        }
+        
+        __weak RSMainViewController *weakSelf = self;
+        RSEraseDataCmd *cmd = (RSEraseDataCmd *)[[RSCommandFactory sharedInstance] getCmdForType:kRSCmdEraseData forDevice:device];
+        cmd.blockTillCleared = YES;
+        cmd.eraseType = (uint)eraseType;
+        [cmd setCompletedBlock:^(RSCmd *sourceCmd, NSError *error)
+         {
+             RSMainViewController *strongSelf = weakSelf;
+             RSEraseDataCmd *sourceEraseCmd = (RSEraseDataCmd *)sourceCmd;
+             NSString *message = nil;
+             if (error == nil)
+             {
+                 if (sourceEraseCmd.result == kRSDeviceErased)
+                 {
+                     message = [NSString stringWithFormat:@"%@ has been successfully cleared.", device.name];
+                 }
+                 else
+                 {
+                     message = [NSString stringWithFormat:@"%@ cannot be cleared right now. Please try again later.", device.name];
+                 }
+             }
+             else
+             {
+                 message = [NSString stringWithFormat:@"Error trying to clear %@. Error: %@", device.name, error];
+             }
+             [strongSelf writeMessage:message];
+         }];
         [device runCmd:cmd];
     }
 }
@@ -240,7 +286,8 @@
         RSDevice *device = (RSDevice *)obj;
         [self writeMessage:[NSString stringWithFormat:@"Found %@ with serial number %@. RSSI %d", device.name, device.serialNumber, device.rssi]];
         
-        if ([self isDeviceNew:device]) {
+        if ([self isDeviceNew:device])
+        {
             [self.devices addObject:device];
             [self.devicesTableView reloadData];
         }
@@ -340,7 +387,11 @@
 
 - (BOOL)isDeviceReady:(RSDevice *)device
 {
-    if (device != nil && [device isDeviceReady])
+    if (device == nil)
+    {
+        return NO;
+    }
+    else if ([device isDeviceReady])
     {
         return YES;
     }
