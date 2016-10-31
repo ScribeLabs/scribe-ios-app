@@ -6,6 +6,8 @@
 #import "RSDeviceMgr.h"
 #import "RSDeviceTableViewCell.h"
 #import "RSAppLogging.h"
+#import "RSCommandFactory.h"
+#import "RSDisplayLEDCmd.h"
 
 @interface RSMainViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -68,25 +70,20 @@
 {
     UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:@"Display LED" message:nil preferredStyle:UIAlertControllerStyleAlert];
 
-    [actionSheet addAction:[UIAlertAction actionWithTitle:@"On/Off" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [self dismissViewControllerAnimated:YES completion:^{
-            
-        }];
-    }]];
-
     [actionSheet addAction:[UIAlertAction actionWithTitle:@"Red" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [self dismissViewControllerAnimated:YES completion:^{
-        }];
+        [self lightUpLED:kRSLEDColorRed];
     }]];
 
     [actionSheet addAction:[UIAlertAction actionWithTitle:@"Green" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [self dismissViewControllerAnimated:YES completion:^{
-        }];
+        [self lightUpLED:kRSLEDColorGreen];
     }]];
     
     [actionSheet addAction:[UIAlertAction actionWithTitle:@"Blue" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [self dismissViewControllerAnimated:YES completion:^{
-        }];
+        [self lightUpLED:kRSLEDColorBlue];
+    }]];
+    
+    [actionSheet addAction:[UIAlertAction actionWithTitle:@"Off" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [self dimLED];
     }]];
 
     [actionSheet addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
@@ -132,6 +129,69 @@
     }
 }
 
+# pragma mark - Device requests
+
+- (void)lightUpLED:(RSLEDColor)ledColor
+{
+    RSDevice *device = [self getSelectedDevice];
+    if ([self isDeviceReady:device])
+    {
+        NSArray *colorRGB;
+        switch (ledColor)
+        {
+            case kRSLEDColorRed:
+                colorRGB = @[@255, @0, @0];
+                [self writeMessage:[NSString stringWithFormat:@"Light up red LED on %@", device.name]];
+                break;
+            case kRSLEDColorGreen:
+                colorRGB = @[@0, @255, @0];
+                [self writeMessage:[NSString stringWithFormat:@"Light up green LED on %@", device.name]];
+                break;
+            case kRSLEDColorBlue:
+                colorRGB = @[@0, @0, @255];
+                [self writeMessage:[NSString stringWithFormat:@"Light up blue LED on %@", device.name]];
+                break;
+        }
+        
+        RSDisplayLEDCmd *cmd = (RSDisplayLEDCmd *)[[RSCommandFactory sharedInstance] getCmdForType:kRSCmdDisplayLED forDevice:device];
+        if ([device isAtProtocolVersion:kProtocolVer2_0])
+        {
+            cmd.pattern = kRSLEDPatternConnected;
+            cmd.cycles = 150; // keep in on for 5 minutes -- ie, 150 cycles of 2 second animations.
+            cmd.red = (int)((NSNumber *)colorRGB[0]).integerValue;
+            cmd.green = (int)((NSNumber *)colorRGB[1]).integerValue;
+            cmd.blue = (int)((NSNumber *)colorRGB[2]).integerValue;
+        }
+        else
+        {
+            cmd.mode = kRSLEDModeSolid;
+            cmd.color = ledColor;
+        }
+        [cmd setCompletedBlock:nil];
+        [device runCmd:cmd];
+    }
+}
+
+- (void)dimLED
+{
+    RSDevice *device = [self getSelectedDevice];
+    if ([self isDeviceReady:device])
+    {
+        RSDisplayLEDCmd *cmd = (RSDisplayLEDCmd *)[[RSCommandFactory sharedInstance] getCmdForType:kRSCmdDisplayLED forDevice:device];
+        if ([device isAtProtocolVersion:kProtocolVer2_0])
+        {
+            cmd.pattern = kRSLEDPatternCancel;
+        }
+        else
+        {
+            cmd.mode = kRSLEDModeNormal;
+            cmd.color = kRSLEDColorBlue;
+        }
+        [cmd setCompletedBlock:nil];
+        [device runCmd:cmd];
+    }
+}
+
 # pragma mark - UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -167,7 +227,6 @@
     if (![device isPeripheralConnected])
     {
         [self writeMessage:[NSString stringWithFormat:@"Connecting to %@", device.name]];
-        [self writeMessage:@"Scan automatically stopped"];
         [self.deviceMgr connectToDevice:device];
     }
 }
@@ -262,6 +321,45 @@
     }
     
     return -1;
+}
+
+- (RSDevice *)getSelectedDevice
+{
+    NSIndexPath *selectedDeviceIndexPath = [self.devicesTableView indexPathForSelectedRow];
+    if (selectedDeviceIndexPath != nil && selectedDeviceIndexPath.row > -1)
+    {
+        RSDevice *device = (RSDevice *)[self.devices objectAtIndex:selectedDeviceIndexPath.row];
+        return device;
+    }
+    else
+    {
+        [self showAlertWithTitle:@"Error" message:@"No device selected!"];
+        return nil;
+    }
+}
+
+- (BOOL)isDeviceReady:(RSDevice *)device
+{
+    if (device != nil && [device isDeviceReady])
+    {
+        return YES;
+    }
+    else
+    {
+        [self showAlertWithTitle:@"Error" message:@"Your device is not ready to perform this action!"];
+        return NO;
+    }
+}
+
+- (void)showAlertWithTitle:(NSString *)title message:(NSString *)message
+{
+    [self writeMessage:message];
+    UIAlertController *controller = [UIAlertController alertControllerWithTitle:title
+                                                                        message:message
+                                                                 preferredStyle:UIAlertControllerStyleAlert];
+    [controller addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
+    
+    [self presentViewController:controller animated:YES completion:nil];
 }
 
 # pragma mark - Logging
