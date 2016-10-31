@@ -2,11 +2,11 @@
 //  Copyright © 2016 RunScribe. All rights reserved.
 //
 
-#import "MainViewController.h"
+#import "RSMainViewController.h"
 #import "RSDeviceMgr.h"
-#import "DeviceTableViewCell.h"
+#import "RSDeviceTableViewCell.h"
 
-@interface MainViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface RSMainViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, weak) IBOutlet UITextView *logTextView;
 @property (nonatomic, weak) IBOutlet UITableView *devicesTableView;
@@ -16,7 +16,7 @@
 
 @end
 
-@implementation MainViewController
+@implementation RSMainViewController
 
 - (void)viewDidLoad
 {
@@ -140,12 +140,12 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"DeviceTableViewCell";
+    static NSString *CellIdentifier = @"RSDeviceTableViewCell";
     
-    DeviceTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    RSDeviceTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil)
     {
-        cell = [[DeviceTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+        cell = [[RSDeviceTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
     
     RSDevice *device = (RSDevice *)self.devices[indexPath.row];

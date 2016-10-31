@@ -4,7 +4,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MainViewController : UIViewController
+@interface RSMainViewController : UIViewController
 
 
 @end

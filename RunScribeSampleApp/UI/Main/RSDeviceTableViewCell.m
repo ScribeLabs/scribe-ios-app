@@ -1,14 +1,10 @@
 //
-//  DeviceTableViewCell.m
-//  RunScribeSampleApp
-//
-//  Created by Vitaliy Parashchak on 10/28/16.
 //  Copyright © 2016 RunScribe. All rights reserved.
 //
 
-#import "DeviceTableViewCell.h"
+#import "RSDeviceTableViewCell.h"
 
-@implementation DeviceTableViewCell
+@implementation RSDeviceTableViewCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];
