@@ -3,12 +3,17 @@
 //
 
 #import "RSMainViewController.h"
+#import "RSDeviceStatusViewController.h"
 #import "RSDeviceMgr.h"
 #import "RSDeviceTableViewCell.h"
 #import "RSAppLogging.h"
 #import "RSCommandFactory.h"
 #import "RSDisplayLEDCmd.h"
 #import "RSEraseDataCmd.h"
+
+NSString * const kStatusSegueIdentifier = @"DeviceStatusSegue";
+NSString * const RSWriteMessageNotification = @"RSWriteMessageNotification";
+NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
 
 @interface RSMainViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -27,19 +32,20 @@
     [super viewDidLoad];
     self.deviceMgr = [RSDeviceMgr sharedInstance];
     self.devices = [NSMutableArray array];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
+    
+    // SDK notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scanTimedOut:) name:RSDeviceScanTimedOutNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceDiscovered:) name:RSDeviceDiscoveredNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceConnected:) name:RSDeviceConnectedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceDisconnected:) name:RSDeviceDisconnectedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(connectionFailed:) name:RSDeviceConnectTimeoutNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(connectionFailed:) name:RSDeviceConnectFailedNotification object:nil];
+    
+    // Logging notification
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(writeMessageNotificationReceived:) name:RSWriteMessageNotification object:nil];
 }
 
-- (void)viewWillDisappear:(BOOL)animated
+- (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
@@ -124,6 +130,15 @@
     {
         [self writeMessage:[NSString stringWithFormat:@"Connecting to %@", device.name]];
         [self.deviceMgr connectToDevice:device];
+    }
+}
+
+- (IBAction)statusButtonClicked:(id)sender
+{
+    RSDevice *device = [self getSelectedDevice];
+    if ([self isDeviceReady:device])
+    {
+        [self performSegueWithIdentifier:kStatusSegueIdentifier sender:self];
     }
 }
 
@@ -325,6 +340,26 @@
     {
         RSDevice *device = (RSDevice *)obj;
         [self writeMessage:[NSString stringWithFormat:@"Failed connecting to %@", device.name]];
+    }
+}
+
+- (void)writeMessageNotificationReceived:(NSNotification *)note
+{
+    id obj = [note.userInfo valueForKey:kRSWriteMessageKey];
+    if (obj != nil && [obj isKindOfClass:[NSString class]])
+    {
+        [self writeMessage:(NSString *)obj];
+    }
+}
+
+#pragma mark - Navigation
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:kStatusSegueIdentifier])
+    {
+        RSDeviceStatusViewController *controller = (RSDeviceStatusViewController *)segue.destinationViewController;
+        controller.device = [self getSelectedDevice];
     }
 }
 

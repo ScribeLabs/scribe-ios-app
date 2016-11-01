@@ -6,6 +6,8 @@
 
 @interface RSMainViewController : UIViewController
 
+extern NSString * const RSWriteMessageNotification;
+extern NSString * const kRSWriteMessageKey;
 
 @end
 
