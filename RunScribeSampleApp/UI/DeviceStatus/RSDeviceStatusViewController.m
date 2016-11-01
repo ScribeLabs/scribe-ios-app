@@ -127,10 +127,13 @@
 {
     switch (batteryType) {
         case kRSDeviceBatteryNonRechargeable:
-            return @"Lithium";
+            return @"Primary";
             
         case kRSDeviceBatteryRechargeable:
             return @"Li-ion";
+            
+        case kRSDeviceBatteryLiPoly:
+            return @"Li-poly";
             
         default:
             return @"Unknown";
@@ -148,6 +151,9 @@
             
         case kRSDeviceBatteryModeSleep:
             return @"Sleep";
+            
+        case kRSDeviceBatteryModeCharge:
+            return @"Charge";
             
         default:
             return @"Unknown";

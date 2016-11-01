@@ -23,14 +23,16 @@ typedef NS_ENUM(NSInteger, RSDeviceOperationMode)
 typedef NS_ENUM(NSInteger, RSDeviceBatteryType)
 {
     kRSDeviceBatteryNonRechargeable = 0,
-    kRSDeviceBatteryRechargeable = 1
+    kRSDeviceBatteryRechargeable = 1,
+    kRSDeviceBatteryLiPoly = 2
 };
 
 typedef NS_ENUM(NSInteger, RSDeviceBatteryMode)
 {
     kRSDeviceBatteryModeActive = 0,
     kRSDeviceBatteryModeIdle = 1,
-    kRSDeviceBatteryModeSleep = 2
+    kRSDeviceBatteryModeSleep = 2,
+    kRSDeviceBatteryModeCharge = 3
 };
 
 extern NSInteger const kBatteryUsageTimeMultiplier;
