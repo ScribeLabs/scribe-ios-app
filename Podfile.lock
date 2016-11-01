@@ -7,13 +7,16 @@ PODS:
     - CocoaLumberjack/Core
   - CocoaLumberjack/Extensions (2.3.0):
     - CocoaLumberjack/Default
+  - MBProgressHUD (0.9.1)
 
 DEPENDENCIES:
   - CocoaLumberjack (~> 2.0)
+  - MBProgressHUD (= 0.9.1)
 
 SPEC CHECKSUMS:
   CocoaLumberjack: 97fab7ee5f507fe54445cca7ea80f926729cfd15
+  MBProgressHUD: c47f2c166c126cf2ce36498d80f33e754d4e93ad
 
-PODFILE CHECKSUM: 46c5fd5dca23bf62341ac09585fa2965e89a1501
+PODFILE CHECKSUM: 6331769002c6d865a13656cd841da2db4ebbfef9
 
 COCOAPODS: 1.0.1
