@@ -127,43 +127,38 @@
     }
 }
 
-# pragma mark - Device requests
+#pragma mark - Device requests
 
 - (void)lightUpLED:(RSLEDColor)ledColor
 {
     RSDevice *device = [self getSelectedDevice];
     if ([self isDeviceReady:device])
     {
-        NSArray *colorRGB;
+        RSDisplayLEDCmd *cmd = (RSDisplayLEDCmd *)[[RSCommandFactory sharedInstance] getCmdForType:kRSCmdDisplayLED forDevice:device];
+        
         switch (ledColor) {
             case kRSLEDColorRed:
-                colorRGB = @[@255, @0, @0];
                 [self writeMessage:[NSString stringWithFormat:@"Light up red LED on %@", device.name]];
+                cmd.red = 255;
+                cmd.green = 0;
+                cmd.blue = 0;
                 break;
             case kRSLEDColorGreen:
-                colorRGB = @[@0, @255, @0];
                 [self writeMessage:[NSString stringWithFormat:@"Light up green LED on %@", device.name]];
+                cmd.red = 0;
+                cmd.green = 255;
+                cmd.blue = 0;
                 break;
             case kRSLEDColorBlue:
-                colorRGB = @[@0, @0, @255];
                 [self writeMessage:[NSString stringWithFormat:@"Light up blue LED on %@", device.name]];
+                cmd.red = 0;
+                cmd.green = 0;
+                cmd.blue = 255;
                 break;
         }
         
-        RSDisplayLEDCmd *cmd = (RSDisplayLEDCmd *)[[RSCommandFactory sharedInstance] getCmdForType:kRSCmdDisplayLED forDevice:device];
-        if ([device isAtProtocolVersion:kProtocolVer2_0])
-        {
-            cmd.pattern = kRSLEDPatternConnected;
-            cmd.cycles = 150; // keep in on for 5 minutes -- ie, 150 cycles of 2 second animations.
-            cmd.red = (int)((NSNumber *)colorRGB[0]).integerValue;
-            cmd.green = (int)((NSNumber *)colorRGB[1]).integerValue;
-            cmd.blue = (int)((NSNumber *)colorRGB[2]).integerValue;
-        }
-        else
-        {
-            cmd.mode = kRSLEDModeSolid;
-            cmd.color = ledColor;
-        }
+        cmd.pattern = kRSLEDPatternConnected;
+        cmd.cycles = 30; // keep in on for a minute -- ie, 30 cycles of 2 second animations.
         [cmd setCompletedBlock:nil];
         [device runCmd:cmd];
     }
@@ -175,15 +170,7 @@
     if ([self isDeviceReady:device])
     {
         RSDisplayLEDCmd *cmd = (RSDisplayLEDCmd *)[[RSCommandFactory sharedInstance] getCmdForType:kRSCmdDisplayLED forDevice:device];
-        if ([device isAtProtocolVersion:kProtocolVer2_0])
-        {
-            cmd.pattern = kRSLEDPatternCancel;
-        }
-        else
-        {
-            cmd.mode = kRSLEDModeNormal;
-            cmd.color = kRSLEDColorBlue;
-        }
+        cmd.pattern = kRSLEDPatternCancel;
         [cmd setCompletedBlock:nil];
         [device runCmd:cmd];
         [self writeMessage:[NSString stringWithFormat:@"Dim the LED on %@", device.name]];
@@ -238,7 +225,7 @@
     }
 }
 
-# pragma mark - UITableViewDataSource
+#pragma mark - UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -265,7 +252,7 @@
     return cell;
 }
 
-# pragma mark - UITableViewDelegate
+#pragma mark - UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -277,7 +264,7 @@
     }
 }
 
-# pragma mark - Notifications
+#pragma mark - Notifications
 
 - (void)deviceDiscovered:(NSNotification *)note
 {
@@ -305,7 +292,7 @@
     if ([obj isKindOfClass:[RSDevice class]])
     {
         RSDevice *device = (RSDevice *)obj;
-        [self writeMessage:[NSString stringWithFormat:@"Connected %@ (v%@) with serial %@", device.name, device.hardwareVersion, device.serialNumber]];
+        [self writeMessage:[NSString stringWithFormat:@"Connected %@ with serial %@", device.name, device.serialNumber]];
         
         NSIndexPath *selectedRowIndexPath = [self.devicesTableView indexPathForSelectedRow];
         [self.devicesTableView reloadData];
@@ -341,7 +328,7 @@
     }
 }
 
-# pragma mark - Extra
+#pragma mark - Extra
 
 - (BOOL)isDeviceNew:(RSDevice *)discoveredDevice
 {
@@ -413,7 +400,7 @@
     [self presentViewController:controller animated:YES completion:nil];
 }
 
-# pragma mark - Logging
+#pragma mark - Logging
 
 - (void)writeMessage:(NSString *)message
 {
