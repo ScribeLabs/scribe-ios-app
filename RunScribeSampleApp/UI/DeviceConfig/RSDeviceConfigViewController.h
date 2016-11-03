@@ -6,7 +6,7 @@
 #import "RSBaseModalViewController.h"
 #import "RSDevice.h"
 
-@interface RSDeviceStatusViewController : RSBaseModalViewController
+@interface RSDeviceConfigViewController : RSBaseModalViewController
 
 @property (nonatomic, strong) RSDevice *device;
 

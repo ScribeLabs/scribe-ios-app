@@ -4,6 +4,7 @@
 
 #import "RSMainViewController.h"
 #import "RSDeviceStatusViewController.h"
+#import "RSDeviceConfigViewController.h"
 #import "RSDeviceMgr.h"
 #import "RSDeviceTableViewCell.h"
 #import "RSAppLogging.h"
@@ -12,10 +13,13 @@
 #import "RSEraseDataCmd.h"
 
 NSString * const kStatusSegueIdentifier = @"DeviceStatusSegue";
+NSString * const kConfigSegueIdentifier = @"DeviceConfigSegue";
 NSString * const RSWriteMessageNotification = @"RSWriteMessageNotification";
 NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
 
 @interface RSMainViewController () <UITableViewDataSource, UITableViewDelegate>
+
+@property (nonatomic, strong) NSDateFormatter *logDateFormatter;
 
 @property (nonatomic, weak) IBOutlet UITextView *logTextView;
 @property (nonatomic, weak) IBOutlet UITableView *devicesTableView;
@@ -32,6 +36,8 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
     [super viewDidLoad];
     self.deviceMgr = [RSDeviceMgr sharedInstance];
     self.devices = [NSMutableArray array];
+    self.logDateFormatter = [[NSDateFormatter alloc] init];
+    [self.logDateFormatter setDateFormat:@"hh:mm:ss"];
     
     // SDK notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scanTimedOut:) name:RSDeviceScanTimedOutNotification object:nil];
@@ -139,6 +145,15 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
     if ([self isDeviceReady:device])
     {
         [self performSegueWithIdentifier:kStatusSegueIdentifier sender:self];
+    }
+}
+
+- (IBAction)configButtonClicked:(id)sender
+{
+    RSDevice *device = [self getSelectedDevice];
+    if ([self isDeviceReady:device])
+    {
+        [self performSegueWithIdentifier:kConfigSegueIdentifier sender:self];
     }
 }
 
@@ -361,6 +376,11 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
         RSDeviceStatusViewController *controller = (RSDeviceStatusViewController *)segue.destinationViewController;
         controller.device = [self getSelectedDevice];
     }
+    else if ([segue.identifier isEqualToString:kConfigSegueIdentifier])
+    {
+        RSDeviceConfigViewController *controller = (RSDeviceConfigViewController *)segue.destinationViewController;
+        controller.device = [self getSelectedDevice];
+    }
 }
 
 #pragma mark - Extra
@@ -441,7 +461,8 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
 {
     DDLogDebug(@"%@", message);
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSString* newLine = [message stringByAppendingString:@"\n"];
+        NSString *currentTime = [self.logDateFormatter stringFromDate:[NSDate date]];
+        NSString *newLine = [NSString stringWithFormat:@"%@ %@\n", currentTime, message];
         NSAttributedString* name = [[NSAttributedString alloc] initWithString:newLine];
         [[self.logTextView textStorage] appendAttributedString:name];
         [self.logTextView scrollRangeToVisible:NSMakeRange([self.logTextView.text length], 0)];

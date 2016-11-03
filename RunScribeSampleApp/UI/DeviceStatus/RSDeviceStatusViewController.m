@@ -3,7 +3,6 @@
 //
 
 #import "RSDeviceStatusViewController.h"
-#import "RSMainViewController.h"
 #import "MBProgressHUD.h"
 #import "RSCommandFactory.h"
 #import "RSStatusCmd.h"
@@ -36,7 +35,7 @@
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.mode = MBProgressHUDModeIndeterminate;
     
-    // sending the command to device in order to receive its status
+    // sending the command to the device in order to receive its status
     RSStatusCmd *statusCmd = (RSStatusCmd *)[[RSCommandFactory sharedInstance] getCmdForType:kRSCmdStatus forDevice:self.device];
     [statusCmd setCompletedBlock:^(RSCmd *sourceCmd, NSError *error) {
         RSDeviceStatusViewController *strongSelf = weakSelf;
@@ -51,13 +50,7 @@
             else
             {
                 [self writeMessage:[NSString stringWithFormat:@"Failed to read status of %@. Error: %@", self.device.name, error]];
-                UIAlertController *controller = [UIAlertController alertControllerWithTitle:@"Error"
-                                                                                    message:@"Error occurred while reading device status. Please, try again."
-                                                                             preferredStyle:UIAlertControllerStyleAlert];
-                [controller addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                    [self dismissViewControllerAnimated:YES completion:nil];
-                }]];
-                [self presentViewController:controller animated:YES completion:nil];
+                [self showAlertWithTitle:@"Error" message:@"Error occurred while reading device status. Please, try again."];
             }
         });
     }];
@@ -80,13 +73,6 @@
     [self.batteryPercentField setText:[NSString stringWithFormat:@"%i %%", statusResponse.batteryPercent]];
     [self.batteryUsageTimeField setText:[NSString stringWithFormat:@"%i min", statusResponse.batteryUsageTime]];
     [self.batteryChargingField setText:[NSString stringWithFormat:@"%i min", statusResponse.batteryChargingTime]];
-}
-
-#pragma mark - IBActions
-
-- (IBAction)backButtonClicked:(id)sender
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - Extra
@@ -158,18 +144,6 @@
         default:
             return @"Unknown";
     }
-}
-
-#pragma mark - Logging
-
-/**
- *  Sends notification to the RSMainViewController in order to present the message in the log view
- */
-- (void)writeMessage:(NSString *)message
-{
-    [[NSNotificationCenter defaultCenter] postNotificationName:RSWriteMessageNotification
-                                                        object:nil
-                                                      userInfo:@{kRSWriteMessageKey:message}];
 }
 
 @end

@@ -19,6 +19,8 @@
 		2883C5811DC287180065359D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2883C57F1DC287180065359D /* LaunchScreen.storyboard */; };
 		2883C58B1DC2887A0065359D /* RunScribeSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2883C5881DC2884E0065359D /* RunScribeSDK.framework */; };
 		2883C58C1DC2887A0065359D /* RunScribeSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2883C5881DC2884E0065359D /* RunScribeSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		28ED46C71DC9FEA80018218A /* RSDeviceConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28ED46C61DC9FEA80018218A /* RSDeviceConfigViewController.m */; };
+		28ED46CA1DCA019C0018218A /* RSBaseModalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28ED46C91DCA019C0018218A /* RSBaseModalViewController.m */; };
 		28F8A3BE1DC75B2000843D24 /* RSAppLogging.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F8A3BD1DC75B2000843D24 /* RSAppLogging.m */; };
 /* End PBXBuildFile section */
 
@@ -53,6 +55,10 @@
 		2883C5801DC287180065359D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2883C5821DC287180065359D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2883C5881DC2884E0065359D /* RunScribeSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RunScribeSDK.framework; sourceTree = "<group>"; };
+		28ED46C51DC9FEA80018218A /* RSDeviceConfigViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RSDeviceConfigViewController.h; path = UI/DeviceConfig/RSDeviceConfigViewController.h; sourceTree = "<group>"; };
+		28ED46C61DC9FEA80018218A /* RSDeviceConfigViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RSDeviceConfigViewController.m; path = UI/DeviceConfig/RSDeviceConfigViewController.m; sourceTree = "<group>"; };
+		28ED46C81DCA019C0018218A /* RSBaseModalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RSBaseModalViewController.h; path = UI/RSBaseModalViewController.h; sourceTree = "<group>"; };
+		28ED46C91DCA019C0018218A /* RSBaseModalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RSBaseModalViewController.m; path = UI/RSBaseModalViewController.m; sourceTree = "<group>"; };
 		28F8A3BC1DC75B2000843D24 /* RSAppLogging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSAppLogging.h; sourceTree = "<group>"; };
 		28F8A3BD1DC75B2000843D24 /* RSAppLogging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSAppLogging.m; sourceTree = "<group>"; };
 		3049FCAFEF436BE5BCA1B61D /* Pods_RunScribeSampleApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RunScribeSampleApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -76,10 +82,13 @@
 		280D02B31DC4CB4500AA8533 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				28ED46C41DC9FE730018218A /* DeviceConfig */,
 				2846269F1DC8FA4100BF7E1F /* DeviceStatus */,
 				280D02B41DC4CDF300AA8533 /* Main */,
 				2883C5771DC287180065359D /* Main.storyboard */,
 				2883C57F1DC287180065359D /* LaunchScreen.storyboard */,
+				28ED46C81DCA019C0018218A /* RSBaseModalViewController.h */,
+				28ED46C91DCA019C0018218A /* RSBaseModalViewController.m */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -153,6 +162,15 @@
 				2883C5881DC2884E0065359D /* RunScribeSDK.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		28ED46C41DC9FE730018218A /* DeviceConfig */ = {
+			isa = PBXGroup;
+			children = (
+				28ED46C51DC9FEA80018218A /* RSDeviceConfigViewController.h */,
+				28ED46C61DC9FEA80018218A /* RSDeviceConfigViewController.m */,
+			);
+			name = DeviceConfig;
 			sourceTree = "<group>";
 		};
 		7A5FDDFE8566568481C63013 /* Pods */ = {
@@ -297,8 +315,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				28F8A3BE1DC75B2000843D24 /* RSAppLogging.m in Sources */,
+				28ED46CA1DCA019C0018218A /* RSBaseModalViewController.m in Sources */,
 				2883C5731DC287180065359D /* AppDelegate.m in Sources */,
 				280D02BA1DC4D0EA00AA8533 /* RSDeviceTableViewCell.m in Sources */,
+				28ED46C71DC9FEA80018218A /* RSDeviceConfigViewController.m in Sources */,
 				2883C5701DC287180065359D /* main.m in Sources */,
 				284626A21DC8FA4E00BF7E1F /* RSDeviceStatusViewController.m in Sources */,
 				280D02B71DC4D06500AA8533 /* RSMainViewController.m in Sources */,
