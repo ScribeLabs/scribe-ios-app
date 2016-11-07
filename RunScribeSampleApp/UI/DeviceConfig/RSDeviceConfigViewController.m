@@ -6,6 +6,8 @@
 #import "MBProgressHUD.h"
 #import "RSCommandFactory.h"
 #import "RSConfigCmd.h"
+#import "RSReadTimeCmd.h"
+#import "RSSetTimeCmd.h"
 
 NSInteger const kRSPickerViewPlacementTag = 0;
 NSInteger const kRSPickerViewSideTag = 1;
@@ -23,6 +25,10 @@ NSString * const kRSSideRightTitle = @"Right";
 @property (nonatomic, strong) NSArray *sideTitles;
 @property (nonatomic, strong) NSMutableArray *rgbTitles;
 
+@property (nonatomic, strong) NSTimer *timer;
+@property (nonatomic, assign) NSTimeInterval deviceSystemTime;
+@property (nonatomic, strong) NSDateFormatter *deviceDateFormatter;
+
 @property (nonatomic, weak) IBOutlet UITextField *placementTextField;
 @property (nonatomic, weak) IBOutlet UITextField *sideTextField;
 @property (nonatomic, weak) IBOutlet UITextField *recordingTimeoutField;
@@ -34,6 +40,7 @@ NSString * const kRSSideRightTitle = @"Right";
 @property (nonatomic, weak) IBOutlet UITextField *defaultRedColorField;
 @property (nonatomic, weak) IBOutlet UITextField *defaultGreenColorField;
 @property (nonatomic, weak) IBOutlet UITextField *defaultBlueColorField;
+@property (nonatomic, weak) IBOutlet UITextField *deviceTimeField;
 
 @end
 
@@ -52,6 +59,9 @@ NSString * const kRSSideRightTitle = @"Right";
         {
             [self.rgbTitles addObject:@(i)];
         }
+        
+        self.deviceDateFormatter = [[NSDateFormatter alloc] init];
+        [self.deviceDateFormatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
     }
     return self;
 }
@@ -83,6 +93,12 @@ NSString * const kRSSideRightTitle = @"Right";
 - (void)viewWillAppear:(BOOL)animated
 {
     [self readConfiguration];
+    [self readDeviceTime];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [self stopTimer];
 }
 
 - (void)updateUI:(RSConfigCmd *)configResponse
@@ -100,6 +116,10 @@ NSString * const kRSSideRightTitle = @"Right";
 
 #pragma mark - Device requests
 
+/**
+ *  Reads device configuration such as location, side, recording timeout, voltage thresholds, etc.
+ *  The received values are shown in the specific text fields.
+ */
 - (void)readConfiguration
 {
     __weak RSDeviceConfigViewController *weakSelf = self;
@@ -107,28 +127,31 @@ NSString * const kRSSideRightTitle = @"Right";
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.mode = MBProgressHUDModeIndeterminate;
     
-    RSConfigCmd *configCmd = (RSConfigCmd *)[[RSCommandFactory sharedInstance] getCmdForType:kRSCmdReadConfig forDevice:self.device];
-    configCmd.configPoint = (uint)kRSScribeConfig;
-    [configCmd setCompletedBlock:^(RSCmd *sourceCmd, NSError *error) {
+    RSConfigCmd *readConfigCmd = (RSConfigCmd *)[[RSCommandFactory sharedInstance] getCmdForType:kRSCmdReadConfig forDevice:self.device];
+    readConfigCmd.configPoint = (uint)kRSScribeConfig;
+    [readConfigCmd setCompletedBlock:^(RSCmd *sourceCmd, NSError *error) {
         RSDeviceConfigViewController *strongSelf = weakSelf;
         dispatch_async(dispatch_get_main_queue(),^{
             [MBProgressHUD hideHUDForView:strongSelf.view animated:YES];
             if (error == nil)
             {
-                RSConfigCmd *cCmd = (RSConfigCmd *)sourceCmd;
-                [self updateUI:cCmd];
-                [self writeMessage:[NSString stringWithFormat:@"Successfully read configuration of %@", self.device.name]];
+                RSConfigCmd *configResponse = (RSConfigCmd *)sourceCmd;
+                [strongSelf updateUI:configResponse];
+                [strongSelf writeMessage:[NSString stringWithFormat:@"Successfully read configuration of %@", self.device.name]];
             }
             else
             {
-                [self writeMessage:[NSString stringWithFormat:@"Failed to read configuration of %@. Error: %@", self.device.name, error]];
-                [self showAlertWithTitle:@"Error" message:@"Error occurred while reading device configuration. Please, try again."];
+                [strongSelf writeMessage:[NSString stringWithFormat:@"Failed to read configuration of %@. Error: %@", self.device.name, error]];
+                [strongSelf showAlertWithTitle:@"Error" message:@"Error occurred while reading device configuration. Please, try again."];
             }
         });
     }];
-    [self.device runCmd:configCmd];
+    [self.device runCmd:readConfigCmd];
 }
 
+/**
+ *  Writes device configuration based on data from the specific text fields.
+ */
 - (void)writeConfiguration
 {
     __weak RSDeviceConfigViewController *weakSelf = self;
@@ -160,17 +183,75 @@ NSString * const kRSSideRightTitle = @"Right";
             [MBProgressHUD hideHUDForView:strongSelf.view animated:YES];
             if (error == nil)
             {
-                [self writeMessage:[NSString stringWithFormat:@"Successfully write configuration to %@", self.device.name]];
+                [strongSelf writeMessage:[NSString stringWithFormat:@"Successfully write configuration to %@", self.device.name]];
             }
             else
             {
-                [self writeMessage:[NSString stringWithFormat:@"Failed to write configuration to %@. Error: %@", self.device.name, error]];
-                [self showAlertWithTitle:@"Error" message:@"Error occurred while writting device configuration. Please, try again."];
+                [strongSelf writeMessage:[NSString stringWithFormat:@"Failed to write configuration to %@. Error: %@", self.device.name, error]];
+                [strongSelf showAlertWithTitle:@"Error" message:@"Error occurred while writting device configuration. Please, try again."];
             }
         });
     }];
 
     [self.device runCmd:writeConfigCmd];
+}
+
+/**
+ *  Reads device system time and displays it in the specific text field.
+ *  The field is updating every second to present a current system time on the device.
+ */
+- (void)readDeviceTime
+{
+    __weak RSDeviceConfigViewController *weakSelf = self;
+    
+    RSReadTimeCmd *readTimeCmd = (RSReadTimeCmd *)[[RSCommandFactory sharedInstance] getCmdForType:kRSCmdReadTime forDevice:self.device];
+    [readTimeCmd setCompletedBlock:^(RSCmd *sourceCmd, NSError *error) {
+        RSDeviceConfigViewController *strongSelf = weakSelf;
+        dispatch_async(dispatch_get_main_queue(),^{
+            if (error == nil)
+            {
+                [strongSelf writeMessage:[NSString stringWithFormat:@"Successfully read a system time of %@", self.device.name]];
+                RSReadTimeCmd *readTimeResponse = (RSReadTimeCmd *)sourceCmd;
+                self.deviceSystemTime = readTimeResponse.systemTime.timeIntervalSince1970;
+                [self startTimer];
+            }
+            else
+            {
+                [strongSelf writeMessage:[NSString stringWithFormat:@"Failed to read a system time of %@. Error: %@", self.device.name, error]];
+                [strongSelf showAlertWithTitle:@"Error" message:@"Error occurred while reading a device system time. Please, try again."];
+            }
+        });
+    }];
+    
+    [self.device runCmd:readTimeCmd];
+}
+
+/**
+ *  Sets current date and time on the device.
+ */
+- (void)setDeviceTime
+{
+    __weak RSDeviceConfigViewController *weakSelf = self;
+    
+    RSSetTimeCmd *setTimeCmd = (RSSetTimeCmd *)[[RSCommandFactory sharedInstance] getCmdForType:kRSCmdSetTime forDevice:self.device];
+    setTimeCmd.deviceTime = [NSDate date];
+    [setTimeCmd setCompletedBlock:^(RSCmd *sourceCmd, NSError *error) {
+        RSDeviceConfigViewController *strongSelf = weakSelf;
+        dispatch_async(dispatch_get_main_queue(),^{
+            if (error == nil)
+            {
+                [strongSelf writeMessage:[NSString stringWithFormat:@"Successfully set time on %@", self.device.name]];
+                self.deviceSystemTime = [[NSDate date] timeIntervalSince1970];
+            }
+            else
+            {
+                [strongSelf writeMessage:[NSString stringWithFormat:@"Failed to set time on %@. Error: %@", self.device.name, error]];
+                [strongSelf showAlertWithTitle:@"Error" message:@"Error occurred while setting time on the device. Please, try again."];
+            }
+        });
+    }];
+    
+    [self.device runCmd:setTimeCmd];
 }
 
 #pragma mark - View setters
@@ -300,6 +381,30 @@ NSString * const kRSSideRightTitle = @"Right";
 - (IBAction)saveButtonClicked:(id)sender
 {
     [self writeConfiguration];
+    [self setDeviceTime];
+}
+
+#pragma mark - Timer
+
+- (void)startTimer
+{
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(timerTick:) userInfo:nil repeats:YES];
+    [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSDefaultRunLoopMode];
+}
+
+- (void)timerTick:(NSTimer *)sender
+{
+    self.deviceSystemTime++;
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970:self.deviceSystemTime];
+    [self.deviceTimeField setText:[NSString stringWithFormat:@"%@",[self.deviceDateFormatter stringFromDate:date]]];
+}
+
+- (void)stopTimer
+{
+    if (self.timer)
+    {
+        [self.timer invalidate];
+    }
 }
 
 #pragma mark - Extra

@@ -853,6 +853,7 @@
                         <outlet property="defaultBlueColorField" destination="0fP-EL-AUk" id="XsJ-X2-dku"/>
                         <outlet property="defaultGreenColorField" destination="Osd-5T-4ut" id="fSh-bl-aLv"/>
                         <outlet property="defaultRedColorField" destination="18n-Xg-GZO" id="sxf-Ky-510"/>
+                        <outlet property="deviceTimeField" destination="nuA-Gj-la4" id="mu7-36-ijJ"/>
                         <outlet property="minRecordingVoltageField" destination="kYG-b1-ZRQ" id="uHy-wF-qQh"/>
                         <outlet property="placementTextField" destination="OY1-YB-vDE" id="5eK-eI-HYQ"/>
                         <outlet property="recordingTimeoutField" destination="DGA-pD-9th" id="C0z-xm-es4"/>

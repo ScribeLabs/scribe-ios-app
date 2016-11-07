@@ -159,34 +159,42 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
 
 #pragma mark - Device requests
 
+/**
+ *  Lights up LED of the selected device with specified color
+ */
 - (void)lightUpLED:(RSLEDColor)ledColor
 {
     RSDevice *device = [self getSelectedDevice];
     if ([self isDeviceReady:device])
     {
-        RSDisplayLEDCmd *cmd = (RSDisplayLEDCmd *)[[RSCommandFactory sharedInstance] getCmdForType:kRSCmdDisplayLED forDevice:device];
-        
         switch (ledColor) {
             case kRSLEDColorRed:
                 [self writeMessage:[NSString stringWithFormat:@"Light up red LED on %@", device.name]];
-                cmd.red = 255;
-                cmd.green = 0;
-                cmd.blue = 0;
+                [self lightUpLEDWithRed:255 green:0 blue:0 device:device];
                 break;
             case kRSLEDColorGreen:
                 [self writeMessage:[NSString stringWithFormat:@"Light up green LED on %@", device.name]];
-                cmd.red = 0;
-                cmd.green = 255;
-                cmd.blue = 0;
+                [self lightUpLEDWithRed:0 green:255 blue:0 device:device];
                 break;
             case kRSLEDColorBlue:
                 [self writeMessage:[NSString stringWithFormat:@"Light up blue LED on %@", device.name]];
-                cmd.red = 0;
-                cmd.green = 0;
-                cmd.blue = 255;
+                [self lightUpLEDWithRed:0 green:0 blue:255 device:device];
                 break;
         }
-        
+    }
+}
+
+/**
+ *  Light up LED of the specified device with the specific RGB values
+ */
+- (void)lightUpLEDWithRed:(NSInteger)red green:(NSInteger)green blue:(NSInteger)blue device:(RSDevice *)device
+{
+    if ([self isDeviceReady:device])
+    {
+        RSDisplayLEDCmd *cmd = (RSDisplayLEDCmd *)[[RSCommandFactory sharedInstance] getCmdForType:kRSCmdDisplayLED forDevice:device];
+        cmd.red = red;
+        cmd.green = green;
+        cmd.blue = blue;
         cmd.pattern = kRSLEDPatternConnected;
         cmd.cycles = 30; // keep in on for a minute -- ie, 30 cycles of 2 second animations.
         [cmd setCompletedBlock:nil];
@@ -194,6 +202,9 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
     }
 }
 
+/**
+ *  Dims LED of the selected device
+ */
 - (void)dimLED
 {
     RSDevice *device = [self getSelectedDevice];
@@ -207,6 +218,9 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
     }
 }
 
+/**
+ *  Performs erasing data on the selected device by specified type
+ */
 - (void)erase:(RSEraseTypes)eraseType
 {
     RSDevice *device = [self getSelectedDevice];
@@ -229,8 +243,7 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
         RSEraseDataCmd *cmd = (RSEraseDataCmd *)[[RSCommandFactory sharedInstance] getCmdForType:kRSCmdEraseData forDevice:device];
         cmd.blockTillCleared = YES;
         cmd.eraseType = (uint)eraseType;
-        [cmd setCompletedBlock:^(RSCmd *sourceCmd, NSError *error)
-         {
+        [cmd setCompletedBlock:^(RSCmd *sourceCmd, NSError *error) {
              RSMainViewController *strongSelf = weakSelf;
              RSEraseDataCmd *sourceEraseCmd = (RSEraseDataCmd *)sourceCmd;
              NSString *message = nil;
