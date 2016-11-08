@@ -12,6 +12,8 @@
 #import "RSDisplayLEDCmd.h"
 #import "RSDefaultLEDColorCmd.h"
 #import "RSEraseDataCmd.h"
+#import "RSSetModeCmd.h"
+#import "RSStatusCmd.h"
 
 NSString * const kStatusSegueIdentifier = @"DeviceStatusSegue";
 NSString * const kConfigSegueIdentifier = @"DeviceConfigSegue";
@@ -24,9 +26,11 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
 
 @property (nonatomic, weak) IBOutlet UITextView *logTextView;
 @property (nonatomic, weak) IBOutlet UITableView *devicesTableView;
+@property (nonatomic, weak) IBOutlet UIButton *changeModeButton;
 
 @property (nonatomic, strong) RSDeviceMgr *deviceMgr;
 @property (nonatomic, strong) NSMutableArray *devices; // includes connected and discovered devices
+@property (nonatomic, strong) NSMutableArray *recordingDevicesUUIDs; // UUIDs of devices that are in the recording mode at the moment
 
 @end
 
@@ -37,6 +41,7 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
     [super viewDidLoad];
     self.deviceMgr = [RSDeviceMgr sharedInstance];
     self.devices = [NSMutableArray array];
+    self.recordingDevicesUUIDs = [NSMutableArray array];
     self.logDateFormatter = [[NSDateFormatter alloc] init];
     [self.logDateFormatter setDateFormat:@"hh:mm:ss"];
     
@@ -137,6 +142,8 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
     if ([device isPeripheralConnected])
     {
         [self writeMessage:[NSString stringWithFormat:@"Disconnecting the %@", device.name]];
+        [self.recordingDevicesUUIDs removeObject:device.uuidString];
+        [self dimLED:device];
         [self.deviceMgr disconnectDevice:device];
     }
     else
@@ -144,6 +151,8 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
         [self writeMessage:[NSString stringWithFormat:@"Connecting to %@", device.name]];
         [self.deviceMgr connectToDevice:device];
     }
+    
+    [self updateTitleOfChangeModeButton];
 }
 
 - (IBAction)statusButtonClicked:(id)sender
@@ -161,6 +170,28 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
     if ([self isDeviceReady:device])
     {
         [self performSegueWithIdentifier:kConfigSegueIdentifier sender:self];
+    }
+}
+
+- (IBAction)changeModeButtonClicked:(id)sender
+{
+    RSDevice *device = [self getSelectedDevice:YES];
+    if ([self isDeviceReady:device])
+    {
+        if ([self.recordingDevicesUUIDs containsObject:device.uuidString])
+        {
+            [self setMode:device command:kRSScribeModeCommandRecord state:kRSScribeModeCommandStatusOff];
+            [self.recordingDevicesUUIDs removeObject:device.uuidString];
+            [self writeMessage:[NSString stringWithFormat:@"Stopped recording on %@", device.name]];
+            [self updateTitleOfChangeModeButton];
+        }
+        else
+        {
+            [self setMode:device command:kRSScribeModeCommandRecord state:kRSScribeModeCommandStatusOn];
+            [self.recordingDevicesUUIDs addObject:device.uuidString];
+            [self writeMessage:[NSString stringWithFormat:@"Started recording on %@", device.name]];
+            [self updateTitleOfChangeModeButton];
+        }
     }
 }
 
@@ -200,6 +231,18 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
     if ([self isDeviceReady:device])
     {
         [self dimLED:device];
+    }
+}
+
+/**
+ *  Performs erasing data on the selected device by specific type.
+ */
+- (void)erase:(RSEraseTypes)eraseType
+{
+    RSDevice *device = [self getSelectedDevice:YES];
+    if ([self isDeviceReady:device])
+    {
+        [self performErasing:device eraseType:eraseType];
     }
 }
 
@@ -268,12 +311,11 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
 }
 
 /**
- *  Performs erasing data on the selected device by specified type.
+ *  Performs erasing data on the specified device by specific type.
  */
-- (void)erase:(RSEraseTypes)eraseType
+- (void)performErasing:(RSDevice *)device eraseType:(RSEraseTypes)eraseType
 {
-    RSDevice *device = [self getSelectedDevice:YES];
-    if ([self isDeviceReady:device])
+    if ([device isDeviceReady])
     {
         switch (eraseType) {
             case kRSDeviceChipErase:
@@ -314,6 +356,62 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
              [strongSelf writeMessage:message];
          }];
         [device runCmd:cmd];
+    }
+}
+
+/**
+ *  Sets the specific mode on the specified device
+ */
+- (void)setMode:(RSDevice *)device command:(RSScribeModeCommand)command state:(RSScribeModeCommandStatus)state
+{
+    if ([device isDeviceReady])
+    {
+        __weak RSMainViewController *weakSelf = self;
+        
+        RSSetModeCmd *setModeCmd = (RSSetModeCmd *)[[RSCommandFactory sharedInstance] getCmdForType:kRSCmdSetMode forDevice:device];
+        setModeCmd.command = command;
+        setModeCmd.state = state;
+        [setModeCmd setCompletedBlock:^(RSCmd *sourceCmd, NSError *error) {
+            if (error != nil)
+            {
+                RSMainViewController *strongSelf = weakSelf;
+                [strongSelf writeMessage:[NSString stringWithFormat:@"Error trying to set mode on %@. Error: %@", device.name, error]];
+            }
+        }];
+        [device runCmd:setModeCmd];
+    }
+}
+
+/**
+ *  Reads the device status in order to check an active mode. 
+ *  If the active mode is recording then we update title of the button that changes device mode.
+ */
+- (void)checkDeviceMode:(RSDevice *)device
+{
+    if ([device isDeviceReady])
+    {
+        __weak RSMainViewController *weakSelf = self;
+        
+        RSStatusCmd *statusCmd = (RSStatusCmd *)[[RSCommandFactory sharedInstance] getCmdForType:kRSCmdStatus forDevice:device];
+        [statusCmd setCompletedBlock:^(RSCmd *sourceCmd, NSError *error) {
+            RSMainViewController *strongSelf = weakSelf;
+            dispatch_async(dispatch_get_main_queue(),^{
+                if (error == nil)
+                {
+                    RSStatusCmd *statusResponce = (RSStatusCmd *)sourceCmd;
+                    if (statusResponce.operationMode == kRSDeviceModeRecording)
+                    {
+                        [strongSelf.recordingDevicesUUIDs addObject:device.uuidString];
+                        [strongSelf updateTitleOfChangeModeButton];
+                    }
+                }
+                else
+                {
+                    [strongSelf writeMessage:[NSString stringWithFormat:@"Failed to read status of %@. Error: %@", device.name, error]];
+                }
+            });
+        }];
+        [device runCmd:statusCmd];
     }
 }
 
@@ -364,6 +462,8 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
     {
         [self displayDefaultLedColor:device];
     }
+    
+    [self updateTitleOfChangeModeButton];
 }
 
 #pragma mark - Notifications
@@ -405,6 +505,7 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
         {
             [self displayDefaultLedColor:connectedDevice];
         }
+        [self checkDeviceMode:connectedDevice];
     }
 }
 
@@ -533,6 +634,19 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
     [controller addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
     
     [self presentViewController:controller animated:YES completion:nil];
+}
+
+- (void)updateTitleOfChangeModeButton
+{
+    RSDevice *selectedDevice = [self getSelectedDevice:NO];
+    if (selectedDevice == nil || ![self.recordingDevicesUUIDs containsObject:selectedDevice.uuidString])
+    {
+        [self.changeModeButton setTitle:@"Start Rec" forState:UIControlStateNormal];
+    }
+    else
+    {
+        [self.changeModeButton setTitle:@"Stop Rec" forState:UIControlStateNormal];
+    }
 }
 
 #pragma mark - Logging

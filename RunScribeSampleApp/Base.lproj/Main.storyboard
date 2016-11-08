@@ -40,6 +40,9 @@
                                         <integer key="value" value="10"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="changeModeButtonClicked:" destination="BYZ-38-t0r" eventType="touchDown" id="oou-74-lee"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xci-2W-j15">
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
@@ -241,6 +244,7 @@
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="600" height="320"/>
                     <connections>
+                        <outlet property="changeModeButton" destination="20y-4h-Sqo" id="eyP-TJ-D2f"/>
                         <outlet property="devicesTableView" destination="L0R-ZH-0cV" id="rxt-7r-BfJ"/>
                         <outlet property="logTextView" destination="xjB-jE-7OW" id="ZOS-lF-pPC"/>
                         <segue destination="b0G-jh-RPV" kind="presentation" identifier="DeviceStatusSegue" id="1oc-XO-ljN"/>

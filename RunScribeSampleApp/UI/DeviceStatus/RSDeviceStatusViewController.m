@@ -43,14 +43,14 @@
             [MBProgressHUD hideHUDForView:strongSelf.view animated:YES];
             if (error == nil)
             {
-                RSStatusCmd *sCmd = (RSStatusCmd *)sourceCmd;
-                [self updateUI:sCmd];
-                [self writeMessage:[NSString stringWithFormat:@"Successfully read status of %@", self.device.name]];
+                RSStatusCmd *statusResponse = (RSStatusCmd *)sourceCmd;
+                [strongSelf updateUI:statusResponse];
+                [strongSelf writeMessage:[NSString stringWithFormat:@"Successfully read status of %@", strongSelf.device.name]];
             }
             else
             {
-                [self writeMessage:[NSString stringWithFormat:@"Failed to read status of %@. Error: %@", self.device.name, error]];
-                [self showAlertWithTitle:@"Error" message:@"Error occurred while reading device status. Please, try again."];
+                [strongSelf writeMessage:[NSString stringWithFormat:@"Failed to read status of %@. Error: %@", strongSelf.device.name, error]];
+                [strongSelf showAlertWithTitle:@"Error" message:@"Error occurred while reading device status. Please, try again."];
             }
         });
     }];
