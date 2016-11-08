@@ -10,6 +10,7 @@
 #import "RSAppLogging.h"
 #import "RSCommandFactory.h"
 #import "RSDisplayLEDCmd.h"
+#import "RSDefaultLEDColorCmd.h"
 #import "RSEraseDataCmd.h"
 
 NSString * const kStatusSegueIdentifier = @"DeviceStatusSegue";
@@ -47,8 +48,14 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(connectionFailed:) name:RSDeviceConnectTimeoutNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(connectionFailed:) name:RSDeviceConnectFailedNotification object:nil];
     
-    // Logging notification
+    // Another view controllers send messages using this notification type
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(writeMessageNotificationReceived:) name:RSWriteMessageNotification object:nil];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    RSDevice *selectedDevice = [self getSelectedDevice:NO];
+    [self displayDefaultLedColor:selectedDevice];
 }
 
 - (void)dealloc
@@ -141,7 +148,7 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
 
 - (IBAction)statusButtonClicked:(id)sender
 {
-    RSDevice *device = [self getSelectedDevice];
+    RSDevice *device = [self getSelectedDevice:YES];
     if ([self isDeviceReady:device])
     {
         [self performSegueWithIdentifier:kStatusSegueIdentifier sender:self];
@@ -150,21 +157,21 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
 
 - (IBAction)configButtonClicked:(id)sender
 {
-    RSDevice *device = [self getSelectedDevice];
+    RSDevice *device = [self getSelectedDevice:YES];
     if ([self isDeviceReady:device])
     {
         [self performSegueWithIdentifier:kConfigSegueIdentifier sender:self];
     }
 }
 
-#pragma mark - Device requests
+#pragma mark - Actions
 
 /**
- *  Lights up LED of the selected device with specified color
+ *  Lights up LED of the selected device with specified color.
  */
 - (void)lightUpLED:(RSLEDColor)ledColor
 {
-    RSDevice *device = [self getSelectedDevice];
+    RSDevice *device = [self getSelectedDevice:YES];
     if ([self isDeviceReady:device])
     {
         switch (ledColor) {
@@ -185,11 +192,25 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
 }
 
 /**
- *  Light up LED of the specified device with the specific RGB values
+ *  Dims LED of the selected device.
+ */
+- (void)dimLED
+{
+    RSDevice *device = [self getSelectedDevice:YES];
+    if ([self isDeviceReady:device])
+    {
+        [self dimLED:device];
+    }
+}
+
+#pragma mark - Device requests
+
+/**
+ *  Light up LED of the specified device with the specific RGB values.
  */
 - (void)lightUpLEDWithRed:(NSInteger)red green:(NSInteger)green blue:(NSInteger)blue device:(RSDevice *)device
 {
-    if ([self isDeviceReady:device])
+    if ([device isDeviceReady])
     {
         RSDisplayLEDCmd *cmd = (RSDisplayLEDCmd *)[[RSCommandFactory sharedInstance] getCmdForType:kRSCmdDisplayLED forDevice:device];
         cmd.red = red;
@@ -203,12 +224,11 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
 }
 
 /**
- *  Dims LED of the selected device
+ *  Dims LED of the specified device.
  */
-- (void)dimLED
+- (void)dimLED:(RSDevice *)device
 {
-    RSDevice *device = [self getSelectedDevice];
-    if ([self isDeviceReady:device])
+    if ([device isDeviceReady])
     {
         RSDisplayLEDCmd *cmd = (RSDisplayLEDCmd *)[[RSCommandFactory sharedInstance] getCmdForType:kRSCmdDisplayLED forDevice:device];
         cmd.pattern = kRSLEDPatternCancel;
@@ -219,11 +239,40 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
 }
 
 /**
- *  Performs erasing data on the selected device by specified type
+ *  Displays the default LED color of the specified device.
+ */
+- (void)displayDefaultLedColor:(RSDevice *)device
+{
+    if ([device isDeviceReady])
+    {
+        __weak RSMainViewController *weakSelf = self;
+        
+        RSDefaultLEDColorCmd *getDefaultLedColorCmd = (RSDefaultLEDColorCmd *)[[RSCommandFactory sharedInstance] getCmdForType:kRSCmdGetDefaultLED forDevice:device];
+        [getDefaultLedColorCmd setCompletedBlock:^(RSCmd *sourceCmd, NSError *error) {
+            RSMainViewController *strongSelf = weakSelf;
+            RSDefaultLEDColorCmd *defaultLEDColorResponse = (RSDefaultLEDColorCmd *)sourceCmd;
+            if (error == nil)
+            {
+                [self lightUpLEDWithRed:defaultLEDColorResponse.red
+                                  green:defaultLEDColorResponse.green
+                                   blue:defaultLEDColorResponse.blue
+                                 device:device];
+            }
+            else
+            {
+                [strongSelf writeMessage:[NSString stringWithFormat:@"Error trying to get default LED color of %@. Error: %@", device.name, error]];
+            }
+        }];
+        [device runCmd:getDefaultLedColorCmd];
+    }
+}
+
+/**
+ *  Performs erasing data on the selected device by specified type.
  */
 - (void)erase:(RSEraseTypes)eraseType
 {
-    RSDevice *device = [self getSelectedDevice];
+    RSDevice *device = [self getSelectedDevice:YES];
     if ([self isDeviceReady:device])
     {
         switch (eraseType) {
@@ -297,6 +346,12 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
 
 #pragma mark - UITableViewDelegate
 
+- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    RSDevice *device = (RSDevice *)self.devices[indexPath.row];
+    [self dimLED:device];
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     RSDevice *device = (RSDevice *)self.devices[indexPath.row];
@@ -304,6 +359,10 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
     {
         [self writeMessage:[NSString stringWithFormat:@"Connecting to %@", device.name]];
         [self.deviceMgr connectToDevice:device];
+    }
+    else
+    {
+        [self displayDefaultLedColor:device];
     }
 }
 
@@ -334,12 +393,18 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
     id obj = [note.userInfo valueForKey:kRSDevice];
     if ([obj isKindOfClass:[RSDevice class]])
     {
-        RSDevice *device = (RSDevice *)obj;
-        [self writeMessage:[NSString stringWithFormat:@"Connected %@ with serial %@", device.name, device.serialNumber]];
+        RSDevice *connectedDevice = (RSDevice *)obj;
+        [self writeMessage:[NSString stringWithFormat:@"Connected %@ with serial %@", connectedDevice.name, connectedDevice.serialNumber]];
         
         NSIndexPath *selectedRowIndexPath = [self.devicesTableView indexPathForSelectedRow];
         [self.devicesTableView reloadData];
         [self.devicesTableView selectRowAtIndexPath:selectedRowIndexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+        
+        RSDevice *selectedDevice = [self getSelectedDevice:NO];
+        if ([selectedDevice.uuidString isEqualToString:connectedDevice.uuidString])
+        {
+            [self displayDefaultLedColor:connectedDevice];
+        }
     }
 }
 
@@ -387,12 +452,12 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
     if ([segue.identifier isEqualToString:kStatusSegueIdentifier])
     {
         RSDeviceStatusViewController *controller = (RSDeviceStatusViewController *)segue.destinationViewController;
-        controller.device = [self getSelectedDevice];
+        controller.device = [self getSelectedDevice:NO];
     }
     else if ([segue.identifier isEqualToString:kConfigSegueIdentifier])
     {
         RSDeviceConfigViewController *controller = (RSDeviceConfigViewController *)segue.destinationViewController;
-        controller.device = [self getSelectedDevice];
+        controller.device = [self getSelectedDevice:NO];
     }
 }
 
@@ -425,7 +490,7 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
     return -1;
 }
 
-- (RSDevice *)getSelectedDevice
+- (RSDevice *)getSelectedDevice:(BOOL)showError
 {
     NSIndexPath *selectedDeviceIndexPath = [self.devicesTableView indexPathForSelectedRow];
     if (selectedDeviceIndexPath != nil && selectedDeviceIndexPath.row > -1)
@@ -433,11 +498,13 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
         RSDevice *device = (RSDevice *)[self.devices objectAtIndex:selectedDeviceIndexPath.row];
         return device;
     }
-    else
+    
+    if (showError)
     {
         [self showAlertWithTitle:@"Error" message:@"No device selected!"];
-        return nil;
     }
+    
+    return nil;    
 }
 
 - (BOOL)isDeviceReady:(RSDevice *)device

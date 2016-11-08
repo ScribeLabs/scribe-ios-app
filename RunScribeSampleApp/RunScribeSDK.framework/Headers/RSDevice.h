@@ -34,6 +34,7 @@ extern NSString * const kProtocolVer2_0;
 extern NSString * const kProtocolVer2_1;
 extern NSString * const kProtocolVer2_2;
 extern NSString * const kProtocolVer2_3;
+extern NSString * const kProtocolVer2_4;
 
 // Hardware Versions
 extern NSString * const kHardwareVer1_0;
