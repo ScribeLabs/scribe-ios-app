@@ -5,14 +5,12 @@
 #import "RSMainViewController.h"
 #import "RSDeviceStatusViewController.h"
 #import "RSDeviceConfigViewController.h"
+#import "RSDeviceRequestsHelper.h"
 #import "RSDeviceMgr.h"
 #import "RSDeviceTableViewCell.h"
 #import "RSAppLogging.h"
-#import "RSCommandFactory.h"
 #import "RSDisplayLEDCmd.h"
-#import "RSDefaultLEDColorCmd.h"
 #import "RSEraseDataCmd.h"
-#import "RSSetModeCmd.h"
 #import "RSStatusCmd.h"
 
 NSString * const kStatusSegueIdentifier = @"DeviceStatusSegue";
@@ -60,18 +58,15 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
 - (void)viewWillAppear:(BOOL)animated
 {
     RSDevice *selectedDevice = [self getSelectedDevice:NO];
-    [self displayDefaultLedColor:selectedDevice];
+    if ([selectedDevice isDeviceReady])
+    {
+        [self displayDefaultLedColor:selectedDevice];
+    }
 }
 
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - IBActions
@@ -93,44 +88,54 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
 
 - (IBAction)displayLEDButtonClicked:(id)sender
 {
-    UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:@"Display LED" message:nil preferredStyle:UIAlertControllerStyleAlert];
-
-    [actionSheet addAction:[UIAlertAction actionWithTitle:@"Red" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [self lightUpLED:kRSLEDColorRed];
-    }]];
-
-    [actionSheet addAction:[UIAlertAction actionWithTitle:@"Green" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [self lightUpLED:kRSLEDColorGreen];
-    }]];
-    
-    [actionSheet addAction:[UIAlertAction actionWithTitle:@"Blue" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [self lightUpLED:kRSLEDColorBlue];
-    }]];
-    
-    [actionSheet addAction:[UIAlertAction actionWithTitle:@"Off" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [self dimLED];
-    }]];
-
-    [actionSheet addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
-    
-    [self presentViewController:actionSheet animated:YES completion:nil];
+    RSDevice *device = [self getSelectedDevice:YES];
+    if ([self isDeviceReady:device])
+    {
+        UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:@"Display LED" message:nil preferredStyle:UIAlertControllerStyleAlert];
+        
+        [actionSheet addAction:[UIAlertAction actionWithTitle:@"Red" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            [self lightUpLEDWithRed:255 green:0 blue:0 device:device];
+        }]];
+        
+        [actionSheet addAction:[UIAlertAction actionWithTitle:@"Green" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            [self lightUpLEDWithRed:0 green:255 blue:0 device:device];
+        }]];
+        
+        [actionSheet addAction:[UIAlertAction actionWithTitle:@"Blue" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            [self lightUpLEDWithRed:0 green:0 blue:255 device:device];
+        }]];
+        
+        [actionSheet addAction:[UIAlertAction actionWithTitle:@"Off" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            [self dimLED:device];
+        }]];
+        
+        [actionSheet addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+        
+        [self presentViewController:actionSheet animated:YES completion:nil];
+    }
 }
 
 - (IBAction)eraseButtonClicked:(id)sender
 {
-    UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:@"Erase" message:nil preferredStyle:UIAlertControllerStyleAlert];
-    
-    [actionSheet addAction:[UIAlertAction actionWithTitle:@"Erase Flash" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [self erase:kRSDeviceChipErase];
-    }]];
-    
-    [actionSheet addAction:[UIAlertAction actionWithTitle:@"Erase EE" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [self erase:kRSDeviceEEpromErase];
-    }]];
-    
-    [actionSheet addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
-    
-    [self presentViewController:actionSheet animated:YES completion:nil];
+    RSDevice *device = [self getSelectedDevice:YES];
+    if ([self isDeviceReady:device])
+    {
+        UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:@"Erase" message:nil preferredStyle:UIAlertControllerStyleAlert];
+        
+        [actionSheet addAction:[UIAlertAction actionWithTitle:@"Erase Flash" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            [self writeMessage:[NSString stringWithFormat:@"[%@] - going to perform chip erase on the device", device.name]];
+            [self erase:device eraseType:kRSDeviceChipErase];
+        }]];
+        
+        [actionSheet addAction:[UIAlertAction actionWithTitle:@"Erase EE" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            [self writeMessage:[NSString stringWithFormat:@"[%@] - going to perform EEProm erase on the device", device.name]];
+            [self erase:device eraseType:kRSDeviceEEpromErase];
+        }]];
+        
+        [actionSheet addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+        
+        [self presentViewController:actionSheet animated:YES completion:nil];
+    }
 }
 
 - (IBAction)connectButtonClicked:(UIButton *)sender
@@ -141,14 +146,19 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
     
     if ([device isPeripheralConnected])
     {
-        [self writeMessage:[NSString stringWithFormat:@"Disconnecting the %@", device.name]];
         [self.recordingDevicesUUIDs removeObject:device.uuidString];
         [self dimLED:device];
-        [self.deviceMgr disconnectDevice:device];
+        
+        // wait a bit to let the device dim its LED
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC);
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            [self writeMessage:[NSString stringWithFormat:@"[%@] - disconnecting the device", device.name]];
+            [self.deviceMgr disconnectDevice:device];
+        });
     }
     else
     {
-        [self writeMessage:[NSString stringWithFormat:@"Connecting to %@", device.name]];
+        [self writeMessage:[NSString stringWithFormat:@"[%@] - connecting to the device", device.name]];
         [self.deviceMgr connectToDevice:device];
     }
     
@@ -180,239 +190,131 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
     {
         if ([self.recordingDevicesUUIDs containsObject:device.uuidString])
         {
-            [self setMode:device command:kRSScribeModeCommandRecord state:kRSScribeModeCommandStatusOff];
+            [self writeMessage:[NSString stringWithFormat:@"[%@] - going to stop recording", device.name]];
+            [self updateRecordingState:device state:kRSScribeModeCommandStatusOff];
             [self.recordingDevicesUUIDs removeObject:device.uuidString];
-            [self writeMessage:[NSString stringWithFormat:@"Stopped recording on %@", device.name]];
-            [self updateTitleOfChangeModeButton];
         }
         else
         {
-            [self setMode:device command:kRSScribeModeCommandRecord state:kRSScribeModeCommandStatusOn];
+            [self writeMessage:[NSString stringWithFormat:@"[%@] - going to start recording", device.name]];
+            [self updateRecordingState:device state:kRSScribeModeCommandStatusOn];
             [self.recordingDevicesUUIDs addObject:device.uuidString];
-            [self writeMessage:[NSString stringWithFormat:@"Started recording on %@", device.name]];
-            [self updateTitleOfChangeModeButton];
         }
+        [self updateTitleOfChangeModeButton];
     }
 }
 
 #pragma mark - Actions
 
-/**
- *  Lights up LED of the selected device with specified color.
- */
-- (void)lightUpLED:(RSLEDColor)ledColor
-{
-    RSDevice *device = [self getSelectedDevice:YES];
-    if ([self isDeviceReady:device])
-    {
-        switch (ledColor) {
-            case kRSLEDColorRed:
-                [self writeMessage:[NSString stringWithFormat:@"Light up red LED on %@", device.name]];
-                [self lightUpLEDWithRed:255 green:0 blue:0 device:device];
-                break;
-            case kRSLEDColorGreen:
-                [self writeMessage:[NSString stringWithFormat:@"Light up green LED on %@", device.name]];
-                [self lightUpLEDWithRed:0 green:255 blue:0 device:device];
-                break;
-            case kRSLEDColorBlue:
-                [self writeMessage:[NSString stringWithFormat:@"Light up blue LED on %@", device.name]];
-                [self lightUpLEDWithRed:0 green:0 blue:255 device:device];
-                break;
-        }
-    }
-}
-
-/**
- *  Dims LED of the selected device.
- */
-- (void)dimLED
-{
-    RSDevice *device = [self getSelectedDevice:YES];
-    if ([self isDeviceReady:device])
-    {
-        [self dimLED:device];
-    }
-}
-
-/**
- *  Performs erasing data on the selected device by specific type.
- */
-- (void)erase:(RSEraseTypes)eraseType
-{
-    RSDevice *device = [self getSelectedDevice:YES];
-    if ([self isDeviceReady:device])
-    {
-        [self performErasing:device eraseType:eraseType];
-    }
-}
-
-#pragma mark - Device requests
-
-/**
- *  Light up LED of the specified device with the specific RGB values.
- */
 - (void)lightUpLEDWithRed:(NSInteger)red green:(NSInteger)green blue:(NSInteger)blue device:(RSDevice *)device
 {
-    if ([device isDeviceReady])
-    {
-        RSDisplayLEDCmd *cmd = (RSDisplayLEDCmd *)[[RSCommandFactory sharedInstance] getCmdForType:kRSCmdDisplayLED forDevice:device];
-        cmd.red = red;
-        cmd.green = green;
-        cmd.blue = blue;
-        cmd.pattern = kRSLEDPatternConnected;
-        cmd.cycles = 30; // keep in on for a minute -- ie, 30 cycles of 2 second animations.
-        [cmd setCompletedBlock:nil];
-        [device runCmd:cmd];
-    }
+    [self writeMessage:[NSString stringWithFormat:@"[%@] - going to light up LED on the device using the next values - R:%ld, G:%ld, B:%ld",
+                        device.name, (long)red, (long)green, (long)blue]];
+    
+    __weak RSMainViewController *weakSelf = self;
+    [RSDeviceRequestsHelper lightUpLEDWithRed:red
+                                        green:green
+                                         blue:blue
+                                       device:device
+                              completionBlock:^(RSCmd *sourceCmd, NSError *error) {
+                                  if (error)
+                                  {
+                                      RSMainViewController *strongSelf = weakSelf;
+                                      NSString *message = [NSString stringWithFormat:@"[%@] - failed to light up LED on the device. Error: %@", device.name, error];
+                                      [strongSelf writeMessage:message];
+                                  }
+                              }];
 }
 
-/**
- *  Dims LED of the specified device.
- */
 - (void)dimLED:(RSDevice *)device
 {
-    if ([device isDeviceReady])
-    {
-        RSDisplayLEDCmd *cmd = (RSDisplayLEDCmd *)[[RSCommandFactory sharedInstance] getCmdForType:kRSCmdDisplayLED forDevice:device];
-        cmd.pattern = kRSLEDPatternCancel;
-        [cmd setCompletedBlock:nil];
-        [device runCmd:cmd];
-        [self writeMessage:[NSString stringWithFormat:@"Dim the LED on %@", device.name]];
-    }
+    [self writeMessage:[NSString stringWithFormat:@"[%@] - going to dim LED on the device", device.name]];
+    
+    __weak RSMainViewController *weakSelf = self;
+    [RSDeviceRequestsHelper dimLED:device completionBlock:^(RSCmd *sourceCmd, NSError *error) {
+        if (error)
+        {
+            RSMainViewController *strongSelf = weakSelf;
+            NSString *message = [NSString stringWithFormat:@"[%@] - failed to dim LED on the device. Error: %@", device.name, error];
+            [strongSelf writeMessage:message];
+        }
+    }];
 }
 
-/**
- *  Displays the default LED color of the specified device.
- */
 - (void)displayDefaultLedColor:(RSDevice *)device
 {
-    if ([device isDeviceReady])
-    {
-        __weak RSMainViewController *weakSelf = self;
-        
-        RSDefaultLEDColorCmd *getDefaultLedColorCmd = (RSDefaultLEDColorCmd *)[[RSCommandFactory sharedInstance] getCmdForType:kRSCmdGetDefaultLED forDevice:device];
-        [getDefaultLedColorCmd setCompletedBlock:^(RSCmd *sourceCmd, NSError *error) {
+    [self writeMessage:[NSString stringWithFormat:@"[%@] - going to light up LED using the default color", device.name]];
+    
+    __weak RSMainViewController *weakSelf = self;
+    [RSDeviceRequestsHelper displayDefaultLedColor:device completionBlock:^(RSCmd *sourceCmd, NSError *error) {
+        if (error)
+        {
             RSMainViewController *strongSelf = weakSelf;
-            RSDefaultLEDColorCmd *defaultLEDColorResponse = (RSDefaultLEDColorCmd *)sourceCmd;
-            if (error == nil)
+            NSString *message = [NSString stringWithFormat:@"[%@] - failed to light up LED using the default color. Error: %@", device.name, error];
+            [strongSelf writeMessage:message];
+        }
+    }];
+}
+
+- (void)erase:(RSDevice *)device eraseType:(RSEraseTypes)eraseType
+{
+    __weak RSMainViewController *weakSelf = self;
+    [RSDeviceRequestsHelper erase:device eraseType:eraseType completionBlock:^(RSCmd *sourceCmd, NSError *error) {
+        RSMainViewController *strongSelf = weakSelf;
+        NSString *message = nil;
+        if (error)
+        {
+            message = [NSString stringWithFormat:@"[%@] - failed to erase the device. Error: %@", device.name, error];
+        }
+        else
+        {
+            RSEraseDataCmd *sourceEraseCmd = (RSEraseDataCmd *)sourceCmd;
+            if (sourceEraseCmd.result == kRSDeviceErased)
             {
-                [self lightUpLEDWithRed:defaultLEDColorResponse.red
-                                  green:defaultLEDColorResponse.green
-                                   blue:defaultLEDColorResponse.blue
-                                 device:device];
+                message = [NSString stringWithFormat:@"[%@] - has been successfully erased", device.name];
             }
             else
             {
-                [strongSelf writeMessage:[NSString stringWithFormat:@"Error trying to get default LED color of %@. Error: %@", device.name, error]];
+                message = [NSString stringWithFormat:@"[%@] - device cannot be erased at the moment. Try again later", device.name];
             }
-        }];
-        [device runCmd:getDefaultLedColorCmd];
-    }
-}
-
-/**
- *  Performs erasing data on the specified device by specific type.
- */
-- (void)performErasing:(RSDevice *)device eraseType:(RSEraseTypes)eraseType
-{
-    if ([device isDeviceReady])
-    {
-        switch (eraseType) {
-            case kRSDeviceChipErase:
-                [self writeMessage:[NSString stringWithFormat:@"Performing chip erase on %@", device.name]];
-                break;
-                
-            case kRSDeviceEEpromErase:
-                [self writeMessage:[NSString stringWithFormat:@"Performing EEProm erase on %@", device.name]];
-                break;
-                
-            default:
-                break;
         }
-        
-        __weak RSMainViewController *weakSelf = self;
-        RSEraseDataCmd *cmd = (RSEraseDataCmd *)[[RSCommandFactory sharedInstance] getCmdForType:kRSCmdEraseData forDevice:device];
-        cmd.blockTillCleared = YES;
-        cmd.eraseType = (uint)eraseType;
-        [cmd setCompletedBlock:^(RSCmd *sourceCmd, NSError *error) {
-             RSMainViewController *strongSelf = weakSelf;
-             RSEraseDataCmd *sourceEraseCmd = (RSEraseDataCmd *)sourceCmd;
-             NSString *message = nil;
-             if (error == nil)
-             {
-                 if (sourceEraseCmd.result == kRSDeviceErased)
-                 {
-                     message = [NSString stringWithFormat:@"%@ has been successfully cleared.", device.name];
-                 }
-                 else
-                 {
-                     message = [NSString stringWithFormat:@"%@ cannot be cleared right now. Please try again later.", device.name];
-                 }
-             }
-             else
-             {
-                 message = [NSString stringWithFormat:@"Error trying to clear %@. Error: %@", device.name, error];
-             }
-             [strongSelf writeMessage:message];
-         }];
-        [device runCmd:cmd];
-    }
+        [strongSelf writeMessage:message];
+    }];
 }
 
-/**
- *  Sets the specific mode on the specified device
- */
-- (void)setMode:(RSDevice *)device command:(RSScribeModeCommand)command state:(RSScribeModeCommandStatus)state
+- (void)updateRecordingState:(RSDevice *)device state:(RSScribeModeCommandStatus)state
 {
-    if ([device isDeviceReady])
-    {
-        __weak RSMainViewController *weakSelf = self;
-        
-        RSSetModeCmd *setModeCmd = (RSSetModeCmd *)[[RSCommandFactory sharedInstance] getCmdForType:kRSCmdSetMode forDevice:device];
-        setModeCmd.command = command;
-        setModeCmd.state = state;
-        [setModeCmd setCompletedBlock:^(RSCmd *sourceCmd, NSError *error) {
-            if (error != nil)
-            {
-                RSMainViewController *strongSelf = weakSelf;
-                [strongSelf writeMessage:[NSString stringWithFormat:@"Error trying to set mode on %@. Error: %@", device.name, error]];
-            }
-        }];
-        [device runCmd:setModeCmd];
-    }
+    __weak RSMainViewController *weakSelf = self;
+    [RSDeviceRequestsHelper setMode:device command:kRSScribeModeCommandRecord state:state completionBlock:^(RSCmd *sourceCmd, NSError *error) {
+        if (error)
+        {
+            RSMainViewController *strongSelf = weakSelf;
+            [strongSelf writeMessage:[NSString stringWithFormat:@"[%@] - failed to set mode on the device. Error: %@", device.name, error]];
+        }
+    }];
 }
 
-/**
- *  Reads the device status in order to check an active mode. 
- *  If the active mode is recording then we update title of the button that changes device mode.
- */
 - (void)checkDeviceMode:(RSDevice *)device
 {
-    if ([device isDeviceReady])
-    {
-        __weak RSMainViewController *weakSelf = self;
-        
-        RSStatusCmd *statusCmd = (RSStatusCmd *)[[RSCommandFactory sharedInstance] getCmdForType:kRSCmdStatus forDevice:device];
-        [statusCmd setCompletedBlock:^(RSCmd *sourceCmd, NSError *error) {
-            RSMainViewController *strongSelf = weakSelf;
-            dispatch_async(dispatch_get_main_queue(),^{
-                if (error == nil)
-                {
-                    RSStatusCmd *statusResponce = (RSStatusCmd *)sourceCmd;
-                    if (statusResponce.operationMode == kRSDeviceModeRecording)
-                    {
-                        [strongSelf.recordingDevicesUUIDs addObject:device.uuidString];
-                        [strongSelf updateTitleOfChangeModeButton];
-                    }
-                }
-                else
-                {
-                    [strongSelf writeMessage:[NSString stringWithFormat:@"Failed to read status of %@. Error: %@", device.name, error]];
-                }
-            });
-        }];
-        [device runCmd:statusCmd];
-    }
+    __weak RSMainViewController *weakSelf = self;
+    [RSDeviceRequestsHelper readStatus:device completionBlock:^(RSCmd *sourceCmd, NSError *error) {
+        RSMainViewController *strongSelf = weakSelf;
+        if (error)
+        {
+            [strongSelf writeMessage:[NSString stringWithFormat:@"[%@] - failed to read the device status. Error: %@", device.name, error]];
+        }
+        else
+        {
+            RSStatusCmd *statusResponce = (RSStatusCmd *)sourceCmd;
+            if (statusResponce.operationMode == kRSDeviceModeRecording)
+            {
+                dispatch_async(dispatch_get_main_queue(),^{
+                    [strongSelf.recordingDevicesUUIDs addObject:device.uuidString];
+                    [strongSelf updateTitleOfChangeModeButton];
+                });
+            }
+        }
+    }];
 }
 
 #pragma mark - UITableViewDataSource
@@ -455,7 +357,7 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
     RSDevice *device = (RSDevice *)self.devices[indexPath.row];
     if (![device isPeripheralConnected])
     {
-        [self writeMessage:[NSString stringWithFormat:@"Connecting to %@", device.name]];
+        [self writeMessage:[NSString stringWithFormat:@"[%@] - connecting to the device", device.name]];
         [self.deviceMgr connectToDevice:device];
     }
     else
@@ -494,7 +396,7 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
     if ([obj isKindOfClass:[RSDevice class]])
     {
         RSDevice *connectedDevice = (RSDevice *)obj;
-        [self writeMessage:[NSString stringWithFormat:@"Connected %@ with serial %@", connectedDevice.name, connectedDevice.serialNumber]];
+        [self writeMessage:[NSString stringWithFormat:@"[%@] - has been connected. Serial %@", connectedDevice.name, connectedDevice.serialNumber]];
         
         NSIndexPath *selectedRowIndexPath = [self.devicesTableView indexPathForSelectedRow];
         [self.devicesTableView reloadData];
@@ -515,7 +417,7 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
     if ([obj isKindOfClass:[RSDevice class]])
     {
         RSDevice *device = (RSDevice *)obj;
-        [self writeMessage:[NSString stringWithFormat:@"Device %@ has been disconnected", device.name]];
+        [self writeMessage:[NSString stringWithFormat:@"[%@] - has been disconnected", device.name]];
         
         NSInteger index = [self getDeviceIndex:device.uuidString];
         if (index != -1)
@@ -533,7 +435,7 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
     if ([obj isKindOfClass:[RSDevice class]])
     {
         RSDevice *device = (RSDevice *)obj;
-        [self writeMessage:[NSString stringWithFormat:@"Failed connecting to %@", device.name]];
+        [self writeMessage:[NSString stringWithFormat:@"[%@] - failed to connect to the device", device.name]];
     }
 }
 

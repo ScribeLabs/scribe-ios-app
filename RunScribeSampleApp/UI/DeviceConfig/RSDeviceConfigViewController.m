@@ -8,6 +8,7 @@
 #import "RSConfigCmd.h"
 #import "RSReadTimeCmd.h"
 #import "RSSetTimeCmd.h"
+#import "RSDeviceRequestsHelper.h"
 
 NSInteger const kRSPickerViewPlacementTag = 0;
 NSInteger const kRSPickerViewSideTag = 1;
@@ -114,10 +115,10 @@ NSString * const kRSSideRightTitle = @"Right";
     [self setLEDColorTextWithRed:configResponse.ledRed green:configResponse.ledGreen blue:configResponse.ledBlue];
 }
 
-#pragma mark - Device requests
+#pragma mark - Actions
 
 /**
- *  Reads device configuration such as location, side, recording timeout, voltage thresholds, etc.
+ *  Reads the device configuration such as location, side, recording timeout, voltage thresholds, etc.
  *  The received values are shown in the specific text fields.
  */
 - (void)readConfiguration
@@ -127,103 +128,89 @@ NSString * const kRSSideRightTitle = @"Right";
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.mode = MBProgressHUDModeIndeterminate;
     
-    RSConfigCmd *readConfigCmd = (RSConfigCmd *)[[RSCommandFactory sharedInstance] getCmdForType:kRSCmdReadConfig forDevice:self.device];
-    readConfigCmd.configPoint = (uint)kRSScribeConfig;
-    [readConfigCmd setCompletedBlock:^(RSCmd *sourceCmd, NSError *error) {
+    [RSDeviceRequestsHelper readConfiguration:self.device completionBlock:^(RSCmd *sourceCmd, NSError *error) {
         RSDeviceConfigViewController *strongSelf = weakSelf;
         dispatch_async(dispatch_get_main_queue(),^{
             [MBProgressHUD hideHUDForView:strongSelf.view animated:YES];
-            if (error == nil)
+            if (error)
             {
-                RSConfigCmd *configResponse = (RSConfigCmd *)sourceCmd;
-                [strongSelf updateUI:configResponse];
-                [strongSelf writeMessage:[NSString stringWithFormat:@"Successfully read configuration of %@", self.device.name]];
+                [strongSelf writeMessage:[NSString stringWithFormat:@"[%@] - failed to read the device configuration. Error: %@", strongSelf.device.name, error]];
+                [strongSelf showAlertWithTitle:@"Error" message:@"Error occurred while reading the device configuration. Please, try again."];
             }
             else
             {
-                [strongSelf writeMessage:[NSString stringWithFormat:@"Failed to read configuration of %@. Error: %@", self.device.name, error]];
-                [strongSelf showAlertWithTitle:@"Error" message:@"Error occurred while reading device configuration. Please, try again."];
+                RSConfigCmd *configResponse = (RSConfigCmd *)sourceCmd;
+                [strongSelf updateUI:configResponse];
+                [strongSelf writeMessage:[NSString stringWithFormat:@"[%@] - successfully read the device configuration", strongSelf.device.name]];
             }
         });
     }];
-    [self.device runCmd:readConfigCmd];
 }
 
 /**
- *  Writes device configuration based on data from the specific text fields.
+ *  Writes the configuration to the device based on data from the specific text fields.
  */
 - (void)writeConfiguration
 {
     __weak RSDeviceConfigViewController *weakSelf = self;
     
+    RSConfiguration *config = [[RSConfiguration alloc] init];
+    config.placement = [self getPlacement:self.placementTextField.text];
+    config.side = [self getSide:self.sideTextField.text];
+    config.timeOut = [self getIntegerFromTextField:self.recordingTimeoutField];
+    config.strideRate = [self getIntegerFromTextField:self.strideRateField];
+    config.scaleFactorA = [self getIntegerFromTextField:self.scaleFactorAField];
+    config.scaleFactorB = [self getIntegerFromTextField:self.scaleFactorBField];
+    config.recordingVoltageThreshold = [self getIntegerFromTextField:self.minRecordingVoltageField];
+    config.sleepVoltageThreshold = [self getIntegerFromTextField:self.deepSleepVoltageField];
+    config.ledRed = [self getIntegerFromTextField:self.defaultRedColorField];
+    config.ledGreen = [self getIntegerFromTextField:self.defaultGreenColorField];
+    config.ledBlue = [self getIntegerFromTextField:self.defaultBlueColorField];
+    
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.mode = MBProgressHUDModeIndeterminate;
     
-    RSConfigCmd *writeConfigCmd = (RSConfigCmd *)[[RSCommandFactory sharedInstance] getCmdForType:kRSCmdWriteConfig forDevice:self.device];
-    writeConfigCmd.configPoint = kRSScribeConfig;
-    writeConfigCmd.placement = [self getPlacement:self.placementTextField.text];
-    writeConfigCmd.side = [self getSide:self.sideTextField.text];
-    
-    writeConfigCmd.timeOut = [self getUnsignedIntFromTextField:self.recordingTimeoutField];
-    writeConfigCmd.strideRate = [self getUnsignedIntFromTextField:self.strideRateField];
-    
-    writeConfigCmd.scaleFactorA = [self getUnsignedIntFromTextField:self.scaleFactorAField];
-    writeConfigCmd.scaleFactorB = [self getUnsignedIntFromTextField:self.scaleFactorBField];
-    
-    writeConfigCmd.recordingVoltageThreshold = [self getUnsignedIntFromTextField:self.minRecordingVoltageField];
-    writeConfigCmd.sleepVoltageThreshold = [self getUnsignedIntFromTextField:self.deepSleepVoltageField];
-    
-    writeConfigCmd.ledRed = [self getUnsignedIntFromTextField:self.defaultRedColorField];
-    writeConfigCmd.ledGreen = [self getUnsignedIntFromTextField:self.defaultGreenColorField];
-    writeConfigCmd.ledBlue = [self getUnsignedIntFromTextField:self.defaultBlueColorField];
-    
-    [writeConfigCmd setCompletedBlock:^(RSCmd *sourceCmd, NSError *error) {
+    [RSDeviceRequestsHelper writeConfiguration:config toDevice:self.device completionBlock:^(RSCmd *sourceCmd, NSError *error) {
         RSDeviceConfigViewController *strongSelf = weakSelf;
         dispatch_async(dispatch_get_main_queue(),^{
             [MBProgressHUD hideHUDForView:strongSelf.view animated:YES];
             if (error == nil)
             {
-                [strongSelf writeMessage:[NSString stringWithFormat:@"Successfully write configuration to %@", self.device.name]];
+                [strongSelf writeMessage:[NSString stringWithFormat:@"[%@] - successfully written the device configuration", strongSelf.device.name]];
             }
             else
             {
-                [strongSelf writeMessage:[NSString stringWithFormat:@"Failed to write configuration to %@. Error: %@", self.device.name, error]];
-                [strongSelf showAlertWithTitle:@"Error" message:@"Error occurred while writting device configuration. Please, try again."];
+                [strongSelf writeMessage:[NSString stringWithFormat:@"[%@] - failed to write the configuration to the device. Error: %@", strongSelf.device.name, error]];
+                [strongSelf showAlertWithTitle:@"Error" message:@"Error occurred while writting configuration to the device. Please, try again."];
             }
         });
     }];
-
-    [self.device runCmd:writeConfigCmd];
 }
 
 /**
- *  Reads device system time and displays it in the specific text field.
- *  The field is updating every second to present a current system time on the device.
+ *  Reads the device system time and displays it in the specific text field.
+ *  The field is updating every second.
  */
 - (void)readDeviceTime
 {
     __weak RSDeviceConfigViewController *weakSelf = self;
-    
-    RSReadTimeCmd *readTimeCmd = (RSReadTimeCmd *)[[RSCommandFactory sharedInstance] getCmdForType:kRSCmdReadTime forDevice:self.device];
-    [readTimeCmd setCompletedBlock:^(RSCmd *sourceCmd, NSError *error) {
+    [RSDeviceRequestsHelper readDeviceTime:self.device completionBlock:^(RSCmd *sourceCmd, NSError *error) {
         RSDeviceConfigViewController *strongSelf = weakSelf;
         dispatch_async(dispatch_get_main_queue(),^{
-            if (error == nil)
+            if (error)
             {
-                [strongSelf writeMessage:[NSString stringWithFormat:@"Successfully read a system time of %@", self.device.name]];
-                RSReadTimeCmd *readTimeResponse = (RSReadTimeCmd *)sourceCmd;
-                self.deviceSystemTime = readTimeResponse.systemTime.timeIntervalSince1970;
-                [self startTimer];
+                [strongSelf writeMessage:[NSString stringWithFormat:@"[%@] - failed to read the device system time. Error: %@", strongSelf.device.name, error]];
+                [strongSelf showAlertWithTitle:@"Error" message:@"Error occurred while reading the device system time. Please, try again."];
             }
             else
             {
-                [strongSelf writeMessage:[NSString stringWithFormat:@"Failed to read a system time of %@. Error: %@", self.device.name, error]];
-                [strongSelf showAlertWithTitle:@"Error" message:@"Error occurred while reading a device system time. Please, try again."];
+                RSReadTimeCmd *readTimeResponse = (RSReadTimeCmd *)sourceCmd;
+                [strongSelf writeMessage:[NSString stringWithFormat:@"[%@] - successfully read the device system time", strongSelf.device.name]];
+                strongSelf.deviceSystemTime = readTimeResponse.systemTime.timeIntervalSince1970;
+                [strongSelf startTimer];
             }
         });
     }];
-    
-    [self.device runCmd:readTimeCmd];
 }
 
 /**
@@ -232,26 +219,21 @@ NSString * const kRSSideRightTitle = @"Right";
 - (void)setDeviceTime
 {
     __weak RSDeviceConfigViewController *weakSelf = self;
-    
-    RSSetTimeCmd *setTimeCmd = (RSSetTimeCmd *)[[RSCommandFactory sharedInstance] getCmdForType:kRSCmdSetTime forDevice:self.device];
-    setTimeCmd.deviceTime = [NSDate date];
-    [setTimeCmd setCompletedBlock:^(RSCmd *sourceCmd, NSError *error) {
+    [RSDeviceRequestsHelper setDeviceTime:self.device completionBlock:^(RSCmd *sourceCmd, NSError *error) {
         RSDeviceConfigViewController *strongSelf = weakSelf;
         dispatch_async(dispatch_get_main_queue(),^{
-            if (error == nil)
+            if (error)
             {
-                [strongSelf writeMessage:[NSString stringWithFormat:@"Successfully set time on %@", self.device.name]];
-                self.deviceSystemTime = [[NSDate date] timeIntervalSince1970];
+                [strongSelf writeMessage:[NSString stringWithFormat:@"[%@] - failed to set date and time on the device. Error: %@", strongSelf.device.name, error]];
+                [strongSelf showAlertWithTitle:@"Error" message:@"Error occurred while setting the system time on the device. Please, try again."];
             }
             else
             {
-                [strongSelf writeMessage:[NSString stringWithFormat:@"Failed to set time on %@. Error: %@", self.device.name, error]];
-                [strongSelf showAlertWithTitle:@"Error" message:@"Error occurred while setting time on the device. Please, try again."];
+                [strongSelf writeMessage:[NSString stringWithFormat:@"[%@] - successfully set the device system time", strongSelf.device.name]];
+                strongSelf.deviceSystemTime = [[NSDate date] timeIntervalSince1970];
             }
         });
     }];
-    
-    [self.device runCmd:setTimeCmd];
 }
 
 #pragma mark - View setters
@@ -512,9 +494,9 @@ NSString * const kRSSideRightTitle = @"Right";
 }
 
 /**
- *  Converts text from specified text field into a unsigned int value
+ *  Converts text from the specified text field into an integer value
  */
-- (uint)getUnsignedIntFromTextField:(UITextField *)textField
+- (NSInteger)getIntegerFromTextField:(UITextField *)textField
 {
     if (textField == nil || textField.text.length == 0)
     {
@@ -523,7 +505,7 @@ NSString * const kRSSideRightTitle = @"Right";
     
     NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
     numberFormatter.numberStyle = NSNumberFormatterDecimalStyle;
-    return [numberFormatter numberFromString:textField.text].intValue;
+    return [numberFormatter numberFromString:textField.text].integerValue;
 }
 
 @end

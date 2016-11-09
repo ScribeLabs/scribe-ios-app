@@ -4,7 +4,7 @@
 
 #import "RSDeviceStatusViewController.h"
 #import "MBProgressHUD.h"
-#import "RSCommandFactory.h"
+#import "RSDeviceRequestsHelper.h"
 #import "RSStatusCmd.h"
 
 @interface RSDeviceStatusViewController ()
@@ -35,9 +35,8 @@
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.mode = MBProgressHUDModeIndeterminate;
     
-    // sending the command to the device in order to receive its status
-    RSStatusCmd *statusCmd = (RSStatusCmd *)[[RSCommandFactory sharedInstance] getCmdForType:kRSCmdStatus forDevice:self.device];
-    [statusCmd setCompletedBlock:^(RSCmd *sourceCmd, NSError *error) {
+    // We are going to read the device status and then present values in the specific text fields.
+    [RSDeviceRequestsHelper readStatus:self.device completionBlock:^(RSCmd *sourceCmd, NSError *error) {
         RSDeviceStatusViewController *strongSelf = weakSelf;
         dispatch_async(dispatch_get_main_queue(),^{
             [MBProgressHUD hideHUDForView:strongSelf.view animated:YES];
@@ -45,16 +44,15 @@
             {
                 RSStatusCmd *statusResponse = (RSStatusCmd *)sourceCmd;
                 [strongSelf updateUI:statusResponse];
-                [strongSelf writeMessage:[NSString stringWithFormat:@"Successfully read status of %@", strongSelf.device.name]];
+                [strongSelf writeMessage:[NSString stringWithFormat:@"[%@] - successfully read the device status", strongSelf.device.name]];
             }
             else
             {
-                [strongSelf writeMessage:[NSString stringWithFormat:@"Failed to read status of %@. Error: %@", strongSelf.device.name, error]];
-                [strongSelf showAlertWithTitle:@"Error" message:@"Error occurred while reading device status. Please, try again."];
+                [strongSelf writeMessage:[NSString stringWithFormat:@"[%@] - failed to read the device status. Error: %@", strongSelf.device.name, error]];
+                [strongSelf showAlertWithTitle:@"Error" message:@"Error occurred while reading the device status. Please, try again."];
             }
         });
     }];
-    [self.device runCmd:statusCmd];
 }
 
 - (void)updateUI:(RSStatusCmd *)statusResponse
