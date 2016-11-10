@@ -7,6 +7,14 @@
 //
 #import "RSFileCmd.h"
 
+extern NSString * const kRSIndexKey;
+extern NSString * const kRSSizeKey;
+extern NSString * const kRSDateKey;
+extern NSString * const kRSCRCKey;
+extern NSString * const kRSVoltageKey;
+extern NSString * const kRSFileStatusKey;
+extern NSString * const kRSCRCStatusKey;
+
 typedef NS_ENUM(NSInteger, RSFileTypes)
 {
     kRSFileTypesAllFiles = 1,
@@ -24,4 +32,5 @@ typedef NS_ENUM(NSInteger, RSFileTypes)
 @property (nonatomic, strong) NSDate *fileDate;
 @property (nonatomic, strong) NSArray *fileIndices;
 @property (nonatomic, strong) NSDictionary *fileMap;
+
 @end

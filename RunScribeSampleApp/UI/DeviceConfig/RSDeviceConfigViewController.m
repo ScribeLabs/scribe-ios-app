@@ -69,6 +69,8 @@ NSString * const kRSSideRightTitle = @"Right";
 
 - (void)viewDidLoad
 {
+    [super viewDidLoad];
+    
     [self addDoneButtonOnKeyboardforTextField:self.placementTextField];
     self.placementTextField.inputView = [self createPickerViewWithTag:kRSPickerViewPlacementTag];
     
@@ -93,12 +95,14 @@ NSString * const kRSSideRightTitle = @"Right";
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     [self readConfiguration];
     [self readDeviceTime];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    [super viewWillDisappear:animated];
     [self stopTimer];
 }
 

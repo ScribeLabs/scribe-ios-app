@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		07C7839E2D00B20A53E840D4 /* Pods_RunScribeSampleApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3049FCAFEF436BE5BCA1B61D /* Pods_RunScribeSampleApp.framework */; };
 		280CCE411DD356A80094EA0D /* RSConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 280CCE401DD356A80094EA0D /* RSConfiguration.m */; };
+		280CCE4B1DD37ACD0094EA0D /* RSDeviceFilesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 280CCE4A1DD37ACD0094EA0D /* RSDeviceFilesViewController.m */; };
 		280D02B71DC4D06500AA8533 /* RSMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 280D02B61DC4D06500AA8533 /* RSMainViewController.m */; };
 		280D02BA1DC4D0EA00AA8533 /* RSDeviceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 280D02B91DC4D0EA00AA8533 /* RSDeviceTableViewCell.m */; };
 		282802681DD2240E00EB6826 /* RSDeviceRequestsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 282802671DD2240E00EB6826 /* RSDeviceRequestsHelper.m */; };
@@ -21,6 +22,7 @@
 		2883C5811DC287180065359D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2883C57F1DC287180065359D /* LaunchScreen.storyboard */; };
 		2883C58B1DC2887A0065359D /* RunScribeSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2883C5881DC2884E0065359D /* RunScribeSDK.framework */; };
 		2883C58C1DC2887A0065359D /* RunScribeSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2883C5881DC2884E0065359D /* RunScribeSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		28E7D6501DD4A49A0065F587 /* RSDeviceFileDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28E7D64F1DD4A49A0065F587 /* RSDeviceFileDetailsViewController.m */; };
 		28ED46C71DC9FEA80018218A /* RSDeviceConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28ED46C61DC9FEA80018218A /* RSDeviceConfigViewController.m */; };
 		28ED46CA1DCA019C0018218A /* RSBaseModalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28ED46C91DCA019C0018218A /* RSBaseModalViewController.m */; };
 		28F8A3BE1DC75B2000843D24 /* RSAppLogging.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F8A3BD1DC75B2000843D24 /* RSAppLogging.m */; };
@@ -43,6 +45,8 @@
 /* Begin PBXFileReference section */
 		280CCE3F1DD356A80094EA0D /* RSConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RSConfiguration.h; path = Models/RSConfiguration.h; sourceTree = "<group>"; };
 		280CCE401DD356A80094EA0D /* RSConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RSConfiguration.m; path = Models/RSConfiguration.m; sourceTree = "<group>"; };
+		280CCE491DD37ACD0094EA0D /* RSDeviceFilesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RSDeviceFilesViewController.h; path = UI/DeviceFiles/RSDeviceFilesViewController.h; sourceTree = "<group>"; };
+		280CCE4A1DD37ACD0094EA0D /* RSDeviceFilesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RSDeviceFilesViewController.m; path = UI/DeviceFiles/RSDeviceFilesViewController.m; sourceTree = "<group>"; };
 		280D02B51DC4D06500AA8533 /* RSMainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RSMainViewController.h; path = UI/Main/RSMainViewController.h; sourceTree = "<group>"; };
 		280D02B61DC4D06500AA8533 /* RSMainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RSMainViewController.m; path = UI/Main/RSMainViewController.m; sourceTree = "<group>"; };
 		280D02B81DC4D0EA00AA8533 /* RSDeviceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RSDeviceTableViewCell.h; path = UI/Main/RSDeviceTableViewCell.h; sourceTree = "<group>"; };
@@ -61,6 +65,8 @@
 		2883C5801DC287180065359D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2883C5821DC287180065359D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2883C5881DC2884E0065359D /* RunScribeSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RunScribeSDK.framework; sourceTree = "<group>"; };
+		28E7D64E1DD4A49A0065F587 /* RSDeviceFileDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RSDeviceFileDetailsViewController.h; path = UI/DeviceFiles/RSDeviceFileDetailsViewController.h; sourceTree = "<group>"; };
+		28E7D64F1DD4A49A0065F587 /* RSDeviceFileDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RSDeviceFileDetailsViewController.m; path = UI/DeviceFiles/RSDeviceFileDetailsViewController.m; sourceTree = "<group>"; };
 		28ED46C51DC9FEA80018218A /* RSDeviceConfigViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RSDeviceConfigViewController.h; path = UI/DeviceConfig/RSDeviceConfigViewController.h; sourceTree = "<group>"; };
 		28ED46C61DC9FEA80018218A /* RSDeviceConfigViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RSDeviceConfigViewController.m; path = UI/DeviceConfig/RSDeviceConfigViewController.m; sourceTree = "<group>"; };
 		28ED46C81DCA019C0018218A /* RSBaseModalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RSBaseModalViewController.h; path = UI/RSBaseModalViewController.h; sourceTree = "<group>"; };
@@ -94,9 +100,21 @@
 			name = Models;
 			sourceTree = "<group>";
 		};
+		280CCE421DD372220094EA0D /* DeviceFiles */ = {
+			isa = PBXGroup;
+			children = (
+				280CCE491DD37ACD0094EA0D /* RSDeviceFilesViewController.h */,
+				280CCE4A1DD37ACD0094EA0D /* RSDeviceFilesViewController.m */,
+				28E7D64E1DD4A49A0065F587 /* RSDeviceFileDetailsViewController.h */,
+				28E7D64F1DD4A49A0065F587 /* RSDeviceFileDetailsViewController.m */,
+			);
+			name = DeviceFiles;
+			sourceTree = "<group>";
+		};
 		280D02B31DC4CB4500AA8533 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				280CCE421DD372220094EA0D /* DeviceFiles */,
 				28ED46C41DC9FE730018218A /* DeviceConfig */,
 				2846269F1DC8FA4100BF7E1F /* DeviceStatus */,
 				280D02B41DC4CDF300AA8533 /* Main */,
@@ -335,6 +353,7 @@
 				282802681DD2240E00EB6826 /* RSDeviceRequestsHelper.m in Sources */,
 				28F8A3BE1DC75B2000843D24 /* RSAppLogging.m in Sources */,
 				28ED46CA1DCA019C0018218A /* RSBaseModalViewController.m in Sources */,
+				280CCE4B1DD37ACD0094EA0D /* RSDeviceFilesViewController.m in Sources */,
 				280CCE411DD356A80094EA0D /* RSConfiguration.m in Sources */,
 				2883C5731DC287180065359D /* AppDelegate.m in Sources */,
 				280D02BA1DC4D0EA00AA8533 /* RSDeviceTableViewCell.m in Sources */,
@@ -342,6 +361,7 @@
 				2883C5701DC287180065359D /* main.m in Sources */,
 				284626A21DC8FA4E00BF7E1F /* RSDeviceStatusViewController.m in Sources */,
 				280D02B71DC4D06500AA8533 /* RSMainViewController.m in Sources */,
+				28E7D6501DD4A49A0065F587 /* RSDeviceFileDetailsViewController.m in Sources */,
 				2883C57C1DC287180065359D /* RunScribeSampleApp.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

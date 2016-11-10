@@ -10,6 +10,8 @@
 #import "RSConfigCmd.h"
 #import "RSReadTimeCmd.h"
 #import "RSSetTimeCmd.h"
+#import "RSFileListCmd.h"
+#import "RSFileInfoCmd.h"
 
 @implementation RSDeviceRequestsHelper
 
@@ -161,6 +163,27 @@
         [device runCmd:setTimeCmd];
     }
 }
+
++ (void)readFileList:(RSDevice *)device completionBlock:(RSCmdCompletedCallback)callback
+{
+    if (device != nil && [device isDeviceReady])
+    {
+        RSFileListCmd *fileListCmd = (RSFileListCmd *)[[RSCommandFactory sharedInstance] getCmdForType:kRSCmdFileList forDevice:device];
+        fileListCmd.fileType = kRSFileTypesAllFiles;
+        [fileListCmd setCompletedBlock:callback];
+        [device runCmd:fileListCmd];
+    }
+}
+
++ (void)readFileInformation:(NSInteger)fileIndex device:(RSDevice *)device completionBlock:(RSCmdCompletedCallback)callback
+{
+    if (device != nil && [device isDeviceReady])
+    {
+        RSFileInfoCmd *fileInfoCmd = (RSFileInfoCmd *)[[RSCommandFactory sharedInstance] getCmdForType:kRSCmdFileInfo forDevice:device];
+        fileInfoCmd.fileIndex = (uint)fileIndex;
+        [fileInfoCmd setCompletedBlock:callback];
+        [device runCmd:fileInfoCmd];
+    }
 }
 
 @end

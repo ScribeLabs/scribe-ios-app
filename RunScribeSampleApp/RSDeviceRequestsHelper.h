@@ -69,4 +69,15 @@ completionBlock:(RSCmdCompletedCallback)callback;
  */
 + (void)setDeviceTime:(RSDevice *)device completionBlock:(RSCmdCompletedCallback)callback;
 
+/**
+ *  Reads the list of files stored on the device.
+ *  The list also includes files that are marked as those that should be removed when the device is ready.
+ */
++ (void)readFileList:(RSDevice *)device completionBlock:(RSCmdCompletedCallback)callback;
+
+/**
+ *  Reads information about the file with specified index.
+ */
++ (void)readFileInformation:(NSInteger)fileIndex device:(RSDevice *)device completionBlock:(RSCmdCompletedCallback)callback;
+
 @end

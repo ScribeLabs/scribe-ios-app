@@ -5,6 +5,7 @@
 #import "RSMainViewController.h"
 #import "RSDeviceStatusViewController.h"
 #import "RSDeviceConfigViewController.h"
+#import "RSDeviceFilesViewController.h"
 #import "RSDeviceRequestsHelper.h"
 #import "RSDeviceMgr.h"
 #import "RSDeviceTableViewCell.h"
@@ -13,8 +14,10 @@
 #import "RSEraseDataCmd.h"
 #import "RSStatusCmd.h"
 
-NSString * const kStatusSegueIdentifier = @"DeviceStatusSegue";
-NSString * const kConfigSegueIdentifier = @"DeviceConfigSegue";
+NSString * const kRSStatusSegueIdentifier = @"DeviceStatusSegue";
+NSString * const kRSConfigSegueIdentifier = @"DeviceConfigSegue";
+NSString * const kRSFileListSegueIdentifier = @"DeviceFileListSegue";
+
 NSString * const RSWriteMessageNotification = @"RSWriteMessageNotification";
 NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
 
@@ -37,6 +40,7 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     self.deviceMgr = [RSDeviceMgr sharedInstance];
     self.devices = [NSMutableArray array];
     self.recordingDevicesUUIDs = [NSMutableArray array];
@@ -57,6 +61,8 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    
     RSDevice *selectedDevice = [self getSelectedDevice:NO];
     if ([selectedDevice isDeviceReady])
     {
@@ -170,7 +176,7 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
     RSDevice *device = [self getSelectedDevice:YES];
     if ([self isDeviceReady:device])
     {
-        [self performSegueWithIdentifier:kStatusSegueIdentifier sender:self];
+        [self performSegueWithIdentifier:kRSStatusSegueIdentifier sender:self];
     }
 }
 
@@ -179,7 +185,7 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
     RSDevice *device = [self getSelectedDevice:YES];
     if ([self isDeviceReady:device])
     {
-        [self performSegueWithIdentifier:kConfigSegueIdentifier sender:self];
+        [self performSegueWithIdentifier:kRSConfigSegueIdentifier sender:self];
     }
 }
 
@@ -201,6 +207,15 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
             [self.recordingDevicesUUIDs addObject:device.uuidString];
         }
         [self updateTitleOfChangeModeButton];
+    }
+}
+
+- (IBAction)filesButtonClicked:(id)sender
+{
+    RSDevice *device = [self getSelectedDevice:YES];
+    if ([self isDeviceReady:device])
+    {
+        [self performSegueWithIdentifier:kRSFileListSegueIdentifier sender:self];
     }
 }
 
@@ -452,14 +467,19 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString:kStatusSegueIdentifier])
+    if ([segue.identifier isEqualToString:kRSStatusSegueIdentifier])
     {
         RSDeviceStatusViewController *controller = (RSDeviceStatusViewController *)segue.destinationViewController;
         controller.device = [self getSelectedDevice:NO];
     }
-    else if ([segue.identifier isEqualToString:kConfigSegueIdentifier])
+    else if ([segue.identifier isEqualToString:kRSConfigSegueIdentifier])
     {
         RSDeviceConfigViewController *controller = (RSDeviceConfigViewController *)segue.destinationViewController;
+        controller.device = [self getSelectedDevice:NO];
+    }
+    else if ([segue.identifier isEqualToString:kRSFileListSegueIdentifier])
+    {
+        RSDeviceFilesViewController *controller = (RSDeviceFilesViewController *)segue.destinationViewController;
         controller.device = [self getSelectedDevice:NO];
     }
 }
