@@ -219,6 +219,29 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
     }
 }
 
+- (IBAction)moreButtonClicked:(id)sender
+{
+    RSDevice *device = [self getSelectedDevice:YES];
+    if ([self isDeviceReady:device])
+    {
+        UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:@"More features" message:nil preferredStyle:UIAlertControllerStyleAlert];
+        
+        [actionSheet addAction:[UIAlertAction actionWithTitle:@"Enter DFU mode" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            [self writeMessage:[NSString stringWithFormat:@"[%@] - going to enter DFU mode", device.name]];
+            [RSDeviceRequestsHelper enterDFUMode:device completionBlock:nil];
+        }]];
+        
+        [actionSheet addAction:[UIAlertAction actionWithTitle:@"Reboot" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            [self writeMessage:[NSString stringWithFormat:@"[%@] - going to reboot the device", device.name]];
+            [RSDeviceRequestsHelper rebootDevice:device completionBlock:nil];
+        }]];
+        
+        [actionSheet addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+        
+        [self presentViewController:actionSheet animated:YES completion:nil];
+    }
+}
+
 #pragma mark - Actions
 
 - (void)lightUpLEDWithRed:(NSInteger)red green:(NSInteger)green blue:(NSInteger)blue device:(RSDevice *)device
@@ -412,6 +435,11 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
     {
         RSDevice *connectedDevice = (RSDevice *)obj;
         [self writeMessage:[NSString stringWithFormat:@"[%@] - has been connected. Serial %@", connectedDevice.name, connectedDevice.serialNumber]];
+        
+        if (![self.devices containsObject:connectedDevice])
+        {
+            [self.devices insertObject:connectedDevice atIndex:0];
+        }
         
         NSIndexPath *selectedRowIndexPath = [self.devicesTableView indexPathForSelectedRow];
         [self.devicesTableView reloadData];

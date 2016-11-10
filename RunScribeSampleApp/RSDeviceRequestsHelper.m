@@ -12,6 +12,8 @@
 #import "RSSetTimeCmd.h"
 #import "RSFileListCmd.h"
 #import "RSFileInfoCmd.h"
+#import "RSEnterDFUModeCmd.h"
+#import "RSRebootCmd.h"
 
 @implementation RSDeviceRequestsHelper
 
@@ -183,6 +185,26 @@
         fileInfoCmd.fileIndex = (uint)fileIndex;
         [fileInfoCmd setCompletedBlock:callback];
         [device runCmd:fileInfoCmd];
+    }
+}
+
++ (void)enterDFUMode:(RSDevice *)device completionBlock:(RSCmdCompletedCallback)callback
+{
+    if (device != nil && [device isDeviceReady])
+    {
+        RSEnterDFUModeCmd *enterDFUCmd = (RSEnterDFUModeCmd *)[[RSCommandFactory sharedInstance] getCmdForType:kRSCmdDFUMode forDevice:device];
+        [enterDFUCmd setCompletedBlock:callback];
+        [device runCmd:enterDFUCmd];
+    }
+}
+
++ (void)rebootDevice:(RSDevice *)device completionBlock:(RSCmdCompletedCallback)callback
+{
+    if (device != nil && [device isDeviceReady])
+    {
+        RSRebootCmd *rebootCmd = (RSRebootCmd *)[[RSCommandFactory sharedInstance] getCmdForType:kRSCmdReboot forDevice:device]; 
+        [rebootCmd setCompletedBlock:callback];
+        [device runCmd:rebootCmd];
     }
 }
 

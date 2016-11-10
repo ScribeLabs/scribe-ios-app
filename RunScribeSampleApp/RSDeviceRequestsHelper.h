@@ -80,4 +80,14 @@ completionBlock:(RSCmdCompletedCallback)callback;
  */
 + (void)readFileInformation:(NSInteger)fileIndex device:(RSDevice *)device completionBlock:(RSCmdCompletedCallback)callback;
 
+/**
+ *  Sends command to the device in order to enter it into DFU mode.
+ */
++ (void)enterDFUMode:(RSDevice *)device completionBlock:(RSCmdCompletedCallback)callback;
+
+/**
+ *  Sends command to the device in order to reboot it.
+ */
++ (void)rebootDevice:(RSDevice *)device completionBlock:(RSCmdCompletedCallback)callback;
+
 @end
