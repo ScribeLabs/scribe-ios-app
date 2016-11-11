@@ -14,6 +14,7 @@
 #import "RSFileInfoCmd.h"
 #import "RSEnterDFUModeCmd.h"
 #import "RSRebootCmd.h"
+#import "RSRunDiagnosticsCmd.h"
 
 @implementation RSDeviceRequestsHelper
 
@@ -205,6 +206,17 @@
         RSRebootCmd *rebootCmd = (RSRebootCmd *)[[RSCommandFactory sharedInstance] getCmdForType:kRSCmdReboot forDevice:device]; 
         [rebootCmd setCompletedBlock:callback];
         [device runCmd:rebootCmd];
+    }
+}
+
++ (void)runDiagnostics:(RSDevice *)device completionBlock:(RSCmdCompletedCallback)callback
+{
+    if (device != nil && [device isDeviceReady])
+    {
+        RSRunDiagnosticsCmd *runDiagnosticsCmd = (RSRunDiagnosticsCmd *)[[RSCommandFactory sharedInstance] getCmdForType:kRSCmdRunDiagnostics forDevice:device];
+        runDiagnosticsCmd.mode = kRSDiagnosticsReadMode;
+        [runDiagnosticsCmd setCompletedBlock:callback];
+        [device runCmd:runDiagnosticsCmd];
     }
 }
 

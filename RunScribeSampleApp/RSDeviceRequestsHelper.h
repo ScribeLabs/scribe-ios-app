@@ -90,4 +90,9 @@ completionBlock:(RSCmdCompletedCallback)callback;
  */
 + (void)rebootDevice:(RSDevice *)device completionBlock:(RSCmdCompletedCallback)callback;
 
+/**
+ *  Performs diagnostics on the device.
+ */
++ (void)runDiagnostics:(RSDevice *)device completionBlock:(RSCmdCompletedCallback)callback;
+
 @end

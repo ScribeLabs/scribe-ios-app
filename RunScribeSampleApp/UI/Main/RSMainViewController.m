@@ -12,6 +12,7 @@
 #import "RSAppLogging.h"
 #import "RSDisplayLEDCmd.h"
 #import "RSEraseDataCmd.h"
+#import "RSRunDiagnosticsCmd.h"
 #import "RSStatusCmd.h"
 
 NSString * const kRSStatusSegueIdentifier = @"DeviceStatusSegue";
@@ -216,6 +217,48 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
     if ([self isDeviceReady:device])
     {
         [self performSegueWithIdentifier:kRSFileListSegueIdentifier sender:self];
+    }
+}
+
+- (IBAction)diagnosticsButtonClicked:(id)sender
+{
+    RSDevice *device = [self getSelectedDevice:YES];
+    if ([self isDeviceReady:device])
+    {
+        [self writeMessage:[NSString stringWithFormat:@"[%@] - going to run diagnostics", device.name]];
+
+        __weak RSMainViewController *weakSelf = self;
+        [RSDeviceRequestsHelper runDiagnostics:device completionBlock:^(RSCmd *sourceCmd, NSError *error) {
+            if (error)
+            {
+                RSMainViewController *strongSelf = weakSelf;
+                NSString *message = [NSString stringWithFormat:@"[%@] - failed to run diagnostics on the device. Error: %@", device.name, error];
+                [strongSelf writeMessage:message];
+            }
+            else
+            {
+                RSRunDiagnosticsCmd *runDiagResponse = (RSRunDiagnosticsCmd *)sourceCmd;
+                
+                NSMutableString *diagResultString = [NSMutableString string];
+                [diagResultString appendFormat:@"[%@] - diagnostics results:", device.name];
+                
+                BOOL gyroDiagPassed = [runDiagResponse diagnosticPassed:kRSDiagnosticsTypeGyro];
+                BOOL accelDiagPassed = [runDiagResponse diagnosticPassed:kRSDiagnosticsTypeAccelerometer];
+                BOOL magDiagPassed = [runDiagResponse diagnosticPassed:kRSDiagnosticsTypeMagnometer];
+                BOOL flashDiagPassed = [runDiagResponse diagnosticPassed:kRSDiagnosticsTypeFlash];
+                BOOL eepromDiagPassed = [runDiagResponse diagnosticPassed:kRSDiagnosticsTypeEEPROM];
+                BOOL dmpDiagPassed = [runDiagResponse diagnosticPassed:kRSDiagnosticsTypeDMP];
+                
+                [diagResultString appendFormat:@"\n     GYRO - %@", gyroDiagPassed ? @"✓" : @"✗"];
+                [diagResultString appendFormat:@"\n     ACCEL - %@", accelDiagPassed ? @"✓" : @"✗"];
+                [diagResultString appendFormat:@"\n     MAG - %@", magDiagPassed ? @"✓" : @"✗"];
+                [diagResultString appendFormat:@"\n     FLASH - %@", flashDiagPassed ? @"✓" : @"✗"];
+                [diagResultString appendFormat:@"\n     EEPROM - %@", eepromDiagPassed ? @"✓" : @"✗"];
+                [diagResultString appendFormat:@"\n     DMP - %@", dmpDiagPassed ? @"✓" : @"✗"];
+                
+                [self writeMessage:diagResultString];
+            }
+        }];
     }
 }
 
