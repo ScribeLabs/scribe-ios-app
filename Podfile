@@ -5,5 +5,6 @@ target 'RunScribeSampleApp' do
 
   pod "CocoaLumberjack", "~>2.0"
   pod "MBProgressHUD", "0.9.1"
+  pod "CorePlot", :git => "https://github.com/core-plot/core-plot.git", :branch => "master"
 
 end

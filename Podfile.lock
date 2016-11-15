@@ -7,16 +7,29 @@ PODS:
     - CocoaLumberjack/Core
   - CocoaLumberjack/Extensions (2.3.0):
     - CocoaLumberjack/Default
+  - CorePlot (2.2)
   - MBProgressHUD (0.9.1)
 
 DEPENDENCIES:
   - CocoaLumberjack (~> 2.0)
+  - CorePlot (from `https://github.com/core-plot/core-plot.git`, branch `master`)
   - MBProgressHUD (= 0.9.1)
+
+EXTERNAL SOURCES:
+  CorePlot:
+    :branch: master
+    :git: https://github.com/core-plot/core-plot.git
+
+CHECKOUT OPTIONS:
+  CorePlot:
+    :commit: 08298b423f05c3a7d8cdf5198d13845bc46c2f16
+    :git: https://github.com/core-plot/core-plot.git
 
 SPEC CHECKSUMS:
   CocoaLumberjack: 97fab7ee5f507fe54445cca7ea80f926729cfd15
+  CorePlot: cbe0c6e14220705e32e06a89c7d6a5a908b7d7d8
   MBProgressHUD: c47f2c166c126cf2ce36498d80f33e754d4e93ad
 
-PODFILE CHECKSUM: 6331769002c6d865a13656cd841da2db4ebbfef9
+PODFILE CHECKSUM: 3f3c2484114326874dad4047987d6ce56dc79927
 
 COCOAPODS: 1.0.1
