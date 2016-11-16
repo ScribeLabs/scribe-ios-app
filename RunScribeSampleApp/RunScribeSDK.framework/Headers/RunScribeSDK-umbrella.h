@@ -33,6 +33,7 @@
 #import "RSDFUDevice.h"
 #import "RSDFUDeviceMgr.h"
 #import "RSDFUFile.h"
+#import "RSMotionData.h"
 #import "RSDevice.h"
 #import "RSDeviceMgr.h"
 #import "RSDevicePrivate.h"

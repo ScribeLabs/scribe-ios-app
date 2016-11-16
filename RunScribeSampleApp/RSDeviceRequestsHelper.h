@@ -6,6 +6,7 @@
 #import "RSDevice.h"
 #import "RSCmd.h"
 #import "RSEraseDataCmd.h"
+#import "RSPollingMPUDataCmd.h"
 #import "RSSetModeCmd.h"
 
 @interface RSDeviceRequestsHelper : NSObject
@@ -78,7 +79,9 @@ completionBlock:(RSCmdCompletedCallback)callback;
 /**
  *  Reads information about the file with specified index.
  */
-+ (void)readFileInformation:(NSInteger)fileIndex device:(RSDevice *)device completionBlock:(RSCmdCompletedCallback)callback;
++ (void)readFileInformation:(NSInteger)fileIndex
+                     device:(RSDevice *)device
+            completionBlock:(RSCmdCompletedCallback)callback;
 
 /**
  *  Sends command to the device in order to enter it into DFU mode.
@@ -94,5 +97,18 @@ completionBlock:(RSCmdCompletedCallback)callback;
  *  Performs diagnostics on the device.
  */
 + (void)runDiagnostics:(RSDevice *)device completionBlock:(RSCmdCompletedCallback)callback;
+
+/**
+ *  Enables streaming data for specified mode.
+ */
++ (void)enablePollingMPUData:(RSDevice *)device
+                        mode:(RSPollingMPUDataMode)mode
+                 streamBlock:(RSMotionDataStreamCallback)streamCallback
+             completionBlock:(RSCmdCompletedCallback)callback;
+
+/**
+ *  Disables streaming data on the device.
+ */
++ (void)disablePollingMPUData:(RSDevice *)device completionBlock:(RSCmdCompletedCallback)callback;
 
 @end

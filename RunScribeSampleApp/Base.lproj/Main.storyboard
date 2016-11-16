@@ -8,6 +8,103 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Device Motion View Controller-->
+        <scene sceneID="FEx-Xg-i8v">
+            <objects>
+                <viewController id="sKW-ZY-uZn" customClass="RSDeviceMotionViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="D4t-KB-YTf"/>
+                        <viewControllerLayoutGuide type="bottom" id="JKc-WU-TbK"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="FKj-o0-Ehk">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="320"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kYq-48-Pm8">
+                                <items>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="Vee-8J-SzI"/>
+                                    <barButtonItem systemItem="stop" id="esR-7i-EAh">
+                                        <connections>
+                                            <action selector="backButtonClicked:" destination="sKW-ZY-uZn" id="pLI-ij-6m4"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                                <color key="barTintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                            </toolbar>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8ZO-NG-pCU" customClass="CPTGraphHostingView">
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vRS-7c-WWG">
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="75" id="8mA-38-VLk"/>
+                                </constraints>
+                                <state key="normal" title="COMPASS"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="compassButtonClicked:" destination="sKW-ZY-uZn" eventType="touchDown" id="ayy-OD-jNe"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wPd-4C-kFY">
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <state key="normal" title="GYRO"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="gyroButtonClicked:" destination="sKW-ZY-uZn" eventType="touchDown" id="0Ct-wR-miZ"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6f1-QT-lYd">
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <state key="normal" title="ACCEL"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="accelButtonClicked:" destination="sKW-ZY-uZn" eventType="touchDown" id="qzj-NI-1Ae"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="vRS-7c-WWG" firstAttribute="bottom" secondItem="wPd-4C-kFY" secondAttribute="bottom" id="09H-TU-dFx"/>
+                            <constraint firstItem="wPd-4C-kFY" firstAttribute="top" secondItem="6f1-QT-lYd" secondAttribute="top" id="9hG-Bw-Rdm"/>
+                            <constraint firstItem="vRS-7c-WWG" firstAttribute="top" secondItem="wPd-4C-kFY" secondAttribute="top" id="EJh-Ik-YtT"/>
+                            <constraint firstItem="wPd-4C-kFY" firstAttribute="bottom" secondItem="6f1-QT-lYd" secondAttribute="bottom" id="LDe-Ya-9JC"/>
+                            <constraint firstAttribute="trailing" secondItem="8ZO-NG-pCU" secondAttribute="trailing" id="RSa-Cj-ELr"/>
+                            <constraint firstItem="wPd-4C-kFY" firstAttribute="width" secondItem="6f1-QT-lYd" secondAttribute="width" id="Rs7-mE-zdL"/>
+                            <constraint firstItem="vRS-7c-WWG" firstAttribute="leading" secondItem="wPd-4C-kFY" secondAttribute="trailing" constant="8" id="UfT-to-SoE"/>
+                            <constraint firstItem="JKc-WU-TbK" firstAttribute="top" secondItem="8ZO-NG-pCU" secondAttribute="bottom" id="b5e-c1-CUw"/>
+                            <constraint firstItem="8ZO-NG-pCU" firstAttribute="height" secondItem="FKj-o0-Ehk" secondAttribute="height" multiplier="1:2" id="fit-Ay-nEl"/>
+                            <constraint firstAttribute="trailing" secondItem="kYq-48-Pm8" secondAttribute="trailing" id="gTO-mY-8ye"/>
+                            <constraint firstItem="8ZO-NG-pCU" firstAttribute="top" secondItem="vRS-7c-WWG" secondAttribute="bottom" constant="8" id="iWq-Bw-VT8"/>
+                            <constraint firstItem="8ZO-NG-pCU" firstAttribute="leading" secondItem="FKj-o0-Ehk" secondAttribute="leading" id="ic2-gR-0S3"/>
+                            <constraint firstItem="kYq-48-Pm8" firstAttribute="top" secondItem="D4t-KB-YTf" secondAttribute="bottom" id="kKC-XZ-yAJ"/>
+                            <constraint firstItem="vRS-7c-WWG" firstAttribute="trailing" secondItem="FKj-o0-Ehk" secondAttribute="trailingMargin" id="sQm-6x-L8e"/>
+                            <constraint firstItem="kYq-48-Pm8" firstAttribute="leading" secondItem="FKj-o0-Ehk" secondAttribute="leading" id="wZb-0k-Wrm"/>
+                            <constraint firstItem="vRS-7c-WWG" firstAttribute="width" secondItem="6f1-QT-lYd" secondAttribute="width" id="xiz-6p-BcC"/>
+                            <constraint firstItem="wPd-4C-kFY" firstAttribute="leading" secondItem="6f1-QT-lYd" secondAttribute="trailing" constant="8" id="yvd-q7-GwT"/>
+                        </constraints>
+                    </view>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="600" height="320"/>
+                    <connections>
+                        <outlet property="hostView" destination="8ZO-NG-pCU" id="vhG-yM-8Qc"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="474-dL-McZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1172.8" y="-313.04347826086956"/>
+        </scene>
         <!--Main View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
@@ -112,6 +209,9 @@
                                         <integer key="value" value="10"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="motionButtonClicked:" destination="BYZ-38-t0r" eventType="touchDown" id="rUJ-g1-1lq"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n5x-QZ-IJh">
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
@@ -259,6 +359,7 @@
                         <segue destination="b0G-jh-RPV" kind="presentation" identifier="DeviceStatusSegue" id="1oc-XO-ljN"/>
                         <segue destination="qC0-oI-KIu" kind="presentation" identifier="DeviceConfigSegue" id="vrh-kK-Ac1"/>
                         <segue destination="VHC-Ka-dXe" kind="presentation" identifier="DeviceFileListSegue" id="Jgr-wn-4IE"/>
+                        <segue destination="sKW-ZY-uZn" kind="presentation" identifier="DeviceMotionSegue" id="P4f-GC-HU3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

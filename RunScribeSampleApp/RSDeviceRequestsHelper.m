@@ -15,6 +15,7 @@
 #import "RSEnterDFUModeCmd.h"
 #import "RSRebootCmd.h"
 #import "RSRunDiagnosticsCmd.h"
+#import "RSStopReadDataCmd.h"
 
 @implementation RSDeviceRequestsHelper
 
@@ -218,6 +219,22 @@
         [runDiagnosticsCmd setCompletedBlock:callback];
         [device runCmd:runDiagnosticsCmd];
     }
+}
+
++ (void)enablePollingMPUData:(RSDevice *)device mode:(RSPollingMPUDataMode)mode streamBlock:(RSMotionDataStreamCallback)streamCallback completionBlock:(RSCmdCompletedCallback)callback
+{
+    RSPollingMPUDataCmd *pollingMPUDataCmd = (RSPollingMPUDataCmd *)[[RSCommandFactory sharedInstance] getCmdForType:kRSCmdPollingMPUData forDevice:device];
+    pollingMPUDataCmd.mode = mode;
+    [pollingMPUDataCmd setMotionDataCallback:streamCallback];
+    [pollingMPUDataCmd setCompletedBlock:callback];
+    [device runCmd:pollingMPUDataCmd];
+}
+
++ (void)disablePollingMPUData:(RSDevice *)device completionBlock:(RSCmdCompletedCallback)callback
+{
+    RSStopReadDataCmd *stopReadingDataCmd = (RSStopReadDataCmd *)[[RSCommandFactory sharedInstance] getCmdForType:kRSCmdStopReadData forDevice:device];
+    [stopReadingDataCmd setCompletedBlock:callback];
+    [device runCmd:stopReadingDataCmd];
 }
 
 @end

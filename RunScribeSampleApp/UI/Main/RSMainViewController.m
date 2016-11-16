@@ -6,6 +6,7 @@
 #import "RSDeviceStatusViewController.h"
 #import "RSDeviceConfigViewController.h"
 #import "RSDeviceFilesViewController.h"
+#import "RSDeviceMotionViewController.h"
 #import "RSDeviceRequestsHelper.h"
 #import "RSDeviceMgr.h"
 #import "RSDeviceTableViewCell.h"
@@ -18,6 +19,7 @@
 NSString * const kRSStatusSegueIdentifier = @"DeviceStatusSegue";
 NSString * const kRSConfigSegueIdentifier = @"DeviceConfigSegue";
 NSString * const kRSFileListSegueIdentifier = @"DeviceFileListSegue";
+NSString * const kRSMotionSegueIdentifier = @"DeviceMotionSegue";
 
 NSString * const RSWriteMessageNotification = @"RSWriteMessageNotification";
 NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
@@ -217,6 +219,15 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
     if ([self isDeviceReady:device])
     {
         [self performSegueWithIdentifier:kRSFileListSegueIdentifier sender:self];
+    }
+}
+
+- (IBAction)motionButtonClicked:(id)sender
+{
+    RSDevice *device = [self getSelectedDevice:YES];
+    if ([self isDeviceReady:device])
+    {
+        [self performSegueWithIdentifier:kRSMotionSegueIdentifier sender:self];
     }
 }
 
@@ -551,6 +562,11 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
     else if ([segue.identifier isEqualToString:kRSFileListSegueIdentifier])
     {
         RSDeviceFilesViewController *controller = (RSDeviceFilesViewController *)segue.destinationViewController;
+        controller.device = [self getSelectedDevice:NO];
+    }
+    else if ([segue.identifier isEqualToString:kRSMotionSegueIdentifier])
+    {
+        RSDeviceMotionViewController *controller = (RSDeviceMotionViewController *)segue.destinationViewController;
         controller.device = [self getSelectedDevice:NO];
     }
 }
