@@ -19,7 +19,6 @@
 		2883C5701DC287180065359D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2883C56F1DC287180065359D /* main.m */; };
 		2883C5731DC287180065359D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2883C5721DC287180065359D /* AppDelegate.m */; };
 		2883C5791DC287180065359D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2883C5771DC287180065359D /* Main.storyboard */; };
-		2883C57C1DC287180065359D /* RunScribeSampleApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2883C57A1DC287180065359D /* RunScribeSampleApp.xcdatamodeld */; };
 		2883C57E1DC287180065359D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2883C57D1DC287180065359D /* Assets.xcassets */; };
 		2883C5811DC287180065359D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2883C57F1DC287180065359D /* LaunchScreen.storyboard */; };
 		2883C58B1DC2887A0065359D /* RunScribeSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2883C5881DC2884E0065359D /* RunScribeSDK.framework */; };
@@ -67,7 +66,6 @@
 		2883C5711DC287180065359D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		2883C5721DC287180065359D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		2883C5781DC287180065359D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		2883C57B1DC287180065359D /* RunScribeSampleApp.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = RunScribeSampleApp.xcdatamodel; sourceTree = "<group>"; };
 		2883C57D1DC287180065359D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2883C5801DC287180065359D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2883C5821DC287180065359D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -201,7 +199,6 @@
 				282802671DD2240E00EB6826 /* RSDeviceRequestsHelper.m */,
 				2883C57D1DC287180065359D /* Assets.xcassets */,
 				2883C5821DC287180065359D /* Info.plist */,
-				2883C57A1DC287180065359D /* RunScribeSampleApp.xcdatamodeld */,
 				2883C56E1DC287180065359D /* Supporting Files */,
 			);
 			path = RunScribeSampleApp;
@@ -386,7 +383,6 @@
 				284626A21DC8FA4E00BF7E1F /* RSDeviceStatusViewController.m in Sources */,
 				280D02B71DC4D06500AA8533 /* RSMainViewController.m in Sources */,
 				28E7D6501DD4A49A0065F587 /* RSDeviceFileDetailsViewController.m in Sources */,
-				2883C57C1DC287180065359D /* RunScribeSampleApp.xcdatamodeld in Sources */,
 				28D40ADD1DDC402F0099E063 /* RSCoreXYZGraph.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -563,19 +559,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		2883C57A1DC287180065359D /* RunScribeSampleApp.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				2883C57B1DC287180065359D /* RunScribeSampleApp.xcdatamodel */,
-			);
-			currentVersion = 2883C57B1DC287180065359D /* RunScribeSampleApp.xcdatamodel */;
-			path = RunScribeSampleApp.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = 2883C5631DC287170065359D /* Project object */;
 }
