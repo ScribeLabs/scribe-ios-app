@@ -1,0 +1,6 @@
+framework module Pods_ScribeApp {
+  umbrella header "Pods-ScribeApp-umbrella.h"
+
+  export *
+  module * { export * }
+}

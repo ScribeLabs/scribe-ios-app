@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		07C7839E2D00B20A53E840D4 /* Pods_RunScribeSampleApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3049FCAFEF436BE5BCA1B61D /* Pods_RunScribeSampleApp.framework */; };
 		280CCE411DD356A80094EA0D /* RSConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 280CCE401DD356A80094EA0D /* RSConfiguration.m */; };
 		280CCE4B1DD37ACD0094EA0D /* RSDeviceFilesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 280CCE4A1DD37ACD0094EA0D /* RSDeviceFilesViewController.m */; };
 		280D02B71DC4D06500AA8533 /* RSMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 280D02B61DC4D06500AA8533 /* RSMainViewController.m */; };
@@ -28,6 +27,7 @@
 		28ED46C71DC9FEA80018218A /* RSDeviceConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28ED46C61DC9FEA80018218A /* RSDeviceConfigViewController.m */; };
 		28ED46CA1DCA019C0018218A /* RSBaseModalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28ED46C91DCA019C0018218A /* RSBaseModalViewController.m */; };
 		28F8A3BE1DC75B2000843D24 /* RSAppLogging.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F8A3BD1DC75B2000843D24 /* RSAppLogging.m */; };
+		A75E0F86CB90137771562F1E /* Pods_ScribeApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 491DB715D3F776027EF81C43 /* Pods_ScribeApp.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -61,7 +61,7 @@
 		28413CCF1DD5D25500932C38 /* RSDeviceMotionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RSDeviceMotionViewController.m; path = UI/DeviceMotion/RSDeviceMotionViewController.m; sourceTree = "<group>"; };
 		284626A01DC8FA4E00BF7E1F /* RSDeviceStatusViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RSDeviceStatusViewController.h; path = UI/DeviceStatus/RSDeviceStatusViewController.h; sourceTree = "<group>"; };
 		284626A11DC8FA4E00BF7E1F /* RSDeviceStatusViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RSDeviceStatusViewController.m; path = UI/DeviceStatus/RSDeviceStatusViewController.m; sourceTree = "<group>"; };
-		2883C56B1DC287180065359D /* RunScribeSampleApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RunScribeSampleApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2883C56B1DC287180065359D /* ScribeApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScribeApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2883C56F1DC287180065359D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		2883C5711DC287180065359D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		2883C5721DC287180065359D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -80,9 +80,9 @@
 		28ED46C91DCA019C0018218A /* RSBaseModalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RSBaseModalViewController.m; path = UI/RSBaseModalViewController.m; sourceTree = "<group>"; };
 		28F8A3BC1DC75B2000843D24 /* RSAppLogging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSAppLogging.h; sourceTree = "<group>"; };
 		28F8A3BD1DC75B2000843D24 /* RSAppLogging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSAppLogging.m; sourceTree = "<group>"; };
-		3049FCAFEF436BE5BCA1B61D /* Pods_RunScribeSampleApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RunScribeSampleApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		85038ECCBE491398BD0AC84A /* Pods-RunScribeSampleApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunScribeSampleApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-RunScribeSampleApp/Pods-RunScribeSampleApp.release.xcconfig"; sourceTree = "<group>"; };
-		B4DC3ED047CB44DE320B3B76 /* Pods-RunScribeSampleApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunScribeSampleApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RunScribeSampleApp/Pods-RunScribeSampleApp.debug.xcconfig"; sourceTree = "<group>"; };
+		372192DA9024B379F3C08290 /* Pods-ScribeApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScribeApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-ScribeApp/Pods-ScribeApp.release.xcconfig"; sourceTree = "<group>"; };
+		491DB715D3F776027EF81C43 /* Pods_ScribeApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ScribeApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A7F21C843DA332873F3BFFE1 /* Pods-ScribeApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScribeApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ScribeApp/Pods-ScribeApp.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,8 +90,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				07C7839E2D00B20A53E840D4 /* Pods_RunScribeSampleApp.framework in Frameworks */,
 				28C35F041DDDE8710087DBF7 /* ScribeSDK.framework in Frameworks */,
+				A75E0F86CB90137771562F1E /* Pods_ScribeApp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -170,22 +170,22 @@
 		2883C5621DC287170065359D = {
 			isa = PBXGroup;
 			children = (
-				2883C56D1DC287180065359D /* RunScribeSampleApp */,
+				2883C56D1DC287180065359D /* ScribeApp */,
 				2883C56C1DC287180065359D /* Products */,
-				7A5FDDFE8566568481C63013 /* Pods */,
-				993B2D489E44ED3F57436CE3 /* Frameworks */,
+				FD13B7E6911371125A755453 /* Pods */,
+				B21AA0693E88835304DC4577 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
 		2883C56C1DC287180065359D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				2883C56B1DC287180065359D /* RunScribeSampleApp.app */,
+				2883C56B1DC287180065359D /* ScribeApp.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		2883C56D1DC287180065359D /* RunScribeSampleApp */ = {
+		2883C56D1DC287180065359D /* ScribeApp */ = {
 			isa = PBXGroup;
 			children = (
 				280CCE3E1DD3567C0094EA0D /* Models */,
@@ -201,7 +201,7 @@
 				2883C5821DC287180065359D /* Info.plist */,
 				2883C56E1DC287180065359D /* Supporting Files */,
 			);
-			path = RunScribeSampleApp;
+			path = ScribeApp;
 			sourceTree = "<group>";
 		};
 		2883C56E1DC287180065359D /* Supporting Files */ = {
@@ -229,45 +229,45 @@
 			name = DeviceConfig;
 			sourceTree = "<group>";
 		};
-		7A5FDDFE8566568481C63013 /* Pods */ = {
+		B21AA0693E88835304DC4577 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				B4DC3ED047CB44DE320B3B76 /* Pods-RunScribeSampleApp.debug.xcconfig */,
-				85038ECCBE491398BD0AC84A /* Pods-RunScribeSampleApp.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
-		993B2D489E44ED3F57436CE3 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				3049FCAFEF436BE5BCA1B61D /* Pods_RunScribeSampleApp.framework */,
+				491DB715D3F776027EF81C43 /* Pods_ScribeApp.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		FD13B7E6911371125A755453 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				A7F21C843DA332873F3BFFE1 /* Pods-ScribeApp.debug.xcconfig */,
+				372192DA9024B379F3C08290 /* Pods-ScribeApp.release.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		2883C56A1DC287170065359D /* RunScribeSampleApp */ = {
+		2883C56A1DC287170065359D /* ScribeApp */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2883C5851DC287180065359D /* Build configuration list for PBXNativeTarget "RunScribeSampleApp" */;
+			buildConfigurationList = 2883C5851DC287180065359D /* Build configuration list for PBXNativeTarget "ScribeApp" */;
 			buildPhases = (
-				38E3B50AAC32CB9ADD7DC880 /* [CP] Check Pods Manifest.lock */,
+				5630F85C7EC4655A5FA5AE19 /* [CP] Check Pods Manifest.lock */,
 				2883C5671DC287170065359D /* Sources */,
 				2883C5681DC287170065359D /* Frameworks */,
 				2883C5691DC287170065359D /* Resources */,
-				75A514BB9588764D1E23D903 /* [CP] Embed Pods Frameworks */,
-				F2A5FC8739C6AF831BA30262 /* [CP] Copy Pods Resources */,
 				28C35F061DDDE8710087DBF7 /* Embed Frameworks */,
+				77E6371CE04D8017F4D5AF97 /* [CP] Embed Pods Frameworks */,
+				1094543D72A516050168ED0A /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = RunScribeSampleApp;
-			productName = RunScribeSampleApp;
-			productReference = 2883C56B1DC287180065359D /* RunScribeSampleApp.app */;
+			name = ScribeApp;
+			productName = ScribeApp;
+			productReference = 2883C56B1DC287180065359D /* ScribeApp.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -285,7 +285,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 2883C5661DC287170065359D /* Build configuration list for PBXProject "RunScribeSampleApp" */;
+			buildConfigurationList = 2883C5661DC287170065359D /* Build configuration list for PBXProject "ScribeApp" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -298,7 +298,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				2883C56A1DC287170065359D /* RunScribeSampleApp */,
+				2883C56A1DC287170065359D /* ScribeApp */,
 			);
 		};
 /* End PBXProject section */
@@ -317,7 +317,22 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		38E3B50AAC32CB9ADD7DC880 /* [CP] Check Pods Manifest.lock */ = {
+		1094543D72A516050168ED0A /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ScribeApp/Pods-ScribeApp-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5630F85C7EC4655A5FA5AE19 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -332,7 +347,7 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		75A514BB9588764D1E23D903 /* [CP] Embed Pods Frameworks */ = {
+		77E6371CE04D8017F4D5AF97 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -344,22 +359,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RunScribeSampleApp/Pods-RunScribeSampleApp-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		F2A5FC8739C6AF831BA30262 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RunScribeSampleApp/Pods-RunScribeSampleApp-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ScribeApp/Pods-ScribeApp-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -501,38 +501,38 @@
 		};
 		2883C5861DC287180065359D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B4DC3ED047CB44DE320B3B76 /* Pods-RunScribeSampleApp.debug.xcconfig */;
+			baseConfigurationReference = A7F21C843DA332873F3BFFE1 /* Pods-ScribeApp.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/RunScribeSampleApp",
+					"$(PROJECT_DIR)/ScribeApp",
 				);
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/$(PROJECT)/ScribeSDK.framework/Headers";
-				INFOPLIST_FILE = RunScribeSampleApp/Info.plist;
+				INFOPLIST_FILE = ScribeApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.runScribe.RunScribeSampleApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.scribeLabs.scribeApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
 		};
 		2883C5871DC287180065359D /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 85038ECCBE491398BD0AC84A /* Pods-RunScribeSampleApp.release.xcconfig */;
+			baseConfigurationReference = 372192DA9024B379F3C08290 /* Pods-ScribeApp.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/RunScribeSampleApp",
+					"$(PROJECT_DIR)/ScribeApp",
 				);
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/$(PROJECT)/ScribeSDK.framework/Headers";
-				INFOPLIST_FILE = RunScribeSampleApp/Info.plist;
+				INFOPLIST_FILE = ScribeApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.runScribe.RunScribeSampleApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.scribeLabs.scribeApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -540,7 +540,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		2883C5661DC287170065359D /* Build configuration list for PBXProject "RunScribeSampleApp" */ = {
+		2883C5661DC287170065359D /* Build configuration list for PBXProject "ScribeApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2883C5831DC287180065359D /* Debug */,
@@ -549,7 +549,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2883C5851DC287180065359D /* Build configuration list for PBXNativeTarget "RunScribeSampleApp" */ = {
+		2883C5851DC287180065359D /* Build configuration list for PBXNativeTarget "ScribeApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2883C5861DC287180065359D /* Debug */,

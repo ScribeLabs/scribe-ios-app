@@ -1,6 +1,6 @@
 platform :ios, '8.2'
 
-target 'RunScribeSampleApp' do
+target 'ScribeApp' do
   use_frameworks!
 
   pod "CocoaLumberjack", "~>2.0"
