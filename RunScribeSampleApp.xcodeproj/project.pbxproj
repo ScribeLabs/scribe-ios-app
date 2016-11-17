@@ -21,8 +21,8 @@
 		2883C5791DC287180065359D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2883C5771DC287180065359D /* Main.storyboard */; };
 		2883C57E1DC287180065359D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2883C57D1DC287180065359D /* Assets.xcassets */; };
 		2883C5811DC287180065359D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2883C57F1DC287180065359D /* LaunchScreen.storyboard */; };
-		2883C58B1DC2887A0065359D /* RunScribeSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2883C5881DC2884E0065359D /* RunScribeSDK.framework */; };
-		2883C58C1DC2887A0065359D /* RunScribeSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2883C5881DC2884E0065359D /* RunScribeSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		28C35F041DDDE8710087DBF7 /* ScribeSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28C35F021DDDE8580087DBF7 /* ScribeSDK.framework */; };
+		28C35F051DDDE8710087DBF7 /* ScribeSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 28C35F021DDDE8580087DBF7 /* ScribeSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		28D40ADD1DDC402F0099E063 /* RSCoreXYZGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 28D40ADC1DDC402F0099E063 /* RSCoreXYZGraph.m */; };
 		28E7D6501DD4A49A0065F587 /* RSDeviceFileDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28E7D64F1DD4A49A0065F587 /* RSDeviceFileDetailsViewController.m */; };
 		28ED46C71DC9FEA80018218A /* RSDeviceConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28ED46C61DC9FEA80018218A /* RSDeviceConfigViewController.m */; };
@@ -31,13 +31,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		2883C58D1DC2887A0065359D /* Embed Frameworks */ = {
+		28C35F061DDDE8710087DBF7 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				2883C58C1DC2887A0065359D /* RunScribeSDK.framework in Embed Frameworks */,
+				28C35F051DDDE8710087DBF7 /* ScribeSDK.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -69,7 +69,7 @@
 		2883C57D1DC287180065359D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2883C5801DC287180065359D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2883C5821DC287180065359D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2883C5881DC2884E0065359D /* RunScribeSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RunScribeSDK.framework; sourceTree = "<group>"; };
+		28C35F021DDDE8580087DBF7 /* ScribeSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ScribeSDK.framework; sourceTree = "<group>"; };
 		28D40ADB1DDC402F0099E063 /* RSCoreXYZGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RSCoreXYZGraph.h; path = UI/DeviceMotion/RSCoreXYZGraph.h; sourceTree = "<group>"; };
 		28D40ADC1DDC402F0099E063 /* RSCoreXYZGraph.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RSCoreXYZGraph.m; path = UI/DeviceMotion/RSCoreXYZGraph.m; sourceTree = "<group>"; };
 		28E7D64E1DD4A49A0065F587 /* RSDeviceFileDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RSDeviceFileDetailsViewController.h; path = UI/DeviceFiles/RSDeviceFileDetailsViewController.h; sourceTree = "<group>"; };
@@ -90,8 +90,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2883C58B1DC2887A0065359D /* RunScribeSDK.framework in Frameworks */,
 				07C7839E2D00B20A53E840D4 /* Pods_RunScribeSampleApp.framework in Frameworks */,
+				28C35F041DDDE8710087DBF7 /* ScribeSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -215,7 +215,7 @@
 		2883C58A1DC288560065359D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				2883C5881DC2884E0065359D /* RunScribeSDK.framework */,
+				28C35F021DDDE8580087DBF7 /* ScribeSDK.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -257,9 +257,9 @@
 				2883C5671DC287170065359D /* Sources */,
 				2883C5681DC287170065359D /* Frameworks */,
 				2883C5691DC287170065359D /* Resources */,
-				2883C58D1DC2887A0065359D /* Embed Frameworks */,
 				75A514BB9588764D1E23D903 /* [CP] Embed Pods Frameworks */,
 				F2A5FC8739C6AF831BA30262 /* [CP] Copy Pods Resources */,
+				28C35F061DDDE8710087DBF7 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -510,7 +510,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/RunScribeSampleApp",
 				);
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/$(PROJECT)/RunScribeSDK.framework/Headers";
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/$(PROJECT)/ScribeSDK.framework/Headers";
 				INFOPLIST_FILE = RunScribeSampleApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.runScribe.RunScribeSampleApp;
@@ -529,7 +529,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/RunScribeSampleApp",
 				);
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/$(PROJECT)/RunScribeSDK.framework/Headers";
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/$(PROJECT)/ScribeSDK.framework/Headers";
 				INFOPLIST_FILE = RunScribeSampleApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.runScribe.RunScribeSampleApp;

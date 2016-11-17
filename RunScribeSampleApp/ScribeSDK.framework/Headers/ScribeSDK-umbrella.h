@@ -40,6 +40,6 @@
 #import "RSMockDevice.h"
 #import "RSSDKLogging.h"
 
-FOUNDATION_EXPORT double RunScribeSDKVersionNumber;
-FOUNDATION_EXPORT const unsigned char RunScribeSDKVersionString[];
+FOUNDATION_EXPORT double ScribeSDKVersionNumber;
+FOUNDATION_EXPORT const unsigned char ScribeSDKVersionString[];
 

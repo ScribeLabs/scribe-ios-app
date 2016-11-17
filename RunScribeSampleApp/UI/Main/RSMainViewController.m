@@ -112,7 +112,7 @@ NSString * const kRSWriteMessageKey = @"kRSWriteMessageKey";
     [self.devicesTableView reloadData];
     
     [self writeMessage:@"Scanning devices for 5 seconds"];
-    [self.deviceMgr scanForRunscribes:5 force:YES];
+    [self.deviceMgr scanForScribes:5 force:YES];
 }
 
 - (IBAction)displayLEDButtonClicked:(id)sender

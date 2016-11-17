@@ -27,20 +27,20 @@
 @interface NSDate (Extras)
 
 /*
- RunScribe epoch is midnight, December 31, 1989, UTC.
+ Scribe epoch is midnight, December 31, 1989, UTC.
  */
-+ (NSDate *)runscribeEpoch;
++ (NSDate *)scribeEpoch;
 
 /*
- Finds the time between RunScribe epoch and the specified date in seconds
+ Finds the time between Scribe epoch and the specified date in seconds
  */
-+ (NSTimeInterval)timeSinceRunscribeEpoch:(NSDate *)date;
++ (NSTimeInterval)timeSinceScribeEpoch:(NSDate *)date;
 
 /*
- Constructs a date object based upon a RunScribe time, which is the number of 
+ Constructs a date object based upon a Scribe time, which is the number of
  seconds since midnight, December 31, 1989 UTC
  */
-+ (NSDate *)dateFromRunScribeTime:(NSTimeInterval)runscribeTime;
++ (NSDate *)dateFromScribeTime:(NSTimeInterval)scribeTime;
 
 + (NSDate *)dateBySecondOffset:(NSInteger)offset;
 

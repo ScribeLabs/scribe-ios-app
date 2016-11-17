@@ -55,7 +55,7 @@ extern int const kDefaultPeripheralScanSeconds;
 + (RSDeviceMgr *)sharedInstance;
 
 // ---------------------------------------------------------------------------------
-// Perform a wireless scan for runScribe devices nearby
+// Perform a wireless scan for Scribe devices nearby
 // RSDeviceDiscoveredNotification - with kRSDevice key in dictionary
 // RSDeviceScanTimedOutNotification - when scanSeconds has been reached
 // RSDeviceScanStoppedNotification - if scan was stopped before timeout
@@ -65,7 +65,7 @@ extern int const kDefaultPeripheralScanSeconds;
 // ** Note: RSDeviceDiscoveredNotification notification may fire more than once for
 //    a single device as it changes during discovery. e.g. RSSI values change etc...
 // ---------------------------------------------------------------------------------
-- (void)scanForRunscribes:(int)scanSeconds force:(BOOL)force;
+- (void)scanForScribes:(int)scanSeconds force:(BOOL)force;
 
 // ---------------------------------------------------------------------------------
 // Stops any current device scans that are in progress
@@ -94,12 +94,12 @@ extern int const kDefaultPeripheralScanSeconds;
 //- (void)connectToDeviceWithUUID:(NSString *)uuid timeout:(int)timeout withCallback:(RSDeviceConnectCallback)callback;
 
 // ---------------------------------------------------------------------------------
-// Disconnects all connected runScibe devices.
+// Disconnects all connected Scribe devices.
 // ---------------------------------------------------------------------------------
 - (void)disconnectAllDevices;
 
 // ---------------------------------------------------------------------------------
-// Disconnects the specific runScibe device.
+// Disconnects the specific Scribe device.
 // ---------------------------------------------------------------------------------
 - (void)disconnectDevice:(RSDevice *)device;
 
