@@ -53,10 +53,10 @@
 
 // CONSTANTS
 #define kTeapotScale 4
-#define R2D (57.2957795131) //conversion parameter for radian to degree
 
 // MACROS
-#define DEGREES_TO_RADIANS(__ANGLE__) ((__ANGLE__) / 180.0 * M_PI)
+#define RADIANS_TO_DEGREES(__RADIANS__) ((__RADIANS__) * (180.0 / M_PI))
+#define DEGREES_TO_RADIANS(__DEGREES__) ((__DEGREES__) / 180.0 * M_PI)
 #define mEULAR_ANGLE_Z_FROM_QUAT_YXZ_CONVNETION(q)  (atan2(-2 * (q[1] * q[2] - q[0] * q[3]), 1 - 2 * (q[1] * q[1] + q[3] * q[3])))
 
 @implementation GLGravityView
@@ -132,7 +132,7 @@
 }
 
 
-- (void)updateQuat0:(float)quat0 quat1:(float)quat1 quat2:(float)quat2 quat3:(float)quat3
+- (void)updateQuat0:(double)quat0 quat1:(double)quat1 quat2:(double)quat2 quat3:(double)quat3
 {
     quat[0] = quat0;
     quat[1] = quat1;
@@ -162,7 +162,7 @@
     [EAGLContext setCurrentContext:context];
     
     glBindFramebufferOES(GL_FRAMEBUFFER_OES, viewFramebuffer);
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClearColor(26.0 / 255.0, 26.0 / 255.0, 26.0 / 255.0, 1.0);
     
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
@@ -176,7 +176,7 @@
     // The remaining elememts quat[1], quat[2], quat[3] represent the rotation axis of X-Y-Z coordinate system
     
     // Rotate teapot along Y axis
-    glRotatef(R2D + self.rotAngle, 0, 1, 0);
+    glRotatef(RADIANS_TO_DEGREES(1) + self.rotAngle, 0, 1, 0);
     
     // Compute the rotation angle from quat[0]
     flt = (GLfloat) acos(quat[0]);
@@ -264,7 +264,17 @@
     if (!animating)
     {
         displayLink = [NSClassFromString(@"CADisplayLink") displayLinkWithTarget:self selector:@selector(drawView)];
-        [displayLink setPreferredFramesPerSecond:30];
+        
+        NSString *currSysVer = [[UIDevice currentDevice] systemVersion];
+        if ([currSysVer compare:@"10.0" options:NSNumericSearch] != NSOrderedAscending)
+        {
+            [displayLink setPreferredFramesPerSecond:30];
+        }
+        else
+        {
+            [displayLink setFrameInterval:1];
+        }
+        
         [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
         animating = TRUE;
     }

@@ -34,7 +34,6 @@ typedef struct _NSSignedRange {
 
 - (instancetype)initWithHostingView:(CPTGraphHostingView *)hostingView
                               theme:(CPTTheme *)theme
-                              title:(NSString *)title
                          yAxisRange:(NSSignedRange)yAxisRange;
 
 - (void)addNewData:(RSSensorSample *)sample;

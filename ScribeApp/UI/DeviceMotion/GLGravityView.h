@@ -85,6 +85,6 @@
 - (void)stopAnimation;
 
 // Update the quaternion values
-- (void)updateQuat0:(float)quat0 quat1:(float)quat1 quat2:(float)quat2 quat3:(float)quat3;
+- (void)updateQuat0:(double)quat0 quat1:(double)quat1 quat2:(double)quat2 quat3:(double)quat3;
 
 @end

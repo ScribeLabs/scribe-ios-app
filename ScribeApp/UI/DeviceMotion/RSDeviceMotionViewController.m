@@ -37,16 +37,52 @@
 @property (nonatomic, weak) IBOutlet GLGravityView *glGravityView1;
 @property (nonatomic, weak) IBOutlet GLGravityView *glGravityView2;
 
+@property (nonatomic, weak) IBOutlet UIButton *accelButton;
+@property (nonatomic, weak) IBOutlet UIButton *gyroButton;
+@property (nonatomic, weak) IBOutlet UIButton *compassButton;
+
+@property (nonatomic, weak) IBOutlet UITextField *pitchMinTextField;
+@property (nonatomic, weak) IBOutlet UITextField *pitchCurrentTextField;
+@property (nonatomic, weak) IBOutlet UITextField *pitchMaxTextField;
+@property (nonatomic, weak) IBOutlet UITextField *rollMinTextField;
+@property (nonatomic, weak) IBOutlet UITextField *rollCurrentTextField;
+@property (nonatomic, weak) IBOutlet UITextField *rollMaxTextField;
+@property (nonatomic, weak) IBOutlet UITextField *yawMinTextField;
+@property (nonatomic, weak) IBOutlet UITextField *yawCurrentTextField;
+@property (nonatomic, weak) IBOutlet UITextField *yawMaxTextField;
+
 @end
 
 @implementation RSDeviceMotionViewController
 
 #define AVG_SAMPLE 9
 short xDataArray[AVG_SAMPLE], yDataArray[AVG_SAMPLE], zDataArray[AVG_SAMPLE];
+double pitchMin, pitchMax;
+double rollMin, rollMax;
+double yawMin, yawMax;
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    if (self)
+    {
+        memset(xDataArray, 0, sizeof xDataArray);
+        memset(yDataArray, 0, sizeof yDataArray);
+        memset(zDataArray, 0, sizeof zDataArray);
+        pitchMin = 0;
+        pitchMax = 0;
+        rollMin = 0;
+        rollMax = 0;
+        yawMin = 0;
+        yawMax = 0;
+    }
+    return self;
+}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor colorWithRed:26.0 / 255.0 green:26.0 / 255.0 blue:26.0 / 255.0 alpha:1.0];
     
     self.glGravityView1.rotAngle = 0.0;
     self.glGravityView2.rotAngle = 90.0;
@@ -55,10 +91,11 @@ short xDataArray[AVG_SAMPLE], yDataArray[AVG_SAMPLE], zDataArray[AVG_SAMPLE];
     [self.glGravityView2 startAnimation];
 }
 
-- (void)viewDidLayoutSubviews
+- (void)viewWillAppear:(BOOL)animated
 {
-    [super viewDidLayoutSubviews];
+    [super viewWillAppear:animated];
     [self prepareAccelGraph];
+    [self activateButtonForMode:kRSMPUModeAccel];
     [self enableStreamingData:kRSMPUModeAccel];
 }
 
@@ -117,6 +154,7 @@ short xDataArray[AVG_SAMPLE], yDataArray[AVG_SAMPLE], zDataArray[AVG_SAMPLE];
         memset(zDataArray, 0, sizeof zDataArray);
         
         dispatch_async(dispatch_get_main_queue(),^{
+            [strongSelf deactivateButtonForMode:strongSelf.currentMode];
             switch (mode) {
                 case kRSMPUModeAccel:
                     [strongSelf prepareAccelGraph];
@@ -128,46 +166,12 @@ short xDataArray[AVG_SAMPLE], yDataArray[AVG_SAMPLE], zDataArray[AVG_SAMPLE];
                     [strongSelf prepareCompassGraph];
                     break;
             }
+            [strongSelf activateButtonForMode:mode];
             
             [strongSelf enableStreamingData:mode];
         });
     }];
 }
-
-- (void)prepareAccelGraph
-{
-    NSSignedRange yAxisRange;
-    yAxisRange.location = -6;
-    yAxisRange.length = 12;
-    self.graph = [[RSCoreXYZGraph alloc] initWithHostingView:self.hostView
-                                                       theme:[CPTTheme themeNamed:kCPTDarkGradientTheme]
-                                                       title:@"Accel"
-                                                  yAxisRange:yAxisRange];
-}
-
-- (void)prepareGyroGraph
-{
-    NSSignedRange yAxisRange;
-    yAxisRange.location = -1000;
-    yAxisRange.length = 2000;
-    self.graph = [[RSCoreXYZGraph alloc] initWithHostingView:self.hostView
-                                                       theme:[CPTTheme themeNamed:kCPTDarkGradientTheme]
-                                                       title:@"Gyro"
-                                                  yAxisRange:yAxisRange];
-}
-
-
-- (void)prepareCompassGraph
-{
-    NSSignedRange yAxisRange;
-    yAxisRange.location = -20;
-    yAxisRange.length = 40;
-    self.graph = [[RSCoreXYZGraph alloc] initWithHostingView:self.hostView
-                                                       theme:[CPTTheme themeNamed:kCPTDarkGradientTheme]
-                                                       title:@"Compass"
-                                                  yAxisRange:yAxisRange];
-}
-
 
 - (void)enableStreamingData:(RSPollingMPUDataMode)mode
 {
@@ -278,7 +282,7 @@ short xDataArray[AVG_SAMPLE], yDataArray[AVG_SAMPLE], zDataArray[AVG_SAMPLE];
         {
             if (rawQuaternion[i] > 32767)
             {
-               rawQuaternion[i] -= 65536;
+                rawQuaternion[i] -= 65536;
             }
             quat[i] = rawQuaternion[i] / 16384.0;
         }
@@ -292,6 +296,30 @@ short xDataArray[AVG_SAMPLE], yDataArray[AVG_SAMPLE], zDataArray[AVG_SAMPLE];
                                          quat1:quat[1]
                                          quat2:quat[2]
                                          quat3:quat[3]];
+        
+        double pitch = atan2((2.0 * (quat[0] * quat[1] + quat[2] * quat[3])), (1.0 - 2.0 * (quat[1] * quat[1] + quat[2] * quat[2])));
+        double roll = asin((2.0 * (quat[0] * quat[2] - quat[3] * quat[1])));
+        double yaw = atan2((2.0 * (quat[0] * quat[3] + quat[1] * quat[2])), (1.0 - 2.0 * (quat[2] * quat[2] + quat[3] * quat[3])));
+        
+        pitch = pitch * 180.0 / M_PI;
+        roll = roll * 180.0 / M_PI;
+        yaw = yaw * 180.0 / M_PI;
+        
+        yaw = -yaw;
+        if (yaw < 0)
+        {
+            yaw += 180.0;
+        }
+        else
+        {
+            yaw -= 180.0;
+        }
+        
+        dispatch_async(dispatch_get_main_queue(),^{
+            [strongSelf updatePitchValue:pitch];
+            [strongSelf updateRollValue:roll];
+            [strongSelf updateYawValue:yaw];
+        });
     };
     
     [RSDeviceRequestsHelper enablePollingMPUData:self.device mode:mode streamBlock:callback completionBlock:^(RSCmd *sourceCmd, NSError *error) {
@@ -336,11 +364,132 @@ short xDataArray[AVG_SAMPLE], yDataArray[AVG_SAMPLE], zDataArray[AVG_SAMPLE];
     [RSDeviceRequestsHelper disablePollingMPUData:self.device completionBlock:callback];
 }
 
+#pragma mark - UI
+
+- (void)prepareAccelGraph
+{
+    NSSignedRange yAxisRange;
+    yAxisRange.location = -6;
+    yAxisRange.length = 12;
+    self.graph = [[RSCoreXYZGraph alloc] initWithHostingView:self.hostView
+                                                       theme:[CPTTheme themeNamed:kCPTDarkGradientTheme]
+                                                  yAxisRange:yAxisRange];
+}
+
+- (void)prepareGyroGraph
+{
+    NSSignedRange yAxisRange;
+    yAxisRange.location = -1000;
+    yAxisRange.length = 2000;
+    self.graph = [[RSCoreXYZGraph alloc] initWithHostingView:self.hostView
+                                                       theme:[CPTTheme themeNamed:kCPTDarkGradientTheme]
+                                                  yAxisRange:yAxisRange];
+}
+
+- (void)prepareCompassGraph
+{
+    NSSignedRange yAxisRange;
+    yAxisRange.location = -20;
+    yAxisRange.length = 40;
+    self.graph = [[RSCoreXYZGraph alloc] initWithHostingView:self.hostView
+                                                       theme:[CPTTheme themeNamed:kCPTDarkGradientTheme]
+                                                  yAxisRange:yAxisRange];
+}
+
+- (void)deactivateButtonForMode:(RSPollingMPUDataMode)mode
+{
+    UIButton *button;
+    switch (mode) {
+        case kRSMPUModeAccel:
+            button = self.accelButton;
+            break;
+        case kRSMPUModeGyro:
+            button = self.gyroButton;
+            break;
+        case kRSMPUModeCompass:
+            button = self.compassButton;
+            break;
+    }
+    
+    [button setEnabled:YES];
+    [button setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+}
+
+- (void)activateButtonForMode:(RSPollingMPUDataMode)mode
+{
+    UIButton *button;
+    switch (mode) {
+        case kRSMPUModeAccel:
+            button = self.accelButton;
+            break;
+        case kRSMPUModeGyro:
+            button = self.gyroButton;
+            break;
+        case kRSMPUModeCompass:
+            button = self.compassButton;
+            break;
+    }
+    
+    [button setEnabled:NO];
+    [button setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
+}
+
 - (void)displaySample:(RSSensorSample *)sample
 {
     dispatch_async(dispatch_get_main_queue(),^{
         [self.graph addNewData:sample];
     });
+}
+
+- (void)updatePitchValue:(double)pitch
+{
+    if (pitch < pitchMin)
+    {
+        pitchMin = pitch;
+        self.pitchMinTextField.text = [NSString stringWithFormat:@"%02.1F", pitchMin];
+    }
+    
+    if (pitch > pitchMax)
+    {
+        pitchMax = pitch;
+        self.pitchMaxTextField.text = [NSString stringWithFormat:@"%02.1F", pitchMax];
+    }
+    
+    self.pitchCurrentTextField.text = [NSString stringWithFormat:@"%02.1F", pitch];
+}
+
+- (void)updateRollValue:(double)roll
+{
+    if (roll < rollMin)
+    {
+        rollMin = roll;
+        self.rollMinTextField.text = [NSString stringWithFormat:@"%02.1F", rollMin];
+    }
+    
+    if (roll > rollMax)
+    {
+        rollMax = roll;
+        self.rollMaxTextField.text = [NSString stringWithFormat:@"%02.1F", rollMax];
+    }
+    
+    self.rollCurrentTextField.text = [NSString stringWithFormat:@"%02.1F", roll];
+}
+
+- (void)updateYawValue:(double)yaw
+{
+    if (yaw < yawMin)
+    {
+        yawMin = yaw;
+        self.yawMinTextField.text = [NSString stringWithFormat:@"%02.1F", yawMin];
+    }
+    
+    if (yaw > yawMax)
+    {
+        yawMax = yaw;
+        self.yawMaxTextField.text = [NSString stringWithFormat:@"%02.1F", yawMax];
+    }
+    
+    self.yawCurrentTextField.text = [NSString stringWithFormat:@"%02.1F", yaw];
 }
 
 @end

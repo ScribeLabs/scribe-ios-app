@@ -26,57 +26,56 @@
 
 static double const kFrameRate = 5.0;  // frames per second
 static NSUInteger const kMaxDataPoints = 52;
-static NSString *const kXPlotIdentifier = @"x";
-static NSString *const kYPlotIdentifier = @"y";
-static NSString *const kZPlotIdentifier = @"z";
+static NSString * const kXPlotIdentifier = @"x";
+static NSString * const kYPlotIdentifier = @"y";
+static NSString * const kZPlotIdentifier = @"z";
+static NSUInteger const kGraphPaddingRight = 96; // includes right margin + width of buttons (ACCEL, GYRO, COMPASS) which placed on the Motion screen
 
 @interface RSCoreXYZGraph() <CPTPlotDataSource>
 
 @property (nonatomic, strong) CPTGraphHostingView *defaultLayerHostingView;
 @property (nonatomic, strong) CPTGraph *graph;
-@property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) NSMutableArray *plotData;
 @property (nonatomic, assign) NSSignedRange yAxisRange;
 @property (nonatomic, assign) NSUInteger currentIndex;
-@property (nonatomic, readonly) CGFloat titleSize;
+@property (nonatomic, readonly) CGFloat margin;
 
 @end
 
 @implementation RSCoreXYZGraph
 
-- (instancetype)initWithHostingView:(CPTGraphHostingView *)hostingView theme:(CPTTheme *)theme title:(NSString *)title yAxisRange:(NSSignedRange)yAxisRange;
+- (instancetype)initWithHostingView:(CPTGraphHostingView *)hostingView theme:(CPTTheme *)theme yAxisRange:(NSSignedRange)yAxisRange;
 {
     self = [super init];
     if (self)
     {
         self.plotData = [[NSMutableArray alloc] initWithCapacity:kMaxDataPoints];
-        self.title = title;
         self.yAxisRange = yAxisRange;
         [self renderInView:hostingView withTheme:theme];
     }
     return self;
 }
 
-- (CGFloat)titleSize
+- (CGFloat)margin
 {
-    CGFloat size;
+    CGFloat margin;
     
     switch (UI_USER_INTERFACE_IDIOM())
     {
         case UIUserInterfaceIdiomPad:
-            size = 24.0;
+            margin = 24.0;
             break;
             
         case UIUserInterfaceIdiomPhone:
-            size = 16.0;
+            margin = 16.0;
             break;
             
         default:
-            size = 12.0;
+            margin = 12.0;
             break;
     }
     
-    return size;
+    return margin;
 }
 
 - (void)renderInView:(CPTGraphHostingView *)hostingView withTheme:(CPTTheme *)theme
@@ -114,10 +113,10 @@ static NSString *const kZPlotIdentifier = @"z";
     hostingView.hostedGraph = self.graph;
     [self.graph applyTheme:theme];
     
-    self.graph.plotAreaFrame.paddingTop = self.titleSize;
+    self.graph.plotAreaFrame.paddingTop = self.margin;
     self.graph.plotAreaFrame.paddingRight = 0;
-    self.graph.plotAreaFrame.paddingBottom = self.titleSize;
-    self.graph.plotAreaFrame.paddingLeft = self.titleSize * CPTFloat(2.5);
+    self.graph.plotAreaFrame.paddingBottom = self.margin;
+    self.graph.plotAreaFrame.paddingLeft = self.margin * CPTFloat(2.5);
     self.graph.plotAreaFrame.masksToBorder = NO;
     
     // Grid line styles
@@ -162,7 +161,7 @@ static NSString *const kZPlotIdentifier = @"z";
     self.graph.legend.cornerRadius    = 5.0;
     self.graph.legend.numberOfRows    = 1;
     self.graph.legendAnchor           = CPTRectAnchorBottom;
-    self.graph.legendDisplacement     = CGPointMake(0.0, self.titleSize * CPTFloat(1.25));
+    self.graph.legendDisplacement     = CGPointMake(0.0 - (kGraphPaddingRight - 16) / 2, self.margin / 2);
 }
 
 - (CPTScatterPlot *)createScatterPlot:(NSString *)identifier lineColor:(CPTColor *)lineColor
@@ -182,35 +181,19 @@ static NSString *const kZPlotIdentifier = @"z";
 
 - (void)formatAllGraphs
 {
-    CGFloat graphTitleSize = self.titleSize;
-    
-    // Title
     CPTMutableTextStyle *textStyle = [CPTMutableTextStyle textStyle];
     textStyle.color = [CPTColor grayColor];
     textStyle.fontName = @"Helvetica-Bold";
-    textStyle.fontSize = graphTitleSize;
-    
-    self.graph.title = self.title;
-    self.graph.titleTextStyle = textStyle;
-    self.graph.titleDisplacement = CPTPointMake(0.0, textStyle.fontSize * CPTFloat(1.5));
-    self.graph.titlePlotAreaFrameAnchor = CPTRectAnchorTop;
     
     // Padding
-    CGFloat boundsPadding = graphTitleSize;
+    CGFloat boundsPadding = self.margin;
     self.graph.paddingLeft = boundsPadding;
-    if (self.graph.title.length > 0)
-    {
-        self.graph.paddingTop = MAX(self.graph.titleTextStyle.fontSize * CPTFloat(2.0), boundsPadding);
-    }
-    else
-    {
-        self.graph.paddingTop = boundsPadding;
-    }
-    self.graph.paddingRight = boundsPadding;
+    self.graph.paddingTop = boundsPadding;
+    self.graph.paddingRight = kGraphPaddingRight + self.margin;
     self.graph.paddingBottom = boundsPadding;
     
     // Axis labels
-    CGFloat labelSize = graphTitleSize * CPTFloat(0.5);
+    CGFloat labelSize = self.margin * CPTFloat(0.5);
     for (CPTAxis *axis in self.graph.axisSet.axes)
     {
         // Axis labels
