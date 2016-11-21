@@ -25,13 +25,17 @@
 #import "RSDeviceMotionViewController.h"
 #import "RSDeviceRequestsHelper.h"
 #import "RSCoreXYZGraph.h"
+#import "GLGravityView.h"
 #import "RSSensorSample.h"
 
 @interface RSDeviceMotionViewController ()
 
 @property (nonatomic, assign) RSPollingMPUDataMode currentMode;
-@property (nonatomic, weak) IBOutlet CPTGraphHostingView *hostView;
 @property (nonatomic, strong) RSCoreXYZGraph *graph;
+
+@property (nonatomic, weak) IBOutlet CPTGraphHostingView *hostView;
+@property (nonatomic, weak) IBOutlet GLGravityView *glGravityView1;
+@property (nonatomic, weak) IBOutlet GLGravityView *glGravityView2;
 
 @end
 
@@ -39,6 +43,17 @@
 
 #define AVG_SAMPLE 9
 short xDataArray[AVG_SAMPLE], yDataArray[AVG_SAMPLE], zDataArray[AVG_SAMPLE];
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    self.glGravityView1.rotAngle = 0.0;
+    self.glGravityView2.rotAngle = 90.0;
+    
+    [self.glGravityView1 startAnimation];
+    [self.glGravityView2 startAnimation];
+}
 
 - (void)viewDidLayoutSubviews
 {
@@ -51,6 +66,12 @@ short xDataArray[AVG_SAMPLE], yDataArray[AVG_SAMPLE], zDataArray[AVG_SAMPLE];
 {
     [super viewWillDisappear:animated];
     [self disableStreamingData:nil];
+}
+
+- (void)dealloc
+{
+    [self.glGravityView1 stopAnimation];
+    [self.glGravityView2 stopAnimation];
 }
 
 #pragma mark - IBActions
@@ -151,8 +172,11 @@ short xDataArray[AVG_SAMPLE], yDataArray[AVG_SAMPLE], zDataArray[AVG_SAMPLE];
 - (void)enableStreamingData:(RSPollingMPUDataMode)mode
 {
     self.currentMode = mode;
+    
+    __weak RSDeviceMotionViewController *weakSelf = self;
     RSMotionDataStreamCallback callback = ^(RSMotionData *motionData) {
-        if (self.currentMode != motionData.mpuDataModeIndex)
+        RSDeviceMotionViewController *strongSelf = weakSelf;
+        if (strongSelf.currentMode != motionData.mpuDataModeIndex)
         {
             return;
         }
@@ -183,9 +207,9 @@ short xDataArray[AVG_SAMPLE], yDataArray[AVG_SAMPLE], zDataArray[AVG_SAMPLE];
                     accelZSum += zDataArray[i];
                 }
                 
-                [self displaySample:[[RSSensorSample alloc] initWithX:@(accelXSum / AVG_SAMPLE / 2048.0)
-                                                                    y:@(accelYSum / AVG_SAMPLE / 2048.0)
-                                                                    z:@(accelZSum / AVG_SAMPLE / 2048.0)]];
+                [strongSelf displaySample:[[RSSensorSample alloc] initWithX:@(accelXSum / AVG_SAMPLE / 2048.0)
+                                                                          y:@(accelYSum / AVG_SAMPLE / 2048.0)
+                                                                          z:@(accelZSum / AVG_SAMPLE / 2048.0)]];
                 break;
             }
             case kRSMPUModeGyro:
@@ -212,9 +236,9 @@ short xDataArray[AVG_SAMPLE], yDataArray[AVG_SAMPLE], zDataArray[AVG_SAMPLE];
                     gyroZSum += zDataArray[i];
                 }
                 
-                [self displaySample:[[RSSensorSample alloc] initWithX:@(gyroXSum / AVG_SAMPLE / 16.0)
-                                                                    y:@(gyroYSum / AVG_SAMPLE / 16.0)
-                                                                    z:@(gyroZSum / AVG_SAMPLE / 16.0)]];
+                [strongSelf displaySample:[[RSSensorSample alloc] initWithX:@(gyroXSum / AVG_SAMPLE / 16.0)
+                                                                          y:@(gyroYSum / AVG_SAMPLE / 16.0)
+                                                                          z:@(gyroZSum / AVG_SAMPLE / 16.0)]];
                 break;
             }
             case kRSMPUModeCompass:
@@ -241,15 +265,35 @@ short xDataArray[AVG_SAMPLE], yDataArray[AVG_SAMPLE], zDataArray[AVG_SAMPLE];
                     compassZSum += zDataArray[i];
                 }
                 
-                [self displaySample:[[RSSensorSample alloc] initWithX:@(compassXSum / AVG_SAMPLE / 32.0)
-                                                                    y:@(compassYSum / AVG_SAMPLE / 32.0)
-                                                                    z:@(compassZSum / AVG_SAMPLE / 32.0)]];
+                [strongSelf displaySample:[[RSSensorSample alloc] initWithX:@(compassXSum / AVG_SAMPLE / 32.0)
+                                                                          y:@(compassYSum / AVG_SAMPLE / 32.0)
+                                                                          z:@(compassZSum / AVG_SAMPLE / 32.0)]];
                 break;
             }
         }
+        
+        double rawQuaternion[4] = {motionData.quaternion1, motionData.quaternion2, motionData.quaternion3, motionData.quaternion4};
+        double quat[4];
+        for (int i = 0; i < 4; i++)
+        {
+            if (rawQuaternion[i] > 32767)
+            {
+               rawQuaternion[i] -= 65536;
+            }
+            quat[i] = rawQuaternion[i] / 16384.0;
+        }
+        
+        [strongSelf.glGravityView1 updateQuat0:quat[0]
+                                         quat1:quat[1]
+                                         quat2:quat[2]
+                                         quat3:quat[3]];
+        
+        [strongSelf.glGravityView2 updateQuat0:quat[0]
+                                         quat1:quat[1]
+                                         quat2:quat[2]
+                                         quat3:quat[3]];
     };
     
-    __weak RSDeviceMotionViewController *weakSelf = self;
     [RSDeviceRequestsHelper enablePollingMPUData:self.device mode:mode streamBlock:callback completionBlock:^(RSCmd *sourceCmd, NSError *error) {
         RSDeviceMotionViewController *strongSelf = weakSelf;
         dispatch_async(dispatch_get_main_queue(),^{

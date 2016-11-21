@@ -15,6 +15,7 @@
 		283636A01DDB34C300003D7C /* RSSensorSample.m in Sources */ = {isa = PBXBuildFile; fileRef = 2836369F1DDB34C300003D7C /* RSSensorSample.m */; };
 		28413CD01DD5D25500932C38 /* RSDeviceMotionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28413CCF1DD5D25500932C38 /* RSDeviceMotionViewController.m */; };
 		284626A21DC8FA4E00BF7E1F /* RSDeviceStatusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 284626A11DC8FA4E00BF7E1F /* RSDeviceStatusViewController.m */; };
+		2869AD651DDE6EB5006497F3 /* GLGravityView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2869AD641DDE6EB5006497F3 /* GLGravityView.m */; };
 		2883C5701DC287180065359D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2883C56F1DC287180065359D /* main.m */; };
 		2883C5731DC287180065359D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2883C5721DC287180065359D /* AppDelegate.m */; };
 		2883C5791DC287180065359D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2883C5771DC287180065359D /* Main.storyboard */; };
@@ -59,8 +60,11 @@
 		2836369F1DDB34C300003D7C /* RSSensorSample.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RSSensorSample.m; path = Models/RSSensorSample.m; sourceTree = "<group>"; };
 		28413CCE1DD5D25500932C38 /* RSDeviceMotionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RSDeviceMotionViewController.h; path = UI/DeviceMotion/RSDeviceMotionViewController.h; sourceTree = "<group>"; };
 		28413CCF1DD5D25500932C38 /* RSDeviceMotionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RSDeviceMotionViewController.m; path = UI/DeviceMotion/RSDeviceMotionViewController.m; sourceTree = "<group>"; };
+		2842A3E01DE1A1BE004731C3 /* teapot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = teapot.h; path = Models/teapot.h; sourceTree = "<group>"; };
 		284626A01DC8FA4E00BF7E1F /* RSDeviceStatusViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RSDeviceStatusViewController.h; path = UI/DeviceStatus/RSDeviceStatusViewController.h; sourceTree = "<group>"; };
 		284626A11DC8FA4E00BF7E1F /* RSDeviceStatusViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RSDeviceStatusViewController.m; path = UI/DeviceStatus/RSDeviceStatusViewController.m; sourceTree = "<group>"; };
+		2869AD631DDE6EB5006497F3 /* GLGravityView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLGravityView.h; path = UI/DeviceMotion/GLGravityView.h; sourceTree = "<group>"; };
+		2869AD641DDE6EB5006497F3 /* GLGravityView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GLGravityView.m; path = UI/DeviceMotion/GLGravityView.m; sourceTree = "<group>"; };
 		2883C56B1DC287180065359D /* ScribeApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScribeApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2883C56F1DC287180065359D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		2883C5711DC287180065359D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -101,6 +105,7 @@
 		280CCE3E1DD3567C0094EA0D /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				2842A3E01DE1A1BE004731C3 /* teapot.h */,
 				280CCE3F1DD356A80094EA0D /* RSConfiguration.h */,
 				280CCE401DD356A80094EA0D /* RSConfiguration.m */,
 				2836369E1DDB34C300003D7C /* RSSensorSample.h */,
@@ -150,6 +155,8 @@
 		28413CCD1DD5D1F400932C38 /* DeviceMotion */ = {
 			isa = PBXGroup;
 			children = (
+				2869AD631DDE6EB5006497F3 /* GLGravityView.h */,
+				2869AD641DDE6EB5006497F3 /* GLGravityView.m */,
 				28413CCE1DD5D25500932C38 /* RSDeviceMotionViewController.h */,
 				28413CCF1DD5D25500932C38 /* RSDeviceMotionViewController.m */,
 				28D40ADB1DDC402F0099E063 /* RSCoreXYZGraph.h */,
@@ -383,6 +390,7 @@
 				284626A21DC8FA4E00BF7E1F /* RSDeviceStatusViewController.m in Sources */,
 				280D02B71DC4D06500AA8533 /* RSMainViewController.m in Sources */,
 				28E7D6501DD4A49A0065F587 /* RSDeviceFileDetailsViewController.m in Sources */,
+				2869AD651DDE6EB5006497F3 /* GLGravityView.m in Sources */,
 				28D40ADD1DDC402F0099E063 /* RSCoreXYZGraph.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

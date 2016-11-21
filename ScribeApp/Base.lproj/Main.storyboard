@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -34,10 +35,22 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8ZO-NG-pCU" customClass="CPTGraphHostingView">
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Fwr-wA-n2e" customClass="GLGravityView">
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="Fwr-wA-n2e" secondAttribute="height" multiplier="1:1" id="OB8-9W-yzI"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RHE-cJ-z3b" customClass="GLGravityView">
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="RHE-cJ-z3b" secondAttribute="height" multiplier="1:1" id="AeZ-AN-u33"/>
+                                </constraints>
+                            </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vRS-7c-WWG">
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="75" id="8mA-38-VLk"/>
+                                    <constraint firstAttribute="width" constant="80" id="uqX-kZ-BOn"/>
                                 </constraints>
                                 <state key="normal" title="COMPASS"/>
                                 <userDefinedRuntimeAttributes>
@@ -76,28 +89,36 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="vRS-7c-WWG" firstAttribute="bottom" secondItem="wPd-4C-kFY" secondAttribute="bottom" id="09H-TU-dFx"/>
-                            <constraint firstItem="wPd-4C-kFY" firstAttribute="top" secondItem="6f1-QT-lYd" secondAttribute="top" id="9hG-Bw-Rdm"/>
-                            <constraint firstItem="vRS-7c-WWG" firstAttribute="top" secondItem="wPd-4C-kFY" secondAttribute="top" id="EJh-Ik-YtT"/>
-                            <constraint firstItem="wPd-4C-kFY" firstAttribute="bottom" secondItem="6f1-QT-lYd" secondAttribute="bottom" id="LDe-Ya-9JC"/>
+                            <constraint firstItem="vRS-7c-WWG" firstAttribute="trailing" secondItem="FKj-o0-Ehk" secondAttribute="trailingMargin" id="4iQ-Yt-TbE"/>
+                            <constraint firstItem="vRS-7c-WWG" firstAttribute="width" secondItem="6f1-QT-lYd" secondAttribute="width" id="K2l-HL-lHy"/>
+                            <constraint firstItem="Fwr-wA-n2e" firstAttribute="top" secondItem="kYq-48-Pm8" secondAttribute="bottom" constant="8" id="L9z-99-ui0"/>
+                            <constraint firstItem="8ZO-NG-pCU" firstAttribute="top" secondItem="vRS-7c-WWG" secondAttribute="bottom" constant="8" id="LdL-Cd-kZJ"/>
+                            <constraint firstItem="vRS-7c-WWG" firstAttribute="leading" secondItem="wPd-4C-kFY" secondAttribute="trailing" constant="8" id="Mun-vW-YHY"/>
+                            <constraint firstItem="8ZO-NG-pCU" firstAttribute="top" secondItem="RHE-cJ-z3b" secondAttribute="bottom" constant="8" id="Q7f-9c-67q"/>
+                            <constraint firstItem="Fwr-wA-n2e" firstAttribute="leading" secondItem="FKj-o0-Ehk" secondAttribute="leading" constant="8" id="QqN-97-sIP"/>
+                            <constraint firstItem="8ZO-NG-pCU" firstAttribute="top" secondItem="Fwr-wA-n2e" secondAttribute="bottom" constant="8" id="RDF-J8-Xdp"/>
                             <constraint firstAttribute="trailing" secondItem="8ZO-NG-pCU" secondAttribute="trailing" id="RSa-Cj-ELr"/>
-                            <constraint firstItem="wPd-4C-kFY" firstAttribute="width" secondItem="6f1-QT-lYd" secondAttribute="width" id="Rs7-mE-zdL"/>
-                            <constraint firstItem="vRS-7c-WWG" firstAttribute="leading" secondItem="wPd-4C-kFY" secondAttribute="trailing" constant="8" id="UfT-to-SoE"/>
+                            <constraint firstItem="wPd-4C-kFY" firstAttribute="leading" secondItem="6f1-QT-lYd" secondAttribute="trailing" constant="8" id="XWB-Xs-mm0"/>
+                            <constraint firstItem="wPd-4C-kFY" firstAttribute="top" secondItem="6f1-QT-lYd" secondAttribute="top" id="ZSQ-dN-FOC"/>
+                            <constraint firstItem="vRS-7c-WWG" firstAttribute="bottom" secondItem="6f1-QT-lYd" secondAttribute="bottom" id="a4B-YE-EQu"/>
                             <constraint firstItem="JKc-WU-TbK" firstAttribute="top" secondItem="8ZO-NG-pCU" secondAttribute="bottom" id="b5e-c1-CUw"/>
-                            <constraint firstItem="8ZO-NG-pCU" firstAttribute="height" secondItem="FKj-o0-Ehk" secondAttribute="height" multiplier="1:2" id="fit-Ay-nEl"/>
+                            <constraint firstItem="8ZO-NG-pCU" firstAttribute="height" secondItem="FKj-o0-Ehk" secondAttribute="height" multiplier="8:20" id="fit-Ay-nEl"/>
                             <constraint firstAttribute="trailing" secondItem="kYq-48-Pm8" secondAttribute="trailing" id="gTO-mY-8ye"/>
-                            <constraint firstItem="8ZO-NG-pCU" firstAttribute="top" secondItem="vRS-7c-WWG" secondAttribute="bottom" constant="8" id="iWq-Bw-VT8"/>
+                            <constraint firstItem="wPd-4C-kFY" firstAttribute="width" secondItem="6f1-QT-lYd" secondAttribute="width" id="ht9-ch-L5U"/>
                             <constraint firstItem="8ZO-NG-pCU" firstAttribute="leading" secondItem="FKj-o0-Ehk" secondAttribute="leading" id="ic2-gR-0S3"/>
+                            <constraint firstItem="wPd-4C-kFY" firstAttribute="bottom" secondItem="6f1-QT-lYd" secondAttribute="bottom" id="j0U-Ez-ctb"/>
                             <constraint firstItem="kYq-48-Pm8" firstAttribute="top" secondItem="D4t-KB-YTf" secondAttribute="bottom" id="kKC-XZ-yAJ"/>
-                            <constraint firstItem="vRS-7c-WWG" firstAttribute="trailing" secondItem="FKj-o0-Ehk" secondAttribute="trailingMargin" id="sQm-6x-L8e"/>
+                            <constraint firstItem="vRS-7c-WWG" firstAttribute="top" secondItem="6f1-QT-lYd" secondAttribute="top" id="oUy-u6-woO"/>
+                            <constraint firstItem="RHE-cJ-z3b" firstAttribute="leading" secondItem="Fwr-wA-n2e" secondAttribute="trailing" constant="8" id="pJc-u2-8HQ"/>
                             <constraint firstItem="kYq-48-Pm8" firstAttribute="leading" secondItem="FKj-o0-Ehk" secondAttribute="leading" id="wZb-0k-Wrm"/>
-                            <constraint firstItem="vRS-7c-WWG" firstAttribute="width" secondItem="6f1-QT-lYd" secondAttribute="width" id="xiz-6p-BcC"/>
-                            <constraint firstItem="wPd-4C-kFY" firstAttribute="leading" secondItem="6f1-QT-lYd" secondAttribute="trailing" constant="8" id="yvd-q7-GwT"/>
+                            <constraint firstItem="RHE-cJ-z3b" firstAttribute="top" secondItem="kYq-48-Pm8" secondAttribute="bottom" constant="8" id="wsj-xs-Fnv"/>
                         </constraints>
                     </view>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="600" height="320"/>
                     <connections>
+                        <outlet property="glGravityView1" destination="Fwr-wA-n2e" id="lIP-Bw-D3Z"/>
+                        <outlet property="glGravityView2" destination="RHE-cJ-z3b" id="zzh-tV-Qxx"/>
                         <outlet property="hostView" destination="8ZO-NG-pCU" id="vhG-yM-8Qc"/>
                     </connections>
                 </viewController>

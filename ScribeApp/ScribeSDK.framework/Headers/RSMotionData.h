@@ -40,13 +40,9 @@
 @property (nonatomic, assign) uint compassY;
 @property (nonatomic, assign) uint compassZ;
 
-@property (nonatomic, assign) uint quat1;
-@property (nonatomic, assign) uint quat2;
-@property (nonatomic, assign) uint quat3;
-@property (nonatomic, assign) uint quat4;
-
-@property (nonatomic, assign) double pitch;
-@property (nonatomic, assign) double roll;
-@property (nonatomic, assign) double yaw;
+@property (nonatomic, assign) uint quaternion1;
+@property (nonatomic, assign) uint quaternion2;
+@property (nonatomic, assign) uint quaternion3;
+@property (nonatomic, assign) uint quaternion4;
 
 @end
