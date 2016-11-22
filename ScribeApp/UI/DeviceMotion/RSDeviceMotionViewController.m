@@ -27,6 +27,7 @@
 #import "RSCoreXYZGraph.h"
 #import "GLGravityView.h"
 #import "RSSensorSample.h"
+#import "RSDeviceMgr.h"
 
 @interface RSDeviceMotionViewController ()
 
@@ -84,6 +85,8 @@ double yawMin, yawMax;
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor colorWithRed:26.0 / 255.0 green:26.0 / 255.0 blue:26.0 / 255.0 alpha:1.0];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceConnected:) name:RSDeviceConnectedNotification object:nil];
+    
     self.glGravityView1.rotAngle = 0.0;
     self.glGravityView2.rotAngle = 90.0;
     
@@ -107,6 +110,7 @@ double yawMin, yawMax;
 
 - (void)dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self.glGravityView1 stopAnimation];
     [self.glGravityView2 stopAnimation];
 }
@@ -490,6 +494,21 @@ double yawMin, yawMax;
     }
     
     self.yawCurrentTextField.text = [NSString stringWithFormat:@"%02.1F", yaw];
+}
+
+#pragma mark - Notifications
+
+- (void)deviceConnected:(NSNotification *)note
+{
+    id obj = [note.userInfo valueForKey:kRSDevice];
+    if ([obj isKindOfClass:[RSDevice class]])
+    {
+        RSDevice *connectedDevice = (RSDevice *)obj;
+        if (connectedDevice == self.device)
+        {
+            [self enableStreamingData:self.currentMode];
+        }
+    }
 }
 
 @end
